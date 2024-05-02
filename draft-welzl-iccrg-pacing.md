@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: "IRTF"
+workgroup: "Internet Congestion Control"
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Internet Congestion Control"
+  type: "Research Group"
+  mail: "iccrg@irtf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/iccrg"
+  github: "mwelzl/draft-iccrg-pacing"
+  latest: "https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html"
 
 author:
  -
