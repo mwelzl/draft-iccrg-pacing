@@ -25,14 +25,31 @@ venue:
 
 author:
   -
-    fullname: "Michael Welzl"
-    organization: University of Oslo
- -
-    fullname: "Vidhi Goel"
-    organization: Apple Inc.
- -
-    fullname: "Wesley Eddy"
-    organization: MTI Systems
+    ins: M. Welzl
+    name: Michael Welzl
+    org: University of Oslo
+    street: PO Box 1080 Blindern
+    city: 0316  Oslo
+    country: Norway
+    email: michawe@ifi.uio.no
+    uri: http://welzl.at/
+  -
+    ins: T. Henderson
+    name: Tom Henderson
+    city: Mercer Island, WA
+    country: United States
+    email: tomh@tomh.org
+    uri: https://www.tomh.org/
+  -
+    ins: G. Fairhurst
+    name: Godred Fairhurst
+    org: University of Aberdeen
+    street: School of Engineering
+    street: Fraser Noble Building
+    city: Aberdeen, AB24 3UE
+    country: UK
+    email: gorry@erg.abdn.ac.uk
+    uri: https://www.erg.abdn.ac.uk/
 
 normative:
 
