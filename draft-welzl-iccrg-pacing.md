@@ -24,6 +24,7 @@ venue:
   latest: "https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html"
 
 author:
+  -
     fullname: "Michael Welzl"
     organization: University of Oslo
     street: PO Box 1080 Blindern
