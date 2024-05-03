@@ -4,8 +4,11 @@
 
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
-Intended status: Informational                                3 May 2024
-Expires: 4 November 2024
+Intended status: Informational                              T. Henderson
+Expires: 4 November 2024                                                
+                                                            G. Fairhurst
+                                                  University of Aberdeen
+                                                              3 May 2024
 
 
                      Pacing in Transport Protocols
@@ -77,7 +80,7 @@ Table of Contents
    7.  IANA Considerations
    8.  Normative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -126,7 +129,28 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
    Michael Welzl
    University of Oslo
+   PO Box 1080 Blindern
+   0316  Oslo
+   Norway
+   Email: michawe@ifi.uio.no
+   URI:   http://welzl.at/
+
+
+   Tom Henderson
+   Mercer Island, WA,
+   United States
+   Email: tomh@tomh.org
+   URI:   https://www.tomh.org/
+
+
+   Godred Fairhurst
+   University of Aberdeen
+   Fraser Noble Building
+   Aberdeen, AB24 3UE
+   United Kingdom
+   Email: gorry@erg.abdn.ac.uk
+   URI:   https://www.erg.abdn.ac.uk/
