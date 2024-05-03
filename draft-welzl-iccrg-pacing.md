@@ -64,7 +64,9 @@ Pacing, the practice of introducing delay in between packets that are emitted by
 
 # Introduction
 
-blabla
+RFCs describing congestion control generally refer to a congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a slower rate. Accordingly, it is in line with these specifications to "pace" packets (introduce time gaps between them). Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT).
+
+Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism {{!I-D.cardwell-iccrg-bbr-congestion-control}}.This document describes some of them.
 
 # Conventions and Definitions
 
@@ -73,7 +75,22 @@ blabla
 
 # Linux TCP
 
-blabla
+The following description is based on Linux kernel version 6.7.3.
+
+There are two ways to enable pacing in Linux: 1) via a socket option, 2) by configuring the FQ queue discipline. We describe case 1).
+
+Independent of the value of the Initial Window (IW), the first 10 (hardcoded) packets are not paced. Later, 10 packets will generally be sent without pacing every 2^32 packets.
+
+Every time an ACK arrives, a pacing rate is calculated, as factor*MSS*cwnd/SRTT, where "factor" is a configurable value that, by default, is 2 in slow start and 1.2 in congestion avoidance. MSS is the sender maximum segment size {{?RFC5681}}, and SRTT is the smoothed round-trip time {{?RFC7556}} [TODO check: Linux calculates SRTT different from the standard, though RFC 7556 relaxes the rules, so maybe it's ok?]
+The sender transmits data in line with the calculated pacing rate; this is approximated by calculating the rate per millisecond, and generally sending the resulting amount of data per millisecond as a burst, every millisecond. This amount of data can be larger when the peer is very close (this is a configurable value, per default with a minimum RTT of 3 milliseconds).
+
+If the pacing rate is smaller than 2 packets per millisecond, these bursts will become 2 packets in size, and they will not be sent every millisecond but with a varying time delay (depending on the pacing rate).
+If the pacing rate is larger than 64 Kbyte per millisecond, these bursts will be 64 Kbyte in size, and they will not be sent every millisecond but with a varying time delay (depending on the pacing rate).
+Bursts can always be smaller than described above, or be "nothing", if a limiting factor such as the receiver window (rwnd) {{?RFC5681}} or the current cwnd disallows transmission.
+If the previous packet was not sent when expected by the pacing logic, but more than half of a pacing gap ago (e.g., due to a cwnd limitation), the pacing gap is halved.
+
+NOTE: This description is based on the longer Linux pacing analysis text that is currently available at: https://docs.google.com/document/d/1-uXnPDcVBKmg5krkG5wYBgaA2yLSFK_kZa7xGDWc7XU/edit?usp=sharing  - comments or corrections are very welcome!
+
 
 # Apple OSes
 
