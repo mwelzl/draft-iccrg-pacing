@@ -34,22 +34,21 @@ author:
     email: michawe@ifi.uio.no
     uri: http://welzl.at/
   -
-    ins: T. Henderson
-    name: Tom Henderson
-    city: Mercer Island, WA
-    country: United States
-    email: tomh@tomh.org
-    uri: https://www.tomh.org/
+    ins: V. Goel
+    name: Vidhi Goel
+    org: Apple Inc.
+    street: One Apple Park Way
+    city: Cupertino, California 95014
+    country: United States of America
+    email: vidhi_goel@apple.com
   -
-    ins: G. Fairhurst
-    name: Godred Fairhurst
-    org: University of Aberdeen
-    street: School of Engineering
-    street: Fraser Noble Building
-    city: Aberdeen, AB24 3UE
-    country: UK
-    email: gorry@erg.abdn.ac.uk
-    uri: https://www.erg.abdn.ac.uk/
+    ins: W. Eddy
+    name: Wesley Eddy
+    org: MTI Systems
+    street: 5929 Talbot Rd
+    city: Lothian, MD 20711
+    country: United States of America
+    email: wes@mti-systems.com
 
 normative:
 
