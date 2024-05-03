@@ -27,24 +27,6 @@ author:
   -
     fullname: "Michael Welzl"
     organization: University of Oslo
-    street: PO Box 1080 Blindern
-    city: 0316 Oslo
-    country: Norway
-    email: michawe@ifi.uio.no
- -
-    fullname: "Vidhi Goel"
-    org: Apple Inc.
-    street: One Apple Park Way
-    city: Cupertino, California 95014
-    country: United States of America
-    email: vidhi_goel@apple.com
- -
-    fullname: "Wesley Eddy"
-    org: MTI Systems
-    street: 5929 Talbot Rd
-    city: Lothian, MD 20711
-    country: United States of America
-    email: wes@mti-systems.com
 
 normative:
 
