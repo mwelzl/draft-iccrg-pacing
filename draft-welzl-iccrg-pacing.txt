@@ -4,10 +4,10 @@
 
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
-Intended status: Informational                              T. Henderson
-Expires: 4 November 2024                                                
-                                                            G. Fairhurst
-                                                  University of Aberdeen
+Intended status: Informational                                   V. Goel
+Expires: 4 November 2024                                      Apple Inc.
+                                                                 W. Eddy
+                                                             MTI Systems
                                                               3 May 2024
 
 
@@ -140,17 +140,17 @@ Authors' Addresses
    URI:   http://welzl.at/
 
 
-   Tom Henderson
-   Mercer Island, WA,
-   United States
-   Email: tomh@tomh.org
-   URI:   https://www.tomh.org/
+   Vidhi Goel
+   Apple Inc.
+   One Apple Park Way
+   Cupertino, California 95014,
+   United States of America
+   Email: vidhi_goel@apple.com
 
 
-   Godred Fairhurst
-   University of Aberdeen
-   Fraser Noble Building
-   Aberdeen, AB24 3UE
-   United Kingdom
-   Email: gorry@erg.abdn.ac.uk
-   URI:   https://www.erg.abdn.ac.uk/
+   Wesley Eddy
+   MTI Systems
+   5929 Talbot Rd
+   Lothian, MD 20711,
+   United States of America
+   Email: wes@mti-systems.com
