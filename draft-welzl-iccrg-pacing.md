@@ -27,6 +27,12 @@ author:
   -
     fullname: "Michael Welzl"
     organization: University of Oslo
+ -
+    fullname: "Vidhi Goel"
+    organization: Apple Inc.
+ -
+    fullname: "Wesley Eddy"
+    organization: MTI Systems
 
 normative:
 
