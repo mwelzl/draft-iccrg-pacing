@@ -1,0 +1,103 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-05-05T00:32:38.431342+00:00",
+  "repo": "mwelzl/draft-iccrg-pacing",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOL2DqS86HvkKM",
+      "title": "Mac OS(es) description",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/1",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "todo Vidhi",
+      "createdAt": "2024-05-03T10:32:25Z",
+      "updatedAt": "2024-05-03T10:32:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOL2DqS86HvkRM",
+      "title": "QUIC BBR description",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/2",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "todo Wes",
+      "createdAt": "2024-05-03T10:32:42Z",
+      "updatedAt": "2024-05-03T10:32:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOL2DqS86Hvkgo",
+      "title": "Should we make this the draft that also *generally* discusses pacing?",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/3",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
+      "createdAt": "2024-05-03T10:33:22Z",
+      "updatedAt": "2024-05-03T10:33:32Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
