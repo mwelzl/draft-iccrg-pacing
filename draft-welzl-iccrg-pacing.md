@@ -57,14 +57,16 @@ informative:
 
 --- abstract
 
-Pacing, the practice of introducing delay in between packets that are emitted by a data sender, has long been a common practice in transport protocol implementations. This document gives an overview of how some known pacing implementations work.
+Congestion control mechanisms when used alone in transport protocols can produce bursty traffic which causes higher queuing, more packet losses and lower goodput. To reduce the burstiness of such traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time, also known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
 
 
 --- middle
 
 # Introduction
 
-RFCs describing congestion control generally refer to a congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a slower rate. Accordingly, it is in line with these specifications to "pace" packets (introduce time gaps between them). Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT).
+RFCs describing congestion control generally refer to congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). This causes burstiness if the sender sends the entire cwnd sized data in an instant which results in higher queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' application in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows to send the same cwnd sized data but spread it across a round trip time evenly resulting in a more even use of a bottleneck resources.
+
+Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a slower rate. Accordingly, it is in line with these specifications to "pace" packets (introduce time gaps between them). Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing is more likely to have higher goodput by reducing the time lost in loss recovery and retransmissions.
 
 Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism {{!I-D.cardwell-iccrg-bbr-congestion-control}}.This document describes some of them.
 
