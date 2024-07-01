@@ -76,7 +76,7 @@ TODO
 
 ## Linux TCP
 
-The following description is based on Linux kernel version 6.7.3.
+The following description is based on Linux kernel version 6.8.9.
 
 There are two ways to enable pacing in Linux: 1) via a socket option, 2) by configuring the FQ queue discipline. We describe case 1).
 
