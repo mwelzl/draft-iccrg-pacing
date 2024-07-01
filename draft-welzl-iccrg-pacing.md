@@ -57,7 +57,7 @@ informative:
 
 --- abstract
 
-Congestion control mechanisms when used alone in transport protocols can produce bursty traffic which causes higher queuing, more packet losses and lower goodput. To reduce the burstiness of such traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time, also known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
+Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
 
 
 --- middle
