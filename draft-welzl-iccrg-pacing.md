@@ -57,14 +57,16 @@ informative:
 
 --- abstract
 
-Pacing, the practice of introducing delay in between packets that are emitted by a data sender, has long been a common practice in transport protocol implementations. This document gives an overview of how some known pacing implementations work.
+Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
 
 
 --- middle
 
 # Introduction
 
-RFCs describing congestion control generally refer to a congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a slower rate. Accordingly, it is in line with these specifications to "pace" packets (introduce time gaps between them). Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT).
+RFCs describing congestion control generally refer to congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can results in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows to send the same cwnd sized data but spread it across a round-trip time more evenly.
+
+Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a lower rate. Accordingly, it is in line with these specifications to pace packets. Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing is more likely to yield higher goodput by reducing the time lost in loss recovery.
 
 Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism {{!I-D.cardwell-iccrg-bbr-congestion-control}}.This document describes some of them.
 
@@ -89,7 +91,8 @@ If the pacing rate is larger than 64 Kbyte per millisecond, these bursts will be
 Bursts can always be smaller than described above, or be "nothing", if a limiting factor such as the receiver window (rwnd) {{?RFC5681}} or the current cwnd disallows transmission.
 If the previous packet was not sent when expected by the pacing logic, but more than half of a pacing gap ago (e.g., due to a cwnd limitation), the pacing gap is halved.
 
-**TEMPORARY NOTE - TO BE REMOVED:** This description is based on the longer Linux pacing analysis text that is currently available at: [https://docs.google.com/document/d/1-uXnPDcVBKmg5krkG5wYBgaA2yLSFK_kZa7xGDWc7XU/edit?usp=sharing](https://docs.google.com/document/d/1-uXnPDcVBKmg5krkG5wYBgaA2yLSFK_kZa7xGDWc7XU/edit?usp=sharing)  - comments or corrections are very welcome!
+
+**TEMPORARY NOTE - TO BE REMOVED:** This description is based on the longer Linux pacing analysis text that is currently available at: [https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing](https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing)  - comments or corrections are very welcome!
 
 
 # Apple OSes
