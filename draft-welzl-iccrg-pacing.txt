@@ -74,14 +74,16 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Linux TCP
-   4.  Apple OSes
-   5.  QUIC BBR implementations
-   6.  Security Considerations
-   7.  IANA Considerations
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   3.  Pacing: general considerations and consequences
+   4.  Implementation examples
+     4.1.  Linux TCP
+     4.2.  Apple OSes
+     4.3.  QUIC BBR implementations
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -108,14 +110,13 @@ Table of Contents
    (e.g., when they are spread out over the RTT).  It also means that
    pacing is less likely to cause any sudden, ephemeral increases in
    queuing delay.  Since keeping the queues short reduces packet losses,
-   pacing is more likely to yield higher goodput by reducing the time
-   lost in loss recovery.
+   pacing can also yield higher goodput by reducing the time lost in
+   loss recovery.
 
    Because of its known advantages, pacing has become common in
    implementations of congestion controlled transports.  It is also an
    integral element of the "BBR" congestion control mechanism
-   [I-D.cardwell-iccrg-bbr-congestion-control].This document describes
-   some of them.
+   [I-D.cardwell-iccrg-bbr-congestion-control].
 
 2.  Conventions and Definitions
 
@@ -125,7 +126,13 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Linux TCP
+3.  Pacing: general considerations and consequences
+
+   TODO
+
+4.  Implementation examples
+
+4.1.  Linux TCP
 
    The following description is based on Linux kernel version 6.7.3.
 
@@ -170,25 +177,25 @@ Table of Contents
    d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing) -
    comments or corrections are very welcome!
 
-4.  Apple OSes
+4.2.  Apple OSes
 
    (TODO)
 
-5.  QUIC BBR implementations
+4.3.  QUIC BBR implementations
 
    (TODO)
 
-6.  Security Considerations
+5.  Security Considerations
 
    TODO Security
 
-7.  IANA Considerations
+6.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  References
+7.  References
 
-8.1.  Normative References
+7.1.  Normative References
 
    [I-D.cardwell-iccrg-bbr-congestion-control]
               Cardwell, N., Cheng, Y., Yeganeh, S. H., Swett, I., and V.
@@ -207,7 +214,7 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-8.2.  Informative References
+7.2.  Informative References
 
    [RFC5681]  Allman, M., Paxson, V., and E. Blanton, "TCP Congestion
               Control", RFC 5681, DOI 10.17487/RFC5681, September 2009,
