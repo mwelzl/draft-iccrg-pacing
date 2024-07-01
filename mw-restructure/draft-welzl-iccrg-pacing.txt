@@ -1,0 +1,248 @@
+
+
+
+
+Internet Congestion Control                                     M. Welzl
+Internet-Draft                                        University of Oslo
+Intended status: Informational                                   W. Eddy
+Expires: 2 January 2025                                      MTI Systems
+                                                             1 July 2024
+
+
+                     Pacing in Transport Protocols
+                    draft-welzl-iccrg-pacing-latest
+
+Abstract
+
+   Applications or congestion control mechanisms can produce bursty
+   traffic which can cause unnecessary queuing and packet loss.  To
+   reduce the burstiness of traffic, the concept of evenly spacing out
+   the traffic from a data sender over a round-trip time known as Pacing
+   has been used in many transport protocol implementations.  This
+   document gives an overview of Pacing and how some known Pacing
+   implementations work.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-
+   pacing.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-welzl-iccrg-pacing/.
+
+   Discussion of this document takes place on the Internet Congestion
+   Control Research Group mailing list (mailto:iccrg@irtf.org), which is
+   archived at https://mailarchive.ietf.org/arch/browse/iccrg.
+   Subscribe at https://www.ietf.org/mailman/listinfo/iccrg/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/mwelzl/draft-iccrg-pacing.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 2 January 2025.
+
+Copyright Notice
+
+   Copyright (c) 2024 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Pacing: general considerations and consequences
+   4.  Implementation examples
+     4.1.  Linux TCP
+     4.2.  Apple OSes
+     4.3.  QUIC BBR implementations
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   RFCs describing congestion control generally refer to congestion
+   window (cwnd) as an upper limit for the number of unacknowledged
+   packets a sender is allowed to emit.  This limits the sender's
+   transmission rate at the granularity of a round-trip time (RTT).  If
+   the sender transmits the entire cwnd sized data in an instant, this
+   can results in unnecessarily high queuing and eventually packet
+   losses at the bottleneck.  Such consequences are detrimental to
+   users' applications in terms of both responsiveness and goodput.  To
+   solve this problem, the concept of pacing was introduced.  Pacing
+   allows to send the same cwnd sized data but spread it across a round-
+   trip time more evenly.
+
+   Congestion control specifications always allow to send less than the
+   cwnd, or temporarily emit packets at a lower rate.  Accordingly, it
+   is in line with these specifications to pace packets.  Pacing is
+   known to have advantages -- if some packets arrive at a bottleneck as
+   a burst (all packets being back-to-back), loss can be more likely to
+   happen than in a case where there are time gaps between packets
+   (e.g., when they are spread out over the RTT).  It also means that
+   pacing is less likely to cause any sudden, ephemeral increases in
+   queuing delay.  Since keeping the queues short reduces packet losses,
+   pacing can also yield higher goodput by reducing the time lost in
+   loss recovery.
+
+   Because of its known advantages, pacing has become common in
+   implementations of congestion controlled transports.  It is also an
+   integral element of the "BBR" congestion control mechanism
+   [I-D.cardwell-iccrg-bbr-congestion-control].
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Pacing: general considerations and consequences
+
+   TODO
+
+4.  Implementation examples
+
+4.1.  Linux TCP
+
+   The following description is based on Linux kernel version 6.7.3.
+
+   There are two ways to enable pacing in Linux: 1) via a socket option,
+   2) by configuring the FQ queue discipline.  We describe case 1).
+
+   Independent of the value of the Initial Window (IW), the first 10
+   (hardcoded) packets are not paced.  Later, 10 packets will generally
+   be sent without pacing every 2^32 packets.
+
+   Every time an ACK arrives, a pacing rate is calculated, as: factor *
+   MSS * cwnd / SRTT, where "factor" is a configurable value that, by
+   default, is 2 in slow start and 1.2 in congestion avoidance.  MSS is
+   the sender maximum segment size [RFC5681], and SRTT is the smoothed
+   round-trip time [RFC6298] [TODO check: Linux calculates SRTT
+   different from the standard, though RFC 6298 relaxes the rules, so
+   maybe it's ok?]  The sender transmits data in line with the
+   calculated pacing rate; this is approximated by calculating the rate
+   per millisecond, and generally sending the resulting amount of data
+   per millisecond as a burst, every millisecond.  This amount of data
+   can be larger when the peer is very close (this is a configurable
+   value, per default with a minimum RTT of 3 milliseconds).
+
+   If the pacing rate is smaller than 2 packets per millisecond, these
+   bursts will become 2 packets in size, and they will not be sent every
+   millisecond but with a varying time delay (depending on the pacing
+   rate).  If the pacing rate is larger than 64 Kbyte per millisecond,
+   these bursts will be 64 Kbyte in size, and they will not be sent
+   every millisecond but with a varying time delay (depending on the
+   pacing rate).  Bursts can always be smaller than described above, or
+   be "nothing", if a limiting factor such as the receiver window (rwnd)
+   [RFC5681] or the current cwnd disallows transmission.  If the
+   previous packet was not sent when expected by the pacing logic, but
+   more than half of a pacing gap ago (e.g., due to a cwnd limitation),
+   the pacing gap is halved.
+
+   *TEMPORARY NOTE - TO BE REMOVED:* This description is based on the
+   longer Linux pacing analysis text that is currently available at:
+   https://docs.google.com/document/
+   d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing
+   (https://docs.google.com/document/
+   d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing) -
+   comments or corrections are very welcome!
+
+4.2.  Apple OSes
+
+   (TODO)
+
+4.3.  QUIC BBR implementations
+
+   (TODO)
+
+5.  Security Considerations
+
+   TODO Security
+
+6.  IANA Considerations
+
+   This document has no IANA actions.
+
+7.  References
+
+7.1.  Normative References
+
+   [I-D.cardwell-iccrg-bbr-congestion-control]
+              Cardwell, N., Cheng, Y., Yeganeh, S. H., Swett, I., and V.
+              Jacobson, "BBR Congestion Control", Work in Progress,
+              Internet-Draft, draft-cardwell-iccrg-bbr-congestion-
+              control-02, 7 March 2022,
+              <https://datatracker.ietf.org/doc/html/draft-cardwell-
+              iccrg-bbr-congestion-control-02>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+7.2.  Informative References
+
+   [RFC5681]  Allman, M., Paxson, V., and E. Blanton, "TCP Congestion
+              Control", RFC 5681, DOI 10.17487/RFC5681, September 2009,
+              <https://www.rfc-editor.org/rfc/rfc5681>.
+
+   [RFC6298]  Paxson, V., Allman, M., Chu, J., and M. Sargent,
+              "Computing TCP's Retransmission Timer", RFC 6298,
+              DOI 10.17487/RFC6298, June 2011,
+              <https://www.rfc-editor.org/rfc/rfc6298>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Authors' Addresses
+
+   Michael Welzl
+   University of Oslo
+   PO Box 1080 Blindern
+   0316  Oslo
+   Norway
+   Email: michawe@ifi.uio.no
+   URI:   http://welzl.at/
+
+
+   Wesley Eddy
+   MTI Systems
+   5929 Talbot Rd
+   Lothian, MD 20711,
+   United States of America
+   Email: wes@mti-systems.com
