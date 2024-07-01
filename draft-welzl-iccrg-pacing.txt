@@ -4,10 +4,8 @@
 
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
-Intended status: Informational                                   V. Goel
-Expires: 2 January 2025                                       Apple Inc.
-                                                                 W. Eddy
-                                                             MTI Systems
+Intended status: Informational                                   W. Eddy
+Expires: 2 January 2025                                      MTI Systems
                                                              1 July 2024
 
 
@@ -233,14 +231,6 @@ Authors' Addresses
    Norway
    Email: michawe@ifi.uio.no
    URI:   http://welzl.at/
-
-
-   Vidhi Goel
-   Apple Inc.
-   One Apple Park Way
-   Cupertino, California 95014,
-   United States of America
-   Email: vidhi_goel@apple.com
 
 
    Wesley Eddy
