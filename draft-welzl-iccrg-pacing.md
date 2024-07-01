@@ -34,14 +34,6 @@ author:
     email: michawe@ifi.uio.no
     uri: http://welzl.at/
   -
-    ins: V. Goel
-    name: Vidhi Goel
-    org: Apple Inc.
-    street: One Apple Park Way
-    city: Cupertino, California 95014
-    country: United States of America
-    email: vidhi_goel@apple.com
-  -
     ins: W. Eddy
     name: Wesley Eddy
     org: MTI Systems
