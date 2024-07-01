@@ -106,7 +106,9 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 
 # Security Considerations
 
-TODO Security
+While congestion control designs, including aspects such as pacing, could result in unwanted competing traffic, they do not directly result in new security considerations.
+
+Transport protocols that provide authentication (including those using encryption), or are carried over protocols that provide authentication, can protect their congestion control algorithm from network attack. This is orthogonal to the congestion control rules.
 
 
 # IANA Considerations
