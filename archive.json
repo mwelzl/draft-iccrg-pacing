@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-30T00:35:37.374130+00:00",
+  "timestamp": "2024-07-02T00:32:18.178171+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -94,7 +94,7 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2024-05-06T14:06:33Z",
+      "updatedAt": "2024-07-01T11:10:42Z",
       "closedAt": null,
       "comments": [
         {
@@ -103,6 +103,13 @@
           "body": "Some pro's of pacing:\r\n\r\n- less likely to provoke spontaneous loss from bursts\r\n- less likely to cause sudden, ephemeral delay increase\r\n- more likely to really saturate the available capacity, especially when queues are short\r\n\r\nSome con's of pacing:\r\n\r\n- more sustained delay growth\r\n- slight (miniscule, perhaps negligible) delays due to delaying packets\r\n- *perhaps* some more from [this old well-known paper](https://homes.cs.washington.edu/~tom/pubs/pacing.pdf) - but the last time I looked, the negative effects seemed to be tied to the combination of adding pacing and using an old TCP version. I don't remember if this is the case for *all* problems identified in this paper, though.",
           "createdAt": "2024-05-06T14:06:32Z",
           "updatedAt": "2024-05-06T14:06:32Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Just to report this here, in emails we agreed that yes, this should be a draft on pacing in general, and con's shouldn't be phrased as \"con's\" but rather \"consequences\" which aren't necessarily all bad.",
+          "createdAt": "2024-07-01T11:10:41Z",
+          "updatedAt": "2024-07-01T11:10:41Z"
         }
       ]
     }
@@ -113,24 +120,26 @@
       "id": "PR_kwDOL2DqS85z8UcE",
       "title": "First edit",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/4",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "goelvidhi",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Hello, I added some text to the abstract and introduction. I only covered the advantages of Pacing listed in #3. I don't think we need to mention the cons as I don't really see them as important but we can discuss this.\r\n",
       "createdAt": "2024-06-29T01:26:51Z",
-      "updatedAt": "2024-06-29T10:18:45Z",
+      "updatedAt": "2024-07-01T07:26:06Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "e7e8efec32d8bf990137f1fcd10ebc26924149c1",
       "headRepository": "goelvidhi/draft-iccrg-pacing",
       "headRefName": "first-edit",
-      "headRefOid": "e436a53ac0c19960866eb95e8621b34af5622431",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "5e1ebed27853078626235d929cacec909e232230",
+      "closedAt": "2024-07-01T07:26:05Z",
+      "mergedAt": "2024-07-01T07:26:05Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "c652ee7bc237d8b86aa1a941320e158722e41aca"
+      },
       "comments": [],
       "reviews": [
         {
@@ -170,8 +179,234 @@
               "updatedAt": "2024-06-29T10:18:45Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AKj6i",
+          "commit": {
+            "abbreviatedOid": "e436a53"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T01:14:34Z",
+          "updatedAt": "2024-07-01T01:14:34Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Agree with all the suggestions.",
+              "createdAt": "2024-07-01T01:14:34Z",
+              "updatedAt": "2024-07-01T01:14:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AKkWA",
+          "commit": {
+            "abbreviatedOid": "e436a53"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T01:18:22Z",
+          "updatedAt": "2024-07-01T01:18:22Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "You are right, at least in slow start, the distribution across a RTT is not perfectly even with rate being 2*cwnd/RTT. So, I agree with your suggested changes.",
+              "createdAt": "2024-07-01T01:18:22Z",
+              "updatedAt": "2024-07-01T01:18:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AL9Ms",
+          "commit": {
+            "abbreviatedOid": "b3c7cc5"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-01T07:23:50Z",
+          "updatedAt": "2024-07-01T07:23:50Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOL2DqS850EE2u",
+      "title": "changing the heading structure, and some very minor edits",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/5",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Hm. Maybe it was a mistake to create a PR just for this minor thing: I'll merge it right away, because I need the new structure for the next PR.",
+      "createdAt": "2024-07-01T12:22:51Z",
+      "updatedAt": "2024-07-01T12:23:23Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "7a3183fa761168023c5945a4778fcf517e118fbb",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-restructure",
+      "headRefOid": "aeed3b9e337ee5aba29403d6cec14b97738aa164",
+      "closedAt": "2024-07-01T12:23:23Z",
+      "mergedAt": "2024-07-01T12:23:23Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "ac9734c3e9a4043d1e6391c0984f2781fa09c2df"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOL2DqS850Fz9U",
+      "title": "General pacing considerations",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/6",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-01T16:05:24Z",
+      "updatedAt": "2024-07-01T21:33:29Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "697177a6164c898352685cc9d4f2fb351c95b5f2",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-consequences",
+      "headRefOid": "4316e25775d07a233f8c2916c88f5d013dceb493",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86AQrcg",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "wesley-eddy",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-01T17:06:14Z",
+          "updatedAt": "2024-07-01T17:11:43Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Is it also productive later to also consider the case of AQM?  I think we would agree that pacing has benefits when paired with AQM as well, not just in the FIFO case.",
+              "createdAt": "2024-07-01T17:06:14Z",
+              "updatedAt": "2024-07-01T17:11:43Z"
+            },
+            {
+              "originalPosition": 19,
+              "body": "Further, should we say that pacing gives more time for the growth of the queue to be detected by the transport (e.g. within a delay signal, or in the case of AQM via ECN) prior to it resulting in necessary loss, in comparison to the non-pacing case?",
+              "createdAt": "2024-07-01T17:10:04Z",
+              "updatedAt": "2024-07-01T17:11:43Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "Is an RTT estimate also available via a route cache from a recent connection?",
+              "createdAt": "2024-07-01T17:11:28Z",
+              "updatedAt": "2024-07-01T17:11:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86ASSKS",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T21:28:17Z",
+          "updatedAt": "2024-07-01T21:28:18Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "HOW COULD I FORGET!  This was the whole point I wanted to get at - a plug for RFC 9040  :-)   Will do!",
+              "createdAt": "2024-07-01T21:28:17Z",
+              "updatedAt": "2024-07-01T21:28:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86ASSrj",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T21:30:11Z",
+          "updatedAt": "2024-07-01T21:30:12Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "AQM is more random, and this is me paraphrasing my model, which is based upon a FIFO queue. I agree that saying something about AQM would be good, but... perhaps further down, as a separate subsection?",
+              "createdAt": "2024-07-01T21:30:12Z",
+              "updatedAt": "2024-07-01T21:30:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86ASTfr",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-01T21:33:28Z",
+          "updatedAt": "2024-07-01T21:33:29Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Hm, does this really only play out positively? It may depend on the AQM...  for creating a more sustained queue growth, a paced flow may end up being \"punished\" earlier? Or causing punishment for all flows earlier?\r\n\r\nOverall I personally think that everything to do with pacing is good, because it makes the behavior more in line with the expectations of a CC algorithm; but in specific scenarios, given how algorithms behave today, bad things MAY happen, and I'd like to avoid a confusion... so let's be a bit cautious with what we say.  The stuff I do say here, based on FIFO and a single flow, I'm very sure about.",
+              "createdAt": "2024-07-01T21:33:29Z",
+              "updatedAt": "2024-07-01T21:33:29Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOL2DqS850F2VU",
+      "title": "security considerations",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/7",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-01T16:11:09Z",
+      "updatedAt": "2024-07-01T16:11:44Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "697177a6164c898352685cc9d4f2fb351c95b5f2",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-security",
+      "headRefOid": "3c5ceccc284a58aa17f6fda42b568bb0d926033b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
