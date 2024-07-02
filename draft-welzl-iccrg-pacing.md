@@ -37,8 +37,8 @@ author:
     ins: W. Eddy
     name: Wesley Eddy
     org: MTI Systems
-    street: 5929 Talbot Rd
-    city: Lothian, MD 20711
+    street: 25111 Country Club Blvd, Suite 295
+    city: North Olmsted, OH 44070
     country: United States of America
     email: wes@mti-systems.com
 
@@ -46,17 +46,31 @@ normative:
 
 informative:
 
+  RFC9002:
+
+  VL87:
+    title: "Hashed and hierarchical timing wheels: data structures for the efficient implementation of a timer facility"
+    author:
+      -
+        ins: G. Varghese
+      -
+        ins: T. Tauck
+    date: 1987-11-01
+    seriesinfo:
+      DOI: 10.1145/37499.37504
 
 --- abstract
 
-Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
+Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "Pacing" has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work.
 
 
 --- middle
 
 # Introduction
 
-RFCs describing congestion control generally refer to congestion window (cwnd) as an upper limit for the number of unacknowledged packets a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can results in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows to send the same cwnd sized data but spread it across a round-trip time more evenly.
+Applications commonly generate either bulk data (e.g. files) or bursts of data (e.g. segments of media) that transport protocols deliver into the network based on congestion control algorithms.
+
+RFCs describing congestion control generally refer to a congestion window (cwnd) state variable as an upper limit for either the number of unacknowledged packets or bytes that a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can result in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows to send the same cwnd sized data but spread it across a round-trip time more evenly.
 
 Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a lower rate. Accordingly, it is in line with these specifications to pace packets. Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing can also yield higher goodput by reducing the time lost in loss recovery.
 
@@ -101,8 +115,27 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 
 ## QUIC BBR implementations
 
-(TODO)
+Pacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP NewReno, which does not include pacing, QUIC congestion control requires either pacing or some other burst limitation (section 7.7 of {{RFC9002}}).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.
 
+Pacing in QUIC stacks commonly involves:
+
+1. Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.
+
+2. Managing additional timers related to pacing, along with those already needed for retransmission, and other events.
+
+3. Details of the actual pacing algorithm (e.g. granularity of bursts allowed, etc.).
+
+Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google "quiche" and Meta "mvfst", that provide examples for some of the concepts discussed below..
+
+Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to acheive pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.
+
+When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel {{VL87}} provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.
+
+Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm might compute a regular interval time and batch size (number of packets) to be released every interval and acheive the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time is elapsed between evaluations.
+
+The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immeidately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.
+
+There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).
 
 # Security Considerations
 
