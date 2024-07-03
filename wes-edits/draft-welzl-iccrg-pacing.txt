@@ -215,7 +215,7 @@ Table of Contents
    Unlike TCP implementations that typically run within the operating
    system kernel, QUIC implementations more typically run in user space
    and are thus faced with more challenges regarding timing and coupling
-   with the underlying protocol stack and hardware needed to acheive
+   with the underlying protocol stack and hardware needed to achieve
    pacing.  For instance, if an application trying to do pacing is
    running on a highly loaded system, it may often "wake up late" and
    miss the times that it intends to pace packets.
