@@ -235,7 +235,7 @@ Table of Contents
    Pacing can be done based on different approaches such as a token-
    based or tokenless algorithm.  For instance, a tokenless algorithm
    might compute a regular interval time and batch size (number of
-   packets) to be released every interval and acheive the pacing rate.
+   packets) to be released every interval and achieve the pacing rate.
    This allows specific future transmissions to be scheduled.  In
    contrast, a token-based algorithm accumulates tokens to permit
    transmission based on the pacing rate, using a "leaky bucket" to
