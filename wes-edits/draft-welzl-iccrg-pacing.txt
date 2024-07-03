@@ -5,8 +5,8 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 3 January 2025                                      MTI Systems
-                                                             2 July 2024
+Expires: 4 January 2025                                      MTI Systems
+                                                             3 July 2024
 
 
                      Pacing in Transport Protocols
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2025.
+   This Internet-Draft will expire on 4 January 2025.
 
 Copyright Notice
 
@@ -188,11 +188,12 @@ Table of Contents
 4.3.  QUIC BBR implementations
 
    Pacing capability is expected in QUIC senders.  While standard QUIC
-   congestion control [RFC9002] is based on TCP NewReno, which does not
-   include pacing, QUIC congestion control requires either pacing or
-   some other burst limitation (section 7.7 of [RFC9002]).  BBR
-   congestion control implementations are common in QUIC stacks, and
-   pacing is integral to BBR, so this document focuses on it.
+   congestion control [RFC9002] is based on TCP Reno, which is not
+   defined to include pacing (but also does not prohibit it), QUIC
+   congestion control requires either pacing or some other burst
+   limitation (Section 7.7 of [RFC9002]).  BBR congestion control
+   implementations are common in QUIC stacks, and pacing is integral to
+   BBR, so this document focuses on it.
 
    Pacing in QUIC stacks commonly involves:
 
