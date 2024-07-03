@@ -115,7 +115,7 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 
 ## QUIC BBR implementations
 
-Pacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP NewReno, which does not include pacing, QUIC congestion control requires either pacing or some other burst limitation (section 7.7 of {{RFC9002}}).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.
+Pacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation ({{Section 7.7 of RFC9002}}).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.
 
 Pacing in QUIC stacks commonly involves:
 
