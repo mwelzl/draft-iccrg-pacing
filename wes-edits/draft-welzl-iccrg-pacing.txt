@@ -234,26 +234,28 @@ Table of Contents
 
    Pacing can be done based on different approaches such as a token-
    based or tokenless algorithm.  For instance, a tokenless algorithm
-   might compute a regular interval time and batch size (number of
-   packets) to be released every interval and achieve the pacing rate.
-   This allows specific future transmissions to be scheduled.  In
-   contrast, a token-based algorithm accumulates tokens to permit
-   transmission based on the pacing rate, using a "leaky bucket" to
-   control bursts.  In this case the size of bursts may be more
-   granular, depending on how much time is elapsed between evaluations.
+   (e.g. as used in mvfst) might compute a regular interval time and
+   batch size (number of packets) to be released every interval and
+   achieve the pacing rate.  This allows specific future transmissions
+   to be scheduled.  In contrast, a token-based algorithm accumulates
+   tokens to permit transmission based on the pacing rate, using a
+   "leaky bucket" to control bursts.  In this case the size of bursts
+   may be more granular, depending on how much time has elapsed between
+   evaluations.
 
    The additional notion of "burst tokens" (or other burst allowance)
    may be present in order to rapidly transmit data if coming out of a
    quiescent period (e.g. when a flow has been application-limited
-   without data to send).  A number of burst tokens, representing
-   packets that can be sent unpaced, is initialized to some value (e.g.
-   10) when a flow starts or becomes quiescent.  If burst tokens are
-   available, outgoing packets are sent immeidately, without pacing, up
-   to the limit permitted by the congestion window, and the burst tokens
-   are depleted by each packet sent.  The number of burst tokens is
-   reduced to zero on congestion events.  When coming out of quiescence,
-   it is set to the minimum of the initial burst size, or the amount of
-   packets that the congestion window (in bytes) represents.
+   without data to send, e.g. as used in quiche).  A number of burst
+   tokens, representing packets that can be sent unpaced, is initialized
+   to some value (e.g. 10) when a flow starts or becomes quiescent.  If
+   burst tokens are available, outgoing packets are sent immeidately,
+   without pacing, up to the limit permitted by the congestion window,
+   and the burst tokens are depleted by each packet sent.  The number of
+   burst tokens is reduced to zero on congestion events.  When coming
+   out of quiescence, it is set to the minimum of the initial burst
+   size, or the amount of packets that the congestion window (in bytes)
+   represents.
 
    There may be additional "lumpy tokens" that further allow unpaced
    packets after the burst tokens have been consumed, and the congestion
