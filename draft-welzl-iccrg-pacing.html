@@ -1318,7 +1318,8 @@ If the previous packet was not sent when expected by the pacing logic, but more 
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">TODO Security<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">While congestion control designs, including aspects such as pacing, could result in unwanted competing traffic, they do not directly result in new security considerations.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Transport protocols that provide authentication (including those using encryption), or are carried over protocols that provide authentication, can protect their congestion control algorithm from network attack. This is orthogonal to the congestion control rules.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
