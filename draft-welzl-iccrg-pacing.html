@@ -10,13 +10,13 @@
 <meta content="
        Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as Pacing has been used in many transport protocol implementations. This document gives an overview of Pacing and how some known Pacing implementations work. 
     " name="description">
-<meta content="xml2rfc 3.21.0" name="generator">
+<meta content="xml2rfc 3.22.0" name="generator">
 <meta content="next generation" name="keyword">
 <meta content="unicorn" name="keyword">
 <meta content="sparkling distributed ledger" name="keyword">
 <meta content="draft-welzl-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.21.0
+  xml2rfc 3.22.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -26,9 +26,8 @@
     platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.31.0
+    requests 2.32.3
     setuptools 69.5.1
-    six 1.16.0
     wcwidth 0.2.13
 -->
 <link href="draft-welzl-iccrg-pacing.xml" rel="alternate" type="application/rfc+xml">
@@ -1032,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl &amp; Eddy</td>
-<td class="center">Expires 2 January 2025</td>
+<td class="center">Expires 4 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-welzl-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-01" class="published">1 July 2024</time>
+<time datetime="2024-07-03" class="published">3 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-02">2 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-04">4 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1140,7 +1139,23 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-pacing-general-consideratio" class="internal xref">Pacing: general considerations and consequences</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-pacing-general-consideratio" class="internal xref">Pacing: general considerations and consequences</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-more-likely-to-saturate-a-b" class="internal xref">More likely to saturate a bottleneck</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-backing-off-after-the-incre" class="internal xref">Backing off after the increase</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-able-to-work-with-smaller-q" class="internal xref">Able to work with smaller queues</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-getting-good-rtt-estimates" class="internal xref">Getting good RTT estimates</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-implementation-examples" class="internal xref">Implementation examples</a></p>
@@ -1209,7 +1224,53 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-pacing-general-consideratio">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-pacing-general-consideratio" class="section-name selfRef">Pacing: general considerations and consequences</a>
       </h2>
-<p id="section-3-1">TODO<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="losstypes">
+<section id="section-3.1">
+        <h3 id="name-more-likely-to-saturate-a-b">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-more-likely-to-saturate-a-b" class="section-name selfRef">More likely to saturate a bottleneck</a>
+        </h3>
+<p id="section-3.1-1">We can distinguish between two reasons for packet losses that are due to congestion at a bottleneck with a DropTail (FIFO) queue:<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.1-2">
+<li id="section-3.1-2.1">
+            <p id="section-3.1-2.1.1">A flight of N packets arrives. The amount of data in this flight exceeds the amount of data that can be transmitted by the bottleneck during the flight's arrival plus the queue length, i.e. some data do not fit into the queue.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-3.1-2.2">
+            <p id="section-3.1-2.2.1">The bottleneck is fully saturated. The queue is full, and packets drain from it more slowly than new packets arrive.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-3.1-3">The second type of loss matches the typical expectation of a congestion control algorithm: the cwnd value when loss happens is indicative of the bottleneck being fully saturated. When the first type of loss happens, however, a sender's cwnd can be much smaller than the Bandwidth*Delay Product (BDP) of the path (the amount of data that can be in flight, ignoring the queue). In the absence of other traffic, the probability for the first type of loss to happen depends on the queue length and the ratio between the departure and the arrival rate during the flight's arrival. By introducing time gaps between the packets of a burst, this ratio is increased, i.e. the difference between the departure and the arrival rate becomes smaller, and the second type of loss is more likely.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">For example, consider a network path with a bottleneck capacity of 50 Mbit/s, a queue length of 15000 bytes (or 10 packets of size 1500 bytes) and an RTT of 30 ms. Assume that all packets emitted by the sender have a size of 1500 bytes. Then, the BDP equals 125 packets. The bottleneck of this network path is fully saturated when a (BDP + queue length) amount of bytes are in flight: 135 packets.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">In this network, the first type of loss can happen as follows: say, N=40 packets arrive at this bottleneck at a rate of 100 Mbit/s. In an otherwise empty network and assuming an initial window of 10 packets and no delayed ACKs, this occurs in the third round of slow start without pacing, provided that the capacities of all links before the bottleneck are at least 100 Mbit/s.
+In this case, an overshoot will occur: packets are forwarded with half their arrival rate, i.e. less than 20 packets can be forwarded during the burst's arrival. The remaining 20 (or more) packets cannot fit into the 10-packet queue. A cwnd of 40 packets is much smaller than the (BDP + queue) limit of 135 packets, and the bottleneck is not fully saturated.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">Let us now assume that the flight of 40 packets is instead paced, such that the arrival rate only mildly exceeds the departure rate -- e.g., they arrive at a rate of 60 Mbit/s. When the last packet of this flight arrives at the bottleneck, 5/6 * 39 = 32.5 packets should already have been transferred. Since only complete packets are sent, 32 packets have really been transferred, and the remaining 40-32 = 8 packets fit in the queue. No loss occurs.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">This example explains how pacing can enable a rate increase to last longer than without pacing. This makes it more likely that a bottleneck is saturated, such that cwnd reflects the BDP plus the queue length (loss type 2).<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<div id="backing-off-after-the-increase">
+<section id="section-3.1.1">
+          <h4 id="name-backing-off-after-the-incre">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-backing-off-after-the-incre" class="section-name selfRef">Backing off after the increase</a>
+          </h4>
+<p id="section-3.1.1-1">The two loss types explained in <a href="#losstypes" class="auto internal xref">Section 3.1</a> require a different back-off factor to allow the queue to drain and congestion to dissipate. Specifically, in the single-sender single-bottleneck example above, when a slow start overshoot occurs as loss type 2, a back-off function such as: ssthresh = cwnd * beta with beta &gt;= 0.5 is guaranteed to cause a second loss after the end of loss recovery. This is because, when cwnd exceeds a fully saturated bottleneck (i.e., cwnd &gt; BDP + queue length), cwnd will have grown further by another (BDP + queue length) by the time the sender learns about the loss. In this case, beta = 0.5 will cause ssthresh to exceed (BDP + queue length) again.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2">Since pacing makes loss type 2 more likely, beta &lt; 0.5 may be a better choice after slow start overshoot when pacing is used.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="able-to-work-with-smaller-queues">
+<section id="section-3.1.2">
+          <h4 id="name-able-to-work-with-smaller-q">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-able-to-work-with-smaller-q" class="section-name selfRef">Able to work with smaller queues</a>
+          </h4>
+<p id="section-3.1.2-1">The probability of loss type 1 in <a href="#losstypes" class="auto internal xref">Section 3.1</a> is indirectly proportional to the queue length. Pacing therefore enables a rate increase to continue with a smaller queue at the bottleneck than in the case without pacing.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="getting-good-rtt-estimates">
+<section id="section-3.2">
+        <h3 id="name-getting-good-rtt-estimates">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-getting-good-rtt-estimates" class="section-name selfRef">Getting good RTT estimates</a>
+        </h3>
+<p id="section-3.2-1">Since pacing algorithms generally attempt to spread out packets evenly across an RTT, it is important to have a good RTT estimate. Especially in the beginning of a transfer, when sending the initial window, the only RTT estimate available may be from the SYN-SYN/ACK handshake. Being based on only one sample, this is a very unreliable estimate, and using it to pace the initial window can cause unnecessary delay. This may be the reason why the Linux implementation does not pace the first 10 packets (see <a href="#linux" class="auto internal xref">Section 4.1</a>). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) <span>[<a href="#RFC9040" class="cite xref">RFC9040</a>]</span>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="implementation-examples">
@@ -1217,7 +1278,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-implementation-examples">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-implementation-examples" class="section-name selfRef">Implementation examples</a>
       </h2>
-<div id="linux-tcp">
+<div id="linux">
 <section id="section-4.1">
         <h3 id="name-linux-tcp">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-linux-tcp" class="section-name selfRef">Linux TCP</a>
@@ -1304,8 +1365,12 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">E. Blanton</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 5681</span>, <span class="seriesInfo">DOI 10.17487/RFC5681</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5681">https://www.rfc-editor.org/rfc/rfc5681</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6298">[RFC6298]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Paxson, V.</span>, <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Chu, J.</span>, and <span class="refAuthor">M. Sargent</span>, <span class="refTitle">"Computing TCP's Retransmission Timer"</span>, <span class="seriesInfo">RFC 6298</span>, <span class="seriesInfo">DOI 10.17487/RFC6298</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6298">https://www.rfc-editor.org/rfc/rfc6298</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9040">[RFC9040]</dt>
+      <dd>
+<span class="refAuthor">Touch, J.</span>, <span class="refAuthor">Welzl, M.</span>, and <span class="refAuthor">S. Islam</span>, <span class="refTitle">"TCP Control Block Interdependence"</span>, <span class="seriesInfo">RFC 9040</span>, <span class="seriesInfo">DOI 10.17487/RFC9040</span>, <time datetime="2021-07" class="refDate">July 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9040">https://www.rfc-editor.org/rfc/rfc9040</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

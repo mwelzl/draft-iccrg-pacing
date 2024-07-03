@@ -5,8 +5,8 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 2 January 2025                                      MTI Systems
-                                                             1 July 2024
+Expires: 4 January 2025                                      MTI Systems
+                                                             3 July 2024
 
 
                      Pacing in Transport Protocols
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2025.
+   This Internet-Draft will expire on 4 January 2025.
 
 Copyright Notice
 
@@ -75,6 +75,10 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Pacing: general considerations and consequences
+     3.1.  More likely to saturate a bottleneck
+       3.1.1.  Backing off after the increase
+       3.1.2.  Able to work with smaller queues
+     3.2.  Getting good RTT estimates
    4.  Implementation examples
      4.1.  Linux TCP
      4.2.  Apple OSes
@@ -128,7 +132,102 @@ Table of Contents
 
 3.  Pacing: general considerations and consequences
 
-   TODO
+3.1.  More likely to saturate a bottleneck
+
+   We can distinguish between two reasons for packet losses that are due
+   to congestion at a bottleneck with a DropTail (FIFO) queue:
+
+   1.  A flight of N packets arrives.  The amount of data in this flight
+       exceeds the amount of data that can be transmitted by the
+       bottleneck during the flight's arrival plus the queue length,
+       i.e. some data do not fit into the queue.
+
+   2.  The bottleneck is fully saturated.  The queue is full, and
+       packets drain from it more slowly than new packets arrive.
+
+   The second type of loss matches the typical expectation of a
+   congestion control algorithm: the cwnd value when loss happens is
+   indicative of the bottleneck being fully saturated.  When the first
+   type of loss happens, however, a sender's cwnd can be much smaller
+   than the Bandwidth*Delay Product (BDP) of the path (the amount of
+   data that can be in flight, ignoring the queue).  In the absence of
+   other traffic, the probability for the first type of loss to happen
+   depends on the queue length and the ratio between the departure and
+   the arrival rate during the flight's arrival.  By introducing time
+   gaps between the packets of a burst, this ratio is increased, i.e.
+   the difference between the departure and the arrival rate becomes
+   smaller, and the second type of loss is more likely.
+
+   For example, consider a network path with a bottleneck capacity of 50
+   Mbit/s, a queue length of 15000 bytes (or 10 packets of size 1500
+   bytes) and an RTT of 30 ms.  Assume that all packets emitted by the
+   sender have a size of 1500 bytes.  Then, the BDP equals 125 packets.
+   The bottleneck of this network path is fully saturated when a (BDP +
+   queue length) amount of bytes are in flight: 135 packets.
+
+   In this network, the first type of loss can happen as follows: say,
+   N=40 packets arrive at this bottleneck at a rate of 100 Mbit/s.  In
+   an otherwise empty network and assuming an initial window of 10
+   packets and no delayed ACKs, this occurs in the third round of slow
+   start without pacing, provided that the capacities of all links
+   before the bottleneck are at least 100 Mbit/s.  In this case, an
+   overshoot will occur: packets are forwarded with half their arrival
+   rate, i.e. less than 20 packets can be forwarded during the burst's
+   arrival.  The remaining 20 (or more) packets cannot fit into the
+   10-packet queue.  A cwnd of 40 packets is much smaller than the (BDP
+   + queue) limit of 135 packets, and the bottleneck is not fully
+   saturated.
+
+   Let us now assume that the flight of 40 packets is instead paced,
+   such that the arrival rate only mildly exceeds the departure rate --
+   e.g., they arrive at a rate of 60 Mbit/s.  When the last packet of
+   this flight arrives at the bottleneck, 5/6 * 39 = 32.5 packets should
+   already have been transferred.  Since only complete packets are sent,
+   32 packets have really been transferred, and the remaining 40-32 = 8
+   packets fit in the queue.  No loss occurs.
+
+   This example explains how pacing can enable a rate increase to last
+   longer than without pacing.  This makes it more likely that a
+   bottleneck is saturated, such that cwnd reflects the BDP plus the
+   queue length (loss type 2).
+
+3.1.1.  Backing off after the increase
+
+   The two loss types explained in Section 3.1 require a different back-
+   off factor to allow the queue to drain and congestion to dissipate.
+   Specifically, in the single-sender single-bottleneck example above,
+   when a slow start overshoot occurs as loss type 2, a back-off
+   function such as: ssthresh = cwnd * beta with beta >= 0.5 is
+   guaranteed to cause a second loss after the end of loss recovery.
+   This is because, when cwnd exceeds a fully saturated bottleneck
+   (i.e., cwnd > BDP + queue length), cwnd will have grown further by
+   another (BDP + queue length) by the time the sender learns about the
+   loss.  In this case, beta = 0.5 will cause ssthresh to exceed (BDP +
+   queue length) again.
+
+   Since pacing makes loss type 2 more likely, beta < 0.5 may be a
+   better choice after slow start overshoot when pacing is used.
+
+3.1.2.  Able to work with smaller queues
+
+   The probability of loss type 1 in Section 3.1 is indirectly
+   proportional to the queue length.  Pacing therefore enables a rate
+   increase to continue with a smaller queue at the bottleneck than in
+   the case without pacing.
+
+3.2.  Getting good RTT estimates
+
+   Since pacing algorithms generally attempt to spread out packets
+   evenly across an RTT, it is important to have a good RTT estimate.
+   Especially in the beginning of a transfer, when sending the initial
+   window, the only RTT estimate available may be from the SYN-SYN/ACK
+   handshake.  Being based on only one sample, this is a very unreliable
+   estimate, and using it to pace the initial window can cause
+   unnecessary delay.  This may be the reason why the Linux
+   implementation does not pace the first 10 packets (see Section 4.1).
+   As a possible improvement, the initial RTT estimate could also be
+   based on a previous connection (temporal sharing) or on another
+   ongoing connection (ensemble sharing) [RFC9040].
 
 4.  Implementation examples
 
@@ -224,6 +323,10 @@ Table of Contents
               "Computing TCP's Retransmission Timer", RFC 6298,
               DOI 10.17487/RFC6298, June 2011,
               <https://www.rfc-editor.org/rfc/rfc6298>.
+
+   [RFC9040]  Touch, J., Welzl, M., and S. Islam, "TCP Control Block
+              Interdependence", RFC 9040, DOI 10.17487/RFC9040, July
+              2021, <https://www.rfc-editor.org/rfc/rfc9040>.
 
 Acknowledgments
 
