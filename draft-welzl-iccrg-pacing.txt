@@ -308,9 +308,9 @@ Table of Contents
 
    Examples of different approaches to dealing with these challenges in
    ways that work on multiple operating systems and hardware platforms
-   can be found in open source QUIC stacks, such as Google "quiche" and
-   Meta "mvfst", that provide examples for some of the concepts
-   discussed below.
+   can be found in open source QUIC stacks, such as Google's QUIC
+   implementation and Meta's "mvfst".  These provide examples for some
+   of the concepts discussed below.
 
    Unlike TCP implementations that typically run within the operating
    system kernel, QUIC implementations more typically run in user space
