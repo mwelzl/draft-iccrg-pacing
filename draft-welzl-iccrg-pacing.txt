@@ -5,8 +5,8 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 4 January 2025                                      MTI Systems
-                                                             3 July 2024
+Expires: 5 January 2025                                      MTI Systems
+                                                             4 July 2024
 
 
                      Pacing in Transport Protocols
@@ -18,8 +18,8 @@ Abstract
    traffic which can cause unnecessary queuing and packet loss.  To
    reduce the burstiness of traffic, the concept of evenly spacing out
    the traffic from a data sender over a round-trip time known as
-   "Pacing" has been used in many transport protocol implementations.
-   This document gives an overview of Pacing and how some known Pacing
+   "pacing" has been used in many transport protocol implementations.
+   This document gives an overview of pacing and how some known pacing
    implementations work.
 
 About This Document
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2025.
+   This Internet-Draft will expire on 5 January 2025.
 
 Copyright Notice
 
@@ -185,10 +185,10 @@ Table of Contents
    Let us now assume that the flight of 40 packets is instead paced,
    such that the arrival rate only mildly exceeds the departure rate --
    e.g., they arrive at a rate of 60 Mbit/s.  When the last packet of
-   this flight arrives at the bottleneck, 5/6 * 39 = 32.5 packets should
-   already have been transferred.  Since only complete packets are sent,
-   32 packets have really been transferred, and the remaining 40-32 = 8
-   packets fit in the queue.  No loss occurs.
+   this flight arrives at the bottleneck, the bottleneck should already
+   have forwarded 5/6 * 39 = 32.5 packets.  Since only complete packets
+   can be sent, the bottleneck has really forwarded 32 packets, and the
+   remaining 40-32 = 8 packets fit in the queue.  No loss occurs.
 
    This example explains how pacing can enable a rate increase to last
    longer than without pacing.  This makes it more likely that a
@@ -224,10 +224,10 @@ Table of Contents
    Since pacing algorithms generally attempt to spread out packets
    evenly across an RTT, it is important to have a good RTT estimate.
    Especially in the beginning of a transfer, when sending the initial
-   window, the only RTT estimate available may be from the SYN-SYN/ACK
-   handshake.  Being based on only one sample, this is a very unreliable
-   estimate, and using it to pace the initial window can cause
-   unnecessary delay.  This may be the reason why the Linux
+   window, the only RTT estimate available may be from the connection
+   establishment handshake.  Being based on only one sample, this is a
+   very unreliable estimate, and using it to pace the initial window can
+   cause unnecessary delay.  This may be the reason why the Linux TCP
    implementation does not pace the first 10 packets (see Section 4.1).
    As a possible improvement, the initial RTT estimate could also be
    based on a previous connection (temporal sharing) or on another
@@ -240,7 +240,7 @@ Table of Contents
    The following description is based on Linux kernel version 6.8.9.
 
    There are two ways to enable pacing in Linux: 1) via a socket option,
-   2) by configuring the FQ queue discipline.  We describe case 1).
+   2) by configuring the FQ queue discipline.  We describe case 1.
 
    Independent of the value of the Initial Window (IW), the first 10
    (hardcoded) packets are not paced.  Later, 10 packets will generally
@@ -255,9 +255,10 @@ Table of Contents
    maybe it's ok?]  The sender transmits data in line with the
    calculated pacing rate; this is approximated by calculating the rate
    per millisecond, and generally sending the resulting amount of data
-   per millisecond as a burst, every millisecond.  This amount of data
-   can be larger when the peer is very close (this is a configurable
-   value, per default with a minimum RTT of 3 milliseconds).
+   per millisecond as a small burst, every millisecond.  As an
+   exception, the per-millisecond amount of data can be a little larger
+   when the peer is very close, depending on a configurable value (per
+   default, when the minimum RTT is less than 3 milliseconds).
 
    If the pacing rate is smaller than 2 packets per millisecond, these
    bursts will become 2 packets in size, and they will not be sent every
