@@ -157,7 +157,7 @@ Pacing in QUIC stacks commonly involves:
 
 3. Details of the actual pacing algorithm (e.g. granularity of bursts allowed, etc.).
 
-Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google "quiche" and Meta "mvfst", that provide examples for some of the concepts discussed below.
+Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.
 
 Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.
 
