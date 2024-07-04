@@ -350,7 +350,7 @@ Table of Contents
    number of burst tokens, representing packets that can be sent
    unpaced, is initialized to some value (e.g. 10) when a flow starts or
    becomes quiescent.  If burst tokens are available, outgoing packets
-   are sent immeidately, without pacing, up to the limit permitted by
+   are sent immediately, without pacing, up to the limit permitted by
    the congestion window, and the burst tokens are depleted by each
    packet sent.  The number of burst tokens is reduced to zero on
    congestion events.  When coming out of quiescence, it is set to the
