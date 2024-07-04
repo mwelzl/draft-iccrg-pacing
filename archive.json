@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-02T00:32:18.178171+00:00",
+  "timestamp": "2024-07-04T00:32:00.850066+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -71,21 +71,21 @@
       "id": "I_kwDOL2DqS86HvkRM",
       "title": "QUIC BBR description",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "todo Wes",
       "createdAt": "2024-05-03T10:32:42Z",
-      "updatedAt": "2024-05-03T10:32:42Z",
-      "closedAt": null,
+      "updatedAt": "2024-07-03T14:22:57Z",
+      "closedAt": "2024-07-03T14:22:57Z",
       "comments": []
     },
     {
       "number": 3,
       "id": "I_kwDOL2DqS86Hvkgo",
-      "title": "Should we make this the draft that also *generally* discusses pacing?",
+      "title": "General pacing considerations",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/3",
       "state": "OPEN",
       "author": "mwelzl",
@@ -94,7 +94,7 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2024-07-01T11:10:42Z",
+      "updatedAt": "2024-07-03T14:23:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -110,6 +110,13 @@
           "body": "Just to report this here, in emails we agreed that yes, this should be a draft on pacing in general, and con's shouldn't be phrased as \"con's\" but rather \"consequences\" which aren't necessarily all bad.",
           "createdAt": "2024-07-01T11:10:41Z",
           "updatedAt": "2024-07-01T11:10:41Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "So we don't forget, a to-do item: @wesley-eddy suggested to also discuss dynamics with AQM.",
+          "createdAt": "2024-07-02T11:02:59Z",
+          "updatedAt": "2024-07-02T11:02:59Z"
         }
       ]
     }
@@ -122,7 +129,7 @@
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/4",
       "state": "MERGED",
       "author": "goelvidhi",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Hello, I added some text to the abstract and introduction. I only covered the advantages of Pacing listed in #3. I don't think we need to mention the cons as I don't really see them as important but we can discuss this.\r\n",
@@ -186,7 +193,7 @@
             "abbreviatedOid": "e436a53"
           },
           "author": "goelvidhi",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-07-01T01:14:34Z",
@@ -206,7 +213,7 @@
             "abbreviatedOid": "e436a53"
           },
           "author": "goelvidhi",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-07-01T01:18:22Z",
@@ -268,24 +275,26 @@
       "id": "PR_kwDOL2DqS850Fz9U",
       "title": "General pacing considerations",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/6",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-07-01T16:05:24Z",
-      "updatedAt": "2024-07-01T21:33:29Z",
+      "updatedAt": "2024-07-03T14:18:29Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "697177a6164c898352685cc9d4f2fb351c95b5f2",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-consequences",
-      "headRefOid": "4316e25775d07a233f8c2916c88f5d013dceb493",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "0ea2114709278c5230da23300abcb492b4d8d5bc",
+      "closedAt": "2024-07-03T14:18:28Z",
+      "mergedAt": "2024-07-03T14:18:28Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "a7bd13a41b6d86ad2ba09088471c6fe887454d9a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -294,7 +303,7 @@
             "abbreviatedOid": "4316e25"
           },
           "author": "wesley-eddy",
-          "authorAssociation": "NONE",
+          "authorAssociation": "COLLABORATOR",
           "state": "APPROVED",
           "body": "",
           "createdAt": "2024-07-01T17:06:14Z",
@@ -379,6 +388,46 @@
               "updatedAt": "2024-07-01T21:33:29Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AW23w",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-02T11:04:17Z",
+          "updatedAt": "2024-07-02T11:04:17Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "I added discussing dynamics with AQM as a todo item in issue #3 ",
+              "createdAt": "2024-07-02T11:04:17Z",
+              "updatedAt": "2024-07-02T11:04:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86Aijve",
+          "commit": {
+            "abbreviatedOid": "4316e25"
+          },
+          "author": "wesley-eddy",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:00:28Z",
+          "updatedAt": "2024-07-03T14:00:29Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Agreed!",
+              "createdAt": "2024-07-03T14:00:29Z",
+              "updatedAt": "2024-07-03T14:00:29Z"
+            }
+          ]
         }
       ]
     },
@@ -387,26 +436,164 @@
       "id": "PR_kwDOL2DqS850F2VU",
       "title": "security considerations",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/7",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-07-01T16:11:09Z",
-      "updatedAt": "2024-07-01T16:11:44Z",
+      "updatedAt": "2024-07-03T14:19:24Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "697177a6164c898352685cc9d4f2fb351c95b5f2",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-security",
       "headRefOid": "3c5ceccc284a58aa17f6fda42b568bb0d926033b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "closedAt": "2024-07-03T14:19:24Z",
+      "mergedAt": "2024-07-03T14:19:24Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "3387690bcd4c6f276d1dfaa785cb73b00926c44f"
+      },
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "I hope Gorry won't mind that I almost literally lifted his text for this section off one of our common drafts...",
+          "createdAt": "2024-07-03T14:19:18Z",
+          "updatedAt": "2024-07-03T14:19:18Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86AijRH",
+          "commit": {
+            "abbreviatedOid": "3c5cecc"
+          },
+          "author": "wesley-eddy",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-03T13:59:43Z",
+          "updatedAt": "2024-07-03T13:59:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOL2DqS850IcNd",
+      "title": "initial QUIC BBR text",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/8",
+      "state": "MERGED",
+      "author": "wesley-eddy",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Initial content for QUIC BBR section, and other small suggested edits.",
+      "createdAt": "2024-07-02T00:56:18Z",
+      "updatedAt": "2024-07-03T14:22:57Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "697177a6164c898352685cc9d4f2fb351c95b5f2",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "wes-edits",
+      "headRefOid": "cbe957ecfc23ff8daaa25096c8dfc29cc3c8a4b3",
+      "closedAt": "2024-07-03T14:22:57Z",
+      "mergedAt": "2024-07-03T14:22:57Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "65f0f2e87e782a45ec866d7c7fef5e1058e67f7f"
+      },
+      "comments": [
+        {
+          "author": "wesley-eddy",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks for the edits Michael!  I think I've responded to your other comments too.",
+          "createdAt": "2024-07-03T13:58:26Z",
+          "updatedAt": "2024-07-03T13:58:26Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86AWxoA",
+          "commit": {
+            "abbreviatedOid": "2e71759"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "A few minor suggestions - but this is a great PR, thanks!  I learned some pretty interesting things here, I wasn't aware of the token-based schemes (they make sense of course, but I just hadn't seen them before)",
+          "createdAt": "2024-07-02T10:53:08Z",
+          "updatedAt": "2024-07-02T11:00:54Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\nPacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation ({{Section 7.7 of RFC9002}}).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.\r\n```\r\n\r\nAbout NewReno: 1) Yuchung keeps making the point that NewReno (as opposed to Reno) is just a difference in the recovery, not a \"new congestion control\", and I agree with him. I think it's called \"newreno\" as a choice in Linux, but let's keep RFCs clean and talk about Reno.  2) about \"not precluding\", I'm suggesting this change because else it might get confusing with other sections - e.g. Linux' pacing is applied to Reno.\r\n\r\nAbout the curly brackets: I learned this from one of the IESG reviews in TAPS, this actually works.",
+              "createdAt": "2024-07-02T10:53:08Z",
+              "updatedAt": "2024-07-02T11:00:54Z"
+            },
+            {
+              "originalPosition": 60,
+              "body": "```suggestion\r\nExamples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google \"quiche\" and Meta \"mvfst\", that provide examples for some of the concepts discussed below.\r\n```\r\n\r\nIMO, the sentence is a bit too long, and it's saying \"Examples can be found in... that provide examples for ...\" - please fil the double example thing somehow.",
+              "createdAt": "2024-07-02T10:55:51Z",
+              "updatedAt": "2024-07-02T11:00:54Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\r\nUnlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often \"wake up late\" and miss the times that it intends to pace packets.\r\n```",
+              "createdAt": "2024-07-02T10:56:22Z",
+              "updatedAt": "2024-07-02T11:00:54Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "```suggestion\r\nPacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a \"leaky bucket\" to control bursts.  In this case the size of bursts may be more granular, depending on how much time is elapsed between evaluations.\r\n```",
+              "createdAt": "2024-07-02T10:58:23Z",
+              "updatedAt": "2024-07-02T11:00:54Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "Should \"time is elapsed\" be \"time has elapsed\"?  I don't know, you're the native speaker...",
+              "createdAt": "2024-07-02T10:58:58Z",
+              "updatedAt": "2024-07-02T11:00:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AidWX",
+          "commit": {
+            "abbreviatedOid": "2e71759"
+          },
+          "author": "wesley-eddy",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T13:51:26Z",
+          "updatedAt": "2024-07-03T13:51:26Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Yes this is good.  Just an odd thing to note: 9002 actually says \"NewReno\", but I agree with you (and Yuchung).",
+              "createdAt": "2024-07-03T13:51:26Z",
+              "updatedAt": "2024-07-03T13:51:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86AiwKs",
+          "commit": {
+            "abbreviatedOid": "cbe957e"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-03T14:20:16Z",
+          "updatedAt": "2024-07-03T14:20:16Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
