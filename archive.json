@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-04T00:32:00.850066+00:00",
+  "timestamp": "2024-07-07T00:36:06.171834+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -94,7 +94,7 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2024-07-03T14:23:15Z",
+      "updatedAt": "2024-07-04T08:53:03Z",
       "closedAt": null,
       "comments": [
         {
@@ -117,8 +117,33 @@
           "body": "So we don't forget, a to-do item: @wesley-eddy suggested to also discuss dynamics with AQM.",
           "createdAt": "2024-07-02T11:02:59Z",
           "updatedAt": "2024-07-02T11:02:59Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Probably, the need for fine-grain timers should also be a \"general consideration\" - this will explain the reader why implementations diverge (e.g., Linux limiting itself to 1ms granularity).",
+          "createdAt": "2024-07-04T08:53:02Z",
+          "updatedAt": "2024-07-04T08:53:02Z"
         }
       ]
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOL2DqS86OeTt1",
+      "title": "Linux SRTT calculation check",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/9",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "mwelzl"
+      ],
+      "labels": [],
+      "body": "The Linux TCP text currently says: SRTT is the smoothed round-trip time [[RFC6298](https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html#RFC6298)] [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]\r\n\r\nIndeed, that check should be done - if it's \"not okay\", there should be some text explaining how the Linux SRTT calculation works.",
+      "createdAt": "2024-07-04T08:50:31Z",
+      "updatedAt": "2024-07-04T08:50:31Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
