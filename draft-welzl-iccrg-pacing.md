@@ -42,6 +42,15 @@ author:
     country: United States of America
     email: wes@mti-systems.com
 
+  -
+    ins: V. Goel
+    name: Vidhi Goel
+    org: Apple Inc.
+    street: One Apple Park Way
+    city: Cupertino, California 95014
+    country: United States of America
+    email: vidhi_goel@apple.com
+
 normative:
 
 informative:
@@ -142,8 +151,9 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 
 ## Apple OSes
 
-(TODO)
+Pacing was added to Apple OS as a private API in iOS 17 and macOS 14. In its current form, an application or transport protocol computes and sets the desired transmit timestamp on a per packet basis and sends it to the pacing module in AQM. The packets are queued in the AQM until the current time becomes greater than or equal to corresponding packet's transmit timestamp. There is an upper limit of 3 seconds for how long the AQM will hold a queued packet before sending it.
 
+The above simplicity in the kernel allows upper layer protocols or applications to set a transmit timestamp in a manner that is suitable for them. For example, a stream based protocol like TCP might pace packets differently than a video conferencing app.
 
 ## QUIC BBR implementations
 
