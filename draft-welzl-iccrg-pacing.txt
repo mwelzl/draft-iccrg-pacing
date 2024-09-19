@@ -5,8 +5,10 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 5 January 2025                                      MTI Systems
-                                                             4 July 2024
+Expires: 23 March 2025                                       MTI Systems
+                                                                 V. Goel
+                                                              Apple Inc.
+                                                       19 September 2024
 
 
                      Pacing in Transport Protocols
@@ -54,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 23 March 2025.
 
 Copyright Notice
 
@@ -283,7 +285,19 @@ Table of Contents
 
 4.2.  Apple OSes
 
-   (TODO)
+   Pacing was added to Apple OS as a private API in iOS 17 and macOS 14.
+   In its current form, an application or transport protocol computes
+   and sets the desired transmit timestamp on a per packet basis and
+   sends it to the pacing module in AQM.  The packets are queued in the
+   AQM until the current time becomes greater than or equal to
+   corresponding packet's transmit timestamp.  There is an upper limit
+   of 3 seconds for how long the AQM will hold a queued packet before
+   sending it.
+
+   The above simplicity in the kernel allows upper layer protocols or
+   applications to set a transmit timestamp in a manner that is suitable
+   for them.  For example, a stream based protocol like TCP might pace
+   packets differently than a video conferencing app.
 
 4.3.  QUIC BBR implementations
 
@@ -444,3 +458,11 @@ Authors' Addresses
    North Olmsted, OH 44070,
    United States of America
    Email: wes@mti-systems.com
+
+
+   Vidhi Goel
+   Apple Inc.
+   One Apple Park Way
+   Cupertino, California 95014,
+   United States of America
+   Email: vidhi_goel@apple.com
