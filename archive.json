@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-17T00:30:14.266630+00:00",
+  "timestamp": "2024-09-19T00:36:50.258374+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -616,6 +616,46 @@
           "body": "",
           "createdAt": "2024-07-03T14:20:16Z",
           "updatedAt": "2024-07-03T14:20:16Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOL2DqS8572j6o",
+      "title": "add Vidhi and Apple OS implementation detail",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/10",
+      "state": "OPEN",
+      "author": "goelvidhi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-09-18T06:19:41Z",
+      "updatedAt": "2024-09-18T08:41:40Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "6d788525374da73028d893bcb6b9b279a7c80b86",
+      "headRepository": "goelvidhi/draft-iccrg-pacing",
+      "headRefName": "dev/macos",
+      "headRefOid": "77f62384e5a9bea760e4b13dedc859da9e76bb2d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86JzqCa",
+          "commit": {
+            "abbreviatedOid": "77f6238"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "This is great, thanks!",
+          "createdAt": "2024-09-18T08:41:40Z",
+          "updatedAt": "2024-09-18T08:41:40Z",
           "comments": []
         }
       ]
