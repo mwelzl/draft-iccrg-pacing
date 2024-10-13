@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-10T00:37:43.139542+00:00",
+  "timestamp": "2024-10-13T00:41:21.933816+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -62,9 +62,17 @@
       "labels": [],
       "body": "todo Vidhi",
       "createdAt": "2024-05-03T10:32:25Z",
-      "updatedAt": "2024-05-03T10:32:25Z",
+      "updatedAt": "2024-10-12T10:03:18Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "We have that now, but it could be more detailed...",
+          "createdAt": "2024-10-12T10:03:17Z",
+          "updatedAt": "2024-10-12T10:03:17Z"
+        }
+      ]
     },
     {
       "number": 2,
@@ -142,6 +150,38 @@
       "body": "The Linux TCP text currently says: SRTT is the smoothed round-trip time [[RFC6298](https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html#RFC6298)] [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]\r\n\r\nIndeed, that check should be done - if it's \"not okay\", there should be some text explaining how the Linux SRTT calculation works.",
       "createdAt": "2024-07-04T08:50:31Z",
       "updatedAt": "2024-07-04T08:50:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOL2DqS86Z8dQE",
+      "title": "Time scales (or: application layer)",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/11",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The \"Sammy\" paper:  https://dl.acm.org/doi/10.1145/3603269.3604839   paces at a larger time scale - avoiding to transmit video data as a bulk but instead spreading it out. This can be done with or without RTT-timescale pacing underneath, and should be discussed as a separate thing IMO.\r\n\r\nPerhaps the right angle is to talk about different time scales, or it is about being at the application layer (because this is really application payload specific).",
+      "createdAt": "2024-10-12T10:07:28Z",
+      "updatedAt": "2024-10-12T10:07:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOL2DqS86Z8dZN",
+      "title": "FreeBSD",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/12",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "from Grenville, I got:\r\n\r\n> Since Michael Tuexen and Randall Stewart are writing an article for the FreeBSD Journal on how pacing works in FreeBSD, I asked Michael (Tuexen) if he could contribute a couple of paragraphs to draft-welzl-iccrg-pacing. Apparently he might already have chatted to you about this? Anyway, I expect Michael will reach out to you soon-ish to confirm that he (possibly with Randall's help) will wordsmith some text for you.\r\n",
+      "createdAt": "2024-10-12T10:09:01Z",
+      "updatedAt": "2024-10-12T10:09:01Z",
       "closedAt": null,
       "comments": []
     }
