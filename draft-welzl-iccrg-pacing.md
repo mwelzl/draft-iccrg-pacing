@@ -68,6 +68,64 @@ informative:
     seriesinfo:
       DOI: 10.1145/37499.37504
 
+  Sammy:
+    title: "Sammy: Smoothing Video Traffic to be a Friendly Internet Neighbor"
+    author:
+      -
+        ins: B. Spang
+        name: Bruce Spang
+      -
+        ins: S. Kunamalla
+        name: Shravya Kunamalla
+      -
+        ins: R. Teixeira
+        name: Renata Teixeira
+      -
+        ins: T.-Y. Huang
+        name: Te-Yuan Huang
+      -
+        ins: G. Armitage
+        name: Grenville Armitage
+      -
+        ins: R. Johari
+        name: Ramesh Johari
+      -
+        ins: N. McKeown
+        name: Nick McKeown
+    date: 2023-09-01
+    seriesinfo: "ACM SIGCOMM '23: Proceedings of the ACM SIGCOMM 2023 Conference"
+    target: https://doi.org/10.1145/3603269.3604839
+
+  RACK:
+    title: "RACK and Alternate TCP Stacks for FreeBSD"
+    author:
+      -
+        ins: R. Stewart
+        name: Randall Stewart
+      -
+        ins: M. Tüxen
+        name: Michael Tüxen
+    date: February 2024
+    seriesinfo: "FreeBSD Journal (January/February 2024)"
+    target: https://freebsdfoundation.org/our-work/journal/browser-based-edition/networking-10th-anniversary/rack-and-alternate-tcp-stacks-for-freebsd/
+
+  HPTS:
+    title: "Pacing in the FreeBSD TCP Stack"
+    author:
+      -
+        ins: R. Stewart
+        name: Randall Stewart
+      -
+        ins: M. Tüxen
+        name: Michael Tüxen
+    date: October 2024
+    seriesinfo: "Upcoming in FreeBSD Journal (September/October 2024)"
+
+  HPTSCode:
+    title: "tcp_hpts.c"
+    date: October 2024
+    target: https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99
+
 --- abstract
 
 Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
@@ -154,6 +212,32 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 Pacing was added to Apple OS as a private API in iOS 17 and macOS 14. In its current form, an application or transport protocol computes and sets the desired transmit timestamp on a per packet basis and sends it to the pacing module in AQM. The packets are queued in the AQM until the current time becomes greater than or equal to corresponding packet's transmit timestamp. There is an upper limit of 3 seconds for how long the AQM will hold a queued packet before sending it.
 
 The above simplicity in the kernel allows upper layer protocols or applications to set a transmit timestamp in a manner that is suitable for them. For example, a stream based protocol like TCP might pace packets differently than a video conferencing app.
+
+## FreeBSD
+
+FreeBSD has the infrastructure to support multiple TCP stacks.
+Each TCP stack has a tcp_output() function, which handles most of the sending of TCP segments.
+The default stack does not support pacing and its tcp_output() may be called whenever
+
+1. a TCP segment is received or
+
+2. a TCP timer (like the retransmission or delayed ACK timer) runs off or
+
+3. the application provides new data to be sent
+
+and sends as many TCP segments as is allowed by the congestion and flow control resulting in burst of TCP segments.
+However, this also allows to make use of TCP Segment Offload (TSO), which reduces the CPU load.
+
+The RACK {{RACK}} and BBR stacks both support pacing by leveraging the TCP High Precision Timer System (HPTS) {{HPTS}}, which is a kernel loadable module available in FreeBSD 14 and higher.
+The tcp_output() function of a TCP stack which supports pacing will not send as much as is allowed by congestion and flow control, but may only send a micro burst and schedule itself for being called after the inter-burst send time using the HPTS.
+The RACK stack supports an application setting a pacing rate and a maximum burst size using TCP socket options.
+The RACK stack then uses these values to compute the actual micro burst size and the inter-burst send time.
+
+The HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than compared to the tcp_output() function of the default stack.
+This allows to use TSO in combination with TCP pacing.
+
+This subsystem underpins recently published research by Netflix and Stanford into application-informed pacing at scale {{Sammy}}.
+
 
 ## QUIC BBR implementations
 
