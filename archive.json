@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-17T00:38:14.215147+00:00",
+  "timestamp": "2024-10-20T00:42:18.145255+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -149,9 +149,17 @@
       "labels": [],
       "body": "The Linux TCP text currently says: SRTT is the smoothed round-trip time [[RFC6298](https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html#RFC6298)] [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]\r\n\r\nIndeed, that check should be done - if it's \"not okay\", there should be some text explaining how the Linux SRTT calculation works.",
       "createdAt": "2024-07-04T08:50:31Z",
-      "updatedAt": "2024-07-04T08:50:31Z",
+      "updatedAt": "2024-10-17T13:53:13Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "It's not RFC 6298 that relaxes the rules, it's [RFC 8961](https://www.rfc-editor.org/rfc/rfc8961.html).",
+          "createdAt": "2024-10-17T13:53:11Z",
+          "updatedAt": "2024-10-17T13:53:11Z"
+        }
+      ]
     },
     {
       "number": 11,
@@ -701,6 +709,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOL2DqS85_Ina5",
+      "title": "Initial FreeBSD text",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/13",
+      "state": "OPEN",
+      "author": "tuexen",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-18T18:31:12Z",
+      "updatedAt": "2024-10-18T18:31:12Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "caa6f25409e9d19c77d9b7e08f3b08c1d6beffbc",
+      "headRepository": "tuexen/draft-iccrg-pacing",
+      "headRefName": "freebsd",
+      "headRefOid": "9c3ae06090ce6dec1c6a47a85c23c1b797d36760",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
