@@ -11,14 +11,14 @@
 <meta content='
        Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. 
     ' name="description">
-<meta content="xml2rfc 3.23.1" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="next generation" name="keyword">
 <meta content="unicorn" name="keyword">
 <meta content="sparkling distributed ledger" name="keyword">
 <meta content="draft-welzl-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.23.1
-    Python 3.12.6
+  xml2rfc 3.23.2
+    Python 3.12.7
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -1028,11 +1028,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Pacing in Transport Protocols</td>
-<td class="right">September 2024</td>
+<td class="right">October 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 23 March 2025</td>
+<td class="center">Expires 23 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-welzl-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-09-19" class="published">19 September 2024</time>
+<time datetime="2024-10-20" class="published">20 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-23">23 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-23">23 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1172,7 +1172,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-apple-oses" class="internal xref">Apple OSes</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-quic-bbr-implementations" class="internal xref">QUIC BBR implementations</a></p>
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-freebsd" class="internal xref">FreeBSD</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-quic-bbr-implementations" class="internal xref">QUIC BBR implementations</a></p>
 </li>
             </ul>
 </li>
@@ -1310,30 +1313,60 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 <p id="section-4.2-2">The above simplicity in the kernel allows upper layer protocols or applications to set a transmit timestamp in a manner that is suitable for them. For example, a stream based protocol like TCP might pace packets differently than a video conferencing app.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="quic-bbr-implementations">
+<div id="freebsd">
 <section id="section-4.3">
-        <h3 id="name-quic-bbr-implementations">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-quic-bbr-implementations" class="section-name selfRef">QUIC BBR implementations</a>
+        <h3 id="name-freebsd">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-freebsd" class="section-name selfRef">FreeBSD</a>
         </h3>
-<p id="section-4.3-1">Pacing capability is expected in QUIC senders.  While standard QUIC congestion control <span>[<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span>).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">Pacing in QUIC stacks commonly involves:<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.3-3">
-<li id="section-4.3-3.1">
-            <p id="section-4.3-3.1.1">Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.<a href="#section-4.3-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">FreeBSD has the infrastructure to support multiple TCP stacks.
+Each TCP stack has a tcp_output() function, which handles most of the sending of TCP segments.
+The default stack does not support pacing and its tcp_output() may be called whenever<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.3-2">
+<li id="section-4.3-2.1">
+            <p id="section-4.3-2.1.1">a TCP segment is received or<a href="#section-4.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-4.3-3.2">
-            <p id="section-4.3-3.2.1">Managing additional timers related to pacing, along with those already needed for retransmission, and other events.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
+          <li id="section-4.3-2.2">
+            <p id="section-4.3-2.2.1">a TCP timer (like the retransmission or delayed ACK timer) runs off or<a href="#section-4.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-4.3-3.3">
-            <p id="section-4.3-3.3.1">Details of the actual pacing algorithm (e.g. granularity of bursts allowed, etc.).<a href="#section-4.3-3.3.1" class="pilcrow">¶</a></p>
+          <li id="section-4.3-2.3">
+            <p id="section-4.3-2.3.1">the application provides new data to be sent<a href="#section-4.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-4.3-4">Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
-<p id="section-4.3-5">Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
-<p id="section-4.3-6">When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel <span>[<a href="#VL87" class="cite xref">VL87</a>]</span> provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
-<p id="section-4.3-7">Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.<a href="#section-4.3-7" class="pilcrow">¶</a></p>
-<p id="section-4.3-8">The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send, e.g. as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
-<p id="section-4.3-9">There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).<a href="#section-4.3-9" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">and sends as many TCP segments as is allowed by the congestion and flow control resulting in burst of TCP segments.
+However, this also allows to make use of TCP Segment Offload (TSO), which reduces the CPU load.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">The RACK <span>[<a href="#RACK" class="cite xref">RACK</a>]</span> and BBR stacks both support pacing by leveraging the TCP High Precision Timer System (HPTS) <span>[<a href="#HPTS" class="cite xref">HPTS</a>]</span>, which is a kernel loadable module available in FreeBSD 14 and higher.
+The tcp_output() function of a TCP stack which supports pacing will not send as much as is allowed by congestion and flow control, but may only send a micro burst and schedule itself for being called after the inter-burst send time using the HPTS.
+The RACK stack supports an application setting a pacing rate and a maximum burst size using TCP socket options.
+The RACK stack then uses these values to compute the actual micro burst size and the inter-burst send time.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">The HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than the tcp_output() function of the default stack.
+This allows to use TSO in combination with TCP pacing.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">This subsystem underpins recently published research by Netflix and Stanford into application-informed pacing at scale <span>[<a href="#Sammy" class="cite xref">Sammy</a>]</span>.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="quic-bbr-implementations">
+<section id="section-4.4">
+        <h3 id="name-quic-bbr-implementations">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-quic-bbr-implementations" class="section-name selfRef">QUIC BBR implementations</a>
+        </h3>
+<p id="section-4.4-1">Pacing capability is expected in QUIC senders.  While standard QUIC congestion control <span>[<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span>).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Pacing in QUIC stacks commonly involves:<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.4-3">
+<li id="section-4.4-3.1">
+            <p id="section-4.4-3.1.1">Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.<a href="#section-4.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.4-3.2">
+            <p id="section-4.4-3.2.1">Managing additional timers related to pacing, along with those already needed for retransmission, and other events.<a href="#section-4.4-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.4-3.3">
+            <p id="section-4.4-3.3.1">Details of the actual pacing algorithm (e.g. granularity of bursts allowed, etc.).<a href="#section-4.4-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-4.4-4">Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
+<p id="section-4.4-5">Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.<a href="#section-4.4-5" class="pilcrow">¶</a></p>
+<p id="section-4.4-6">When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel <span>[<a href="#VL87" class="cite xref">VL87</a>]</span> provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.<a href="#section-4.4-6" class="pilcrow">¶</a></p>
+<p id="section-4.4-7">Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.<a href="#section-4.4-7" class="pilcrow">¶</a></p>
+<p id="section-4.4-8">The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send, e.g. as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.<a href="#section-4.4-8" class="pilcrow">¶</a></p>
+<p id="section-4.4-9">There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).<a href="#section-4.4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1387,6 +1420,18 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="HPTS">[HPTS]</dt>
+        <dd>
+<span class="refAuthor">Stewart, R.</span> and <span class="refAuthor">M. Tüxen</span>, <span class="refTitle">"Pacing in the FreeBSD TCP Stack"</span>, <span class="seriesInfo">Upcoming in FreeBSD Journal (September/October 2024) </span>, <time datetime="2024-10" class="refDate">October 2024</time>. </dd>
+<dd class="break"></dd>
+<dt id="HPTSCode">[HPTSCode]</dt>
+        <dd>
+<span class="refTitle">"tcp_hpts.c"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99">https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RACK">[RACK]</dt>
+        <dd>
+<span class="refAuthor">Stewart, R.</span> and <span class="refAuthor">M. Tüxen</span>, <span class="refTitle">"RACK and Alternate TCP Stacks for FreeBSD"</span>, <span class="seriesInfo">FreeBSD Journal (January/February 2024) </span>, <time datetime="2024-02" class="refDate">February 2024</time>, <span>&lt;<a href="https://freebsdfoundation.org/our-work/journal/browser-based-edition/networking-10th-anniversary/rack-and-alternate-tcp-stacks-for-freebsd/">https://freebsdfoundation.org/our-work/journal/browser-based-edition/networking-10th-anniversary/rack-and-alternate-tcp-stacks-for-freebsd/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5681">[RFC5681]</dt>
         <dd>
 <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">E. Blanton</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 5681</span>, <span class="seriesInfo">DOI 10.17487/RFC5681</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5681">https://www.rfc-editor.org/rfc/rfc5681</a>&gt;</span>. </dd>
@@ -1402,6 +1447,10 @@ If the previous packet was not sent when expected by the pacing logic, but more 
 <dt id="RFC9040">[RFC9040]</dt>
         <dd>
 <span class="refAuthor">Touch, J.</span>, <span class="refAuthor">Welzl, M.</span>, and <span class="refAuthor">S. Islam</span>, <span class="refTitle">"TCP Control Block Interdependence"</span>, <span class="seriesInfo">RFC 9040</span>, <span class="seriesInfo">DOI 10.17487/RFC9040</span>, <time datetime="2021-07" class="refDate">July 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9040">https://www.rfc-editor.org/rfc/rfc9040</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Sammy">[Sammy]</dt>
+        <dd>
+<span class="refAuthor">Spang, B.</span>, <span class="refAuthor">Kunamalla, S.</span>, <span class="refAuthor">Teixeira, R.</span>, <span class="refAuthor">Huang, T.</span>, <span class="refAuthor">Armitage, G.</span>, <span class="refAuthor">Johari, R.</span>, and <span class="refAuthor">N. McKeown</span>, <span class="refTitle">"Sammy: Smoothing Video Traffic to be a Friendly Internet Neighbor"</span>, <span class="seriesInfo">ACM SIGCOMM '23: Proceedings of the ACM SIGCOMM 2023 Conference </span>, <time datetime="2023-09-01" class="refDate">1 September 2023</time>, <span>&lt;<a href="https://doi.org/10.1145/3603269.3604839">https://doi.org/10.1145/3603269.3604839</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="VL87">[VL87]</dt>
       <dd>

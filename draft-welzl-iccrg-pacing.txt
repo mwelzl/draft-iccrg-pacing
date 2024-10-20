@@ -5,10 +5,10 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 23 March 2025                                       MTI Systems
+Expires: 23 April 2025                                       MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
-                                                       19 September 2024
+                                                         20 October 2024
 
 
                      Pacing in Transport Protocols
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2025.
+   This Internet-Draft will expire on 23 April 2025.
 
 Copyright Notice
 
@@ -84,7 +84,8 @@ Table of Contents
    4.  Implementation examples
      4.1.  Linux TCP
      4.2.  Apple OSes
-     4.3.  QUIC BBR implementations
+     4.3.  FreeBSD
+     4.4.  QUIC BBR implementations
    5.  Security Considerations
    6.  IANA Considerations
    7.  References
@@ -299,7 +300,45 @@ Table of Contents
    for them.  For example, a stream based protocol like TCP might pace
    packets differently than a video conferencing app.
 
-4.3.  QUIC BBR implementations
+4.3.  FreeBSD
+
+   FreeBSD has the infrastructure to support multiple TCP stacks.  Each
+   TCP stack has a tcp_output() function, which handles most of the
+   sending of TCP segments.  The default stack does not support pacing
+   and its tcp_output() may be called whenever
+
+   1.  a TCP segment is received or
+
+   2.  a TCP timer (like the retransmission or delayed ACK timer) runs
+       off or
+
+   3.  the application provides new data to be sent
+
+   and sends as many TCP segments as is allowed by the congestion and
+   flow control resulting in burst of TCP segments.  However, this also
+   allows to make use of TCP Segment Offload (TSO), which reduces the
+   CPU load.
+
+   The RACK [RACK] and BBR stacks both support pacing by leveraging the
+   TCP High Precision Timer System (HPTS) [HPTS], which is a kernel
+   loadable module available in FreeBSD 14 and higher.  The tcp_output()
+   function of a TCP stack which supports pacing will not send as much
+   as is allowed by congestion and flow control, but may only send a
+   micro burst and schedule itself for being called after the inter-
+   burst send time using the HPTS.  The RACK stack supports an
+   application setting a pacing rate and a maximum burst size using TCP
+   socket options.  The RACK stack then uses these values to compute the
+   actual micro burst size and the inter-burst send time.
+
+   The HPTS is optimized for handling a large number of TCP connections
+   and the tcp_output() function of the RACK stack is also optimized for
+   being called more often than the tcp_output() function of the default
+   stack.  This allows to use TSO in combination with TCP pacing.
+
+   This subsystem underpins recently published research by Netflix and
+   Stanford into application-informed pacing at scale [Sammy].
+
+4.4.  QUIC BBR implementations
 
    Pacing capability is expected in QUIC senders.  While standard QUIC
    congestion control [RFC9002] is based on TCP Reno, which is not
@@ -415,6 +454,19 @@ Table of Contents
 
 7.2.  Informative References
 
+   [HPTS]     Stewart, R. and M. Tüxen, "Pacing in the FreeBSD TCP
+              Stack", Upcoming in FreeBSD Journal (September/October
+              2024) , October 2024.
+
+   [HPTSCode] "tcp_hpts.c", October 2024, <https://github.com/freebsd/
+              freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99>.
+
+   [RACK]     Stewart, R. and M. Tüxen, "RACK and Alternate TCP Stacks
+              for FreeBSD", FreeBSD Journal (January/February 2024) ,
+              February 2024, <https://freebsdfoundation.org/our-
+              work/journal/browser-based-edition/networking-10th-
+              anniversary/rack-and-alternate-tcp-stacks-for-freebsd/>.
+
    [RFC5681]  Allman, M., Paxson, V., and E. Blanton, "TCP Congestion
               Control", RFC 5681, DOI 10.17487/RFC5681, September 2009,
               <https://www.rfc-editor.org/rfc/rfc5681>.
@@ -431,6 +483,13 @@ Table of Contents
    [RFC9040]  Touch, J., Welzl, M., and S. Islam, "TCP Control Block
               Interdependence", RFC 9040, DOI 10.17487/RFC9040, July
               2021, <https://www.rfc-editor.org/rfc/rfc9040>.
+
+   [Sammy]    Spang, B., Kunamalla, S., Teixeira, R., Huang, T.,
+              Armitage, G., Johari, R., and N. McKeown, "Sammy:
+              Smoothing Video Traffic to be a Friendly Internet
+              Neighbor", ACM SIGCOMM '23: Proceedings of the ACM SIGCOMM
+              2023 Conference , 1 September 2023,
+              <https://doi.org/10.1145/3603269.3604839>.
 
    [VL87]     Varghese, G. and T. Tauck, "Hashed and hierarchical timing
               wheels: data structures for the efficient implementation
