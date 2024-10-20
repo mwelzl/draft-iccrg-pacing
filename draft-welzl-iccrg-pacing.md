@@ -233,7 +233,7 @@ The tcp_output() function of a TCP stack which supports pacing will not send as 
 The RACK stack supports an application setting a pacing rate and a maximum burst size using TCP socket options.
 The RACK stack then uses these values to compute the actual micro burst size and the inter-burst send time.
 
-The HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than compared to the tcp_output() function of the default stack.
+The HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than the tcp_output() function of the default stack.
 This allows to use TSO in combination with TCP pacing.
 
 This subsystem underpins recently published research by Netflix and Stanford into application-informed pacing at scale {{Sammy}}.
