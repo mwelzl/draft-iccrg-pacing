@@ -51,6 +51,15 @@ author:
     country: United States of America
     email: vidhi_goel@apple.com
 
+  -
+    ins: M. Tüxen
+    name: Michael Tüxen
+    org: Münster University of Applied Sciences
+    street: Stegerwaldstrasse 39
+    city: 48565 Steinfurt
+    country: Germany
+    email: tuexen@fh-muenster.de
+
 normative:
 
 informative:
