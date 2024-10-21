@@ -277,10 +277,12 @@ This document has no IANA actions.
 
 --- back
 
-# Acknowledgments
+<!-- # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+TODO acknowledge. Note, numbered sections shouldn't appear
+after an unnumbered one - so either move this last, or take
+the numbering rule out. -->
 
 
 # Change Log
