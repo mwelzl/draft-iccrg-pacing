@@ -281,3 +281,11 @@ This document has no IANA actions.
 {:numbered="false"}
 
 TODO acknowledge.
+
+
+# Change Log
+
+* -00 was the first individual submission for feedback by ICCRG.
+* -01 adds Michael Tuexen as new co-author, and adds the following new descriptions:
+  * a first version of text for Apple OSes
+  * a first version of text for FreeBSD
