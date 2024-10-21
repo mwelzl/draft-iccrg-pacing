@@ -286,7 +286,17 @@ This document has no IANA actions.
 
 --- back
 
-# Acknowledgments
+<!-- # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+TODO acknowledge. Note, numbered sections shouldn't appear
+after an unnumbered one - so either move this last, or take
+the numbering rule out. -->
+
+
+# Change Log
+
+* -00 was the first individual submission for feedback by ICCRG.
+* -01 adds Michael Tuexen as new co-author, and adds the following new descriptions:
+  * a first version of text for Apple OSes
+  * a first version of text for FreeBSD
