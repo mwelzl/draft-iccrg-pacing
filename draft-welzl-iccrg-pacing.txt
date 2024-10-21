@@ -5,10 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 23 April 2025                                       MTI Systems
+Expires: 24 April 2025                                       MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
-                                                         20 October 2024
+                                                                M. Tüxen
+                                  Münster University of Applied Sciences
+                                                         21 October 2024
 
 
                      Pacing in Transport Protocols
@@ -56,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2025.
+   This Internet-Draft will expire on 24 April 2025.
 
 Copyright Notice
 
@@ -525,3 +527,11 @@ Authors' Addresses
    Cupertino, California 95014,
    United States of America
    Email: vidhi_goel@apple.com
+
+
+   Michael Tüxen
+   Münster University of Applied Sciences
+   Stegerwaldstrasse 39
+   48565 Steinfurt
+   Germany
+   Email: tuexen@fh-muenster.de
