@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-20T00:42:18.145255+00:00",
+  "timestamp": "2024-10-22T00:38:54.269806+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -189,9 +189,17 @@
       "labels": [],
       "body": "from Grenville, I got:\r\n\r\n> Since Michael Tuexen and Randall Stewart are writing an article for the FreeBSD Journal on how pacing works in FreeBSD, I asked Michael (Tuexen) if he could contribute a couple of paragraphs to draft-welzl-iccrg-pacing. Apparently he might already have chatted to you about this? Anyway, I expect Michael will reach out to you soon-ish to confirm that he (possibly with Randall's help) will wordsmith some text for you.\r\n",
       "createdAt": "2024-10-12T10:09:01Z",
-      "updatedAt": "2024-10-12T10:09:01Z",
+      "updatedAt": "2024-10-21T10:12:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Update: we have some text now. More to come :-)",
+          "createdAt": "2024-10-21T10:12:42Z",
+          "updatedAt": "2024-10-21T10:12:42Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -715,24 +723,123 @@
       "id": "PR_kwDOL2DqS85_Ina5",
       "title": "Initial FreeBSD text",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/13",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tuexen",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-10-18T18:31:12Z",
-      "updatedAt": "2024-10-18T18:31:12Z",
+      "updatedAt": "2024-10-21T10:24:17Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "caa6f25409e9d19c77d9b7e08f3b08c1d6beffbc",
       "headRepository": "tuexen/draft-iccrg-pacing",
       "headRefName": "freebsd",
-      "headRefOid": "9c3ae06090ce6dec1c6a47a85c23c1b797d36760",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "4ce6625afba84ad2c464335871fc517c712f054f",
+      "closedAt": "2024-10-20T13:07:02Z",
+      "mergedAt": "2024-10-20T13:07:02Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "0657e0528bf8acada33454684688d47d67d346dc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86N4Yhi",
+          "commit": {
+            "abbreviatedOid": "9c3ae06"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "This is a great start for sure, many thanks!  Just one tiny suggestion...",
+          "createdAt": "2024-10-20T10:57:44Z",
+          "updatedAt": "2024-10-20T10:58:09Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "```suggestion\r\nThe HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than the tcp_output() function of the default stack.\r\n```",
+              "createdAt": "2024-10-20T10:57:44Z",
+              "updatedAt": "2024-10-20T10:58:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS86N4ift",
+          "commit": {
+            "abbreviatedOid": "9c3ae06"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-20T11:52:59Z",
+          "updatedAt": "2024-10-20T11:52:59Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "I push the corresponding fix.",
+              "createdAt": "2024-10-20T11:52:59Z",
+              "updatedAt": "2024-10-20T11:52:59Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOL2DqS85_TEFj",
+      "title": "Beginning a change log",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/14",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-21T10:30:04Z",
+      "updatedAt": "2024-10-21T10:46:14Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "0657e0528bf8acada33454684688d47d67d346dc",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-changelog-01",
+      "headRefOid": "20c017390951c5d6dcf5096b6bd7bad90f15ef6a",
+      "closedAt": "2024-10-21T10:46:14Z",
+      "mergedAt": "2024-10-21T10:46:14Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "12e8cdb7620b83807f21c1aab941b95ceb0253b7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOL2DqS85_TEn9",
+      "title": "Add me as a co-author",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/15",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-21T10:31:01Z",
+      "updatedAt": "2024-10-21T10:34:11Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "0657e0528bf8acada33454684688d47d67d346dc",
+      "headRepository": "tuexen/draft-iccrg-pacing",
+      "headRefName": "coauthorship",
+      "headRefOid": "626e6e9791ca5eb0a1b828baab0bf95dad3cb2bb",
+      "closedAt": "2024-10-21T10:34:11Z",
+      "mergedAt": "2024-10-21T10:34:11Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "97034f4f9bff49a4d1ce13ee521bb6ec055f9107"
+      },
       "comments": [],
       "reviews": []
     }
