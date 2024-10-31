@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-29T00:39:38.643776+00:00",
+  "timestamp": "2024-10-31T00:39:15.159226+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -149,7 +149,7 @@
       "labels": [],
       "body": "The Linux TCP text currently says: SRTT is the smoothed round-trip time [[RFC6298](https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html#RFC6298)] [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]\r\n\r\nIndeed, that check should be done - if it's \"not okay\", there should be some text explaining how the Linux SRTT calculation works.",
       "createdAt": "2024-07-04T08:50:31Z",
-      "updatedAt": "2024-10-17T13:53:13Z",
+      "updatedAt": "2024-10-30T14:54:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -158,6 +158,20 @@
           "body": "It's not RFC 6298 that relaxes the rules, it's [RFC 8961](https://www.rfc-editor.org/rfc/rfc8961.html).",
           "createdAt": "2024-10-17T13:53:11Z",
           "updatedAt": "2024-10-17T13:53:11Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "First, the code:\r\n\r\nHere is an analysis of the RTT estimation in Linux, as found at:\r\nhttps://elixir.bootlin.com/linux/v6.11.5/source/net/ipv4/tcp_input.c#L869\r\n\r\nThis is about the function tcp_rtt_estimator, line 869 ff. in net/ipv4/tcp_input.c, kernel v6.11.5. This function gets a new rtt sample, called mrtt_us.\r\n\r\n\r\nCASE 1: THERE IS A PREVIOUS SAMPLE:\r\n\r\nThe stored srtt_us is left-shifted by 3 bits (comment: \"/ smoothed round trip time << 3 in usecs /\"); thus the comment \"m is now error in rtt est\", in line 892, next to:\r\nm -= (srtt >> 3);\r\nis correct, i.e. m now really is the difference between srtt and the latest sample (mrtt_us).\r\n\r\nLet's look at the next line, srtt += m, with the comment:\r\n/* rtt = 7/8 rtt + 1/8 new */\r\n\r\nNote that the value of the \"srtt\" variable is actually the srtt << 3, i.e. times 8. So, using \"SRTT\" to represent srtt in the common meaning and RTT to represent the new RTT sample, this line translates into:\r\n\r\nSRTT = SRTT * 8 + (RTT-SRTT)\r\nwhich really is the same as:\r\nSRTT = SRTT * 7 + RTT\r\n\r\n... which is what the comment says, with the exception that the resulting SRTT value is 8 times too large (i.e., left-shifted by 3 bits), but that's how this value is stored in the end.\r\n\r\nNext, \"mdev\" and \"rttvar\" are updated... which are meaningful for RTO calculation but not for the SRTT directly. \r\n\r\n\r\nCASE 2: THERE IS NO PREVIOUS SAMPLE  (INIT.):\r\n\r\nSRTT is set to RTT (the measured time). In the code, really, it is set to \"m << 3\": before this, m is initialized to be the same as mrtt_us, and it's left-shifted by 3 bits because this is how the SRTT is really stored (srtt_us).\r\n\r\n\r\nGenerally (in line 934), the code also sets a minimum value for SRTT, which is \"1\": this really represents 1/3 microseconds, I believe.\r\n",
+          "createdAt": "2024-10-30T14:49:53Z",
+          "updatedAt": "2024-10-30T14:53:42Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "The short version of the above:\r\nInitially, SRTT = RTT  (\"RTT\" is the new sample).\r\nThen, to update, SRTT = 7/8 * SRTT + 1/8 * RTT.",
+          "createdAt": "2024-10-30T14:54:18Z",
+          "updatedAt": "2024-10-30T14:54:40Z"
         }
       ]
     },
