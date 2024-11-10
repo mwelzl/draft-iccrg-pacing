@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-07T00:43:07.139614+00:00",
+  "timestamp": "2024-11-10T00:40:56.123732+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -187,7 +187,7 @@
       "labels": [],
       "body": "The \"Sammy\" paper:  https://dl.acm.org/doi/10.1145/3603269.3604839   paces at a larger time scale - avoiding to transmit video data as a bulk but instead spreading it out. This can be done with or without RTT-timescale pacing underneath, and should be discussed as a separate thing IMO.\r\n\r\nPerhaps the right angle is to talk about different time scales, or it is about being at the application layer (because this is really application payload specific).",
       "createdAt": "2024-10-12T10:07:28Z",
-      "updatedAt": "2024-10-26T06:51:55Z",
+      "updatedAt": "2024-11-08T10:01:59Z",
       "closedAt": null,
       "comments": [
         {
@@ -200,9 +200,9 @@
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "From Grenville Armitage, this is a different way of looking at it - probably a better phrasing, not about time scales:\r\n\r\n>Sammy makes target upper-bound rate selection on a per-video-chunk basis, and then relies on underlying TCP packet level pacing to instantiate the per-chunk rate-limit target. So, decoupling the rate target selection logic (also referred to as \"application informed pacing\" in the paper) from the instantiation of that upper-bound (in this specific case relying on FreeBSD's HPTS subsystem giving us TCP packet granularity pacing, but of course could be any other subsystem achieving similar on-the-wire outcomes).",
+          "body": "From Grenville Armitage, this is a different way of looking at \"Sammy\" - probably a better phrasing, not about time scales:\r\n\r\n>Sammy makes target upper-bound rate selection on a per-video-chunk basis, and then relies on underlying TCP packet level pacing to instantiate the per-chunk rate-limit target. So, decoupling the rate target selection logic (also referred to as \"application informed pacing\" in the paper) from the instantiation of that upper-bound (in this specific case relying on FreeBSD's HPTS subsystem giving us TCP packet granularity pacing, but of course could be any other subsystem achieving similar on-the-wire outcomes).",
           "createdAt": "2024-10-25T23:15:05Z",
-          "updatedAt": "2024-10-26T06:51:55Z"
+          "updatedAt": "2024-11-08T10:01:59Z"
         }
       ]
     },
@@ -245,6 +245,22 @@
       "body": "See this email from Ingemar Johannson:\r\nhttps://mailarchive.ietf.org/arch/msg/iccrg/8LHZwBITPSnJc5akwsAGqPn3zGM/",
       "createdAt": "2024-10-24T11:21:34Z",
       "updatedAt": "2024-10-24T11:21:34Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOL2DqS86dnKEO",
+      "title": "Acknowledge disadvantages of pacing over wireless",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/17",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "See the panel discussion @ ICCRG in IETF 121. Pacing works against frame aggregation (or: you pace, and then your packets get aggregated by the hardware below anyway). As Matt Mathis said in the conversation, generally, hardware can work better with larger blocks of data, at the cost of jitter for everyone else.",
+      "createdAt": "2024-11-08T14:57:46Z",
+      "updatedAt": "2024-11-08T14:57:46Z",
       "closedAt": null,
       "comments": []
     }
