@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-17T00:43:29.304460+00:00",
+  "timestamp": "2024-11-19T00:40:51.185675+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -102,7 +102,7 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2024-07-04T08:53:03Z",
+      "updatedAt": "2024-11-18T12:52:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -132,6 +132,13 @@
           "body": "Probably, the need for fine-grain timers should also be a \"general consideration\" - this will explain the reader why implementations diverge (e.g., Linux limiting itself to 1ms granularity).",
           "createdAt": "2024-07-04T08:53:02Z",
           "updatedAt": "2024-07-04T08:53:02Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Generally, this issue is related to Issue #17.\r\n\r\nFrom Eduard Vasilenko:\r\n\r\nWhen I explained pacing\u2019s importance, I stressed that the biggest problem is a bump of the high-speed path into the low-speed access (5G or WiFi).\r\nSomething like: \u201cExample:\r\nIf a 15Mbps client is 20ms away. Then CUBIC on the server could burst up to 77kB (BDP) of data, it is a 5.9us burst on the 100GE link.\r\nThat is an additional 20ms burst for the client\u2019s shaper on BRAS or wireless AP that may be already loaded close to the maximum.\u201d\r\n<image005.png>\r\n\r\nIMHO: this fact is not stressed well enough in section 3.\r\nThe story of how 5.9us becomes 20ms is very important story.",
+          "createdAt": "2024-11-18T12:52:07Z",
+          "updatedAt": "2024-11-18T12:52:07Z"
         }
       ]
     },
@@ -260,9 +267,24 @@
       "labels": [],
       "body": "See the panel discussion @ ICCRG in IETF 121. Pacing works against frame aggregation (or: you pace, and then your packets get aggregated by the hardware below anyway). As Matt Mathis said in the conversation, generally, hardware can work better with larger blocks of data, at the cost of jitter for everyone else.",
       "createdAt": "2024-11-08T14:57:46Z",
-      "updatedAt": "2024-11-08T14:57:46Z",
+      "updatedAt": "2024-11-18T12:04:13Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "From Eduard Vasilenko:\r\n\r\nPacing is very useful in the majority of situations. But there are some corner cases when proper burstiness is very valuable:\r\n\u201cPudica: Toward Near-Zero Queuing Delay in Congestion Control for Cloud Gaming\u201d\r\nBursts are created intentionally (something like +25%), then it is possible to see how fast is the drain, then it is possible to estimate the link load that is much below 100% on average!\r\nIf WiFi is transferring big packages (A-MSDU) then the overhead is much smaller, and it is possible to get the better goodput: [Improving Performance of QUIC in WiFi](https://upcommons.upc.edu/bitstream/handle/2117/172208/main.pdf)\r\n \r\nHence, it is possible to comment in the draft that pacing is not always a good goal. There are opposite corner cases.",
+          "createdAt": "2024-11-18T11:59:49Z",
+          "updatedAt": "2024-11-18T11:59:49Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "This is also worth another look:  https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9772053&tag=1  (too much time has passed since I last read this)",
+          "createdAt": "2024-11-18T12:04:11Z",
+          "updatedAt": "2024-11-18T12:04:11Z"
+        }
+      ]
     }
   ],
   "pulls": [
