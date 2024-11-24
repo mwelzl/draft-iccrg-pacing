@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-21T00:40:23.480349+00:00",
+  "timestamp": "2024-11-24T00:43:55.055648+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -267,7 +267,7 @@
       "labels": [],
       "body": "See the panel discussion @ ICCRG in IETF 121. Pacing works against frame aggregation (or: you pace, and then your packets get aggregated by the hardware below anyway). As Matt Mathis said in the conversation, generally, hardware can work better with larger blocks of data, at the cost of jitter for everyone else.",
       "createdAt": "2024-11-08T14:57:46Z",
-      "updatedAt": "2024-11-20T23:49:07Z",
+      "updatedAt": "2024-11-21T07:52:59Z",
       "closedAt": null,
       "comments": [
         {
@@ -290,6 +290,13 @@
           "body": "pacing rate is calculated based on link bandwidth, in units of bytes/sec. Aggregation can still be achieved by allowing a min burst size per send call and this burst can be specified in units of time, for example Prague implementations currently use 250us. And then corresponding burst size can be calculated by multiplying pacing rate * burst (eg. burst size for 100MBps link would be (100MBps * .000250). This should allow transferring big AMPDUs at WiFi layer.\r\n\r\nNot pacing at all is not ideal for any type of traffic whether it is gaming or video. I think pacing is a good goal universally, its just how it is done can be different from use case to use case. Some apps might do pacing at 100%, some might do at a lower rate and some might do at a higher rate. Also, a single app might choose to do pacing at different rates at different times.\r\n\r\nRegarding, lower layer aggregation, I agree that can be counter productive to pacing. Product companies should invest time to reduce queuing and hence aggregation in lower layers. Nokia with their L4S capable WiFi has shown that low queuing and the correct amount of aggregation can be achieved in WiFi.\r\n",
           "createdAt": "2024-11-20T23:49:05Z",
           "updatedAt": "2024-11-20T23:49:05Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "@goelvidhi I agree with all you say here.\r\n\r\nI believe one major take-away is that this all depends on the targeted transmission rate: the faster I need to go, the more bursty I should be, up to a limit (and indeed, using time as a limit as in your Prague example will achieve that).\r\n\r\nWhy should I even care about frame aggregation for a VoIP application low-rate low-latency signaling traffic of a game?\r\n\r\nNote though that \"high rate\" doesn't mean \"large file transfer\" only - e.g. the QUIC paper mentioned above has a plot showing significant reduction in PLT from being more bursty. A static web transfer is limited by the Flow Completion Time (FCT), i.e. we want as high throughput as possible for this application and don't actually care about queuing. Interactive traffic is very different.\r\n\r\nSo, it all depends on the type of application - but, luckily, a simple time-based rule such as the Prague one you mention will probably do the right thing automatically, under all circumstances.",
+          "createdAt": "2024-11-21T07:52:58Z",
+          "updatedAt": "2024-11-21T07:52:58Z"
         }
       ]
     }
