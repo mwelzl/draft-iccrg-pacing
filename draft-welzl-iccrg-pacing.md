@@ -135,6 +135,17 @@ informative:
     date: October 2024
     target: https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99
 
+  LinuxPacing:
+    title: "TCP Pacing in the Linux Kernel"
+    author:
+      -
+        ins: M. Welzl
+        name: Michael Welzl
+    date: 2025-02-17
+    seriesinfo: "IEEE ICNC 2025"
+    target: https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf
+
+
 --- abstract
 
 Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
@@ -204,7 +215,7 @@ There are two ways to enable pacing in Linux: 1) via a socket option, 2) by conf
 
 Independent of the value of the Initial Window (IW), the first 10 (hardcoded) packets are not paced. Later, 10 packets will generally be sent without pacing every 2^32 packets.
 
-Every time an ACK arrives, a pacing rate is calculated, as: factor * MSS * cwnd / SRTT, where "factor" is a configurable value that, by default, is 2 in slow start and 1.2 in congestion avoidance. MSS is the sender maximum segment size {{?RFC5681}}, and SRTT is the smoothed round-trip time {{?RFC6298}} [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]
+Every time an ACK arrives, a pacing rate is calculated, as: factor * MSS * cwnd / SRTT, where "factor" is a configurable value that, by default, is 2 in slow start and 1.2 in congestion avoidance. MSS is the sender maximum segment size {{?RFC5681}}, and SRTT is the smoothed round-trip time {{?RFC6298}}.
 The sender transmits data in line with the calculated pacing rate; this is approximated by calculating the rate per millisecond, and generally sending the resulting amount of data per millisecond as a small burst, every millisecond. As an exception, the per-millisecond amount of data can be a little larger when the peer is very close, depending on a configurable value (per default, when the minimum RTT is less than 3 milliseconds).
 
 If the pacing rate is smaller than 2 packets per millisecond, these bursts will become 2 packets in size, and they will not be sent every millisecond but with a varying time delay (depending on the pacing rate).
@@ -212,8 +223,7 @@ If the pacing rate is larger than 64 Kbyte per millisecond, these bursts will be
 Bursts can always be smaller than described above, or be "nothing", if a limiting factor such as the receiver window (rwnd) {{?RFC5681}} or the current cwnd disallows transmission.
 If the previous packet was not sent when expected by the pacing logic, but more than half of a pacing gap ago (e.g., due to a cwnd limitation), the pacing gap is halved.
 
-
-**TEMPORARY NOTE - TO BE REMOVED:** This description is based on the longer Linux pacing analysis text that is currently available at: [https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing](https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing)  - comments or corrections are very welcome!
+This description is based on the longer Linux pacing analysis text in {{LinuxPacing}}.
 
 
 ## Apple OSes
