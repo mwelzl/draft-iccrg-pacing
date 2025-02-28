@@ -255,12 +255,10 @@ Table of Contents
    MSS * cwnd / SRTT, where "factor" is a configurable value that, by
    default, is 2 in slow start and 1.2 in congestion avoidance.  MSS is
    the sender maximum segment size [RFC5681], and SRTT is the smoothed
-   round-trip time [RFC6298] [TODO check: Linux calculates SRTT
-   different from the standard, though RFC 6298 relaxes the rules, so
-   maybe it's ok?]  The sender transmits data in line with the
-   calculated pacing rate; this is approximated by calculating the rate
-   per millisecond, and generally sending the resulting amount of data
-   per millisecond as a small burst, every millisecond.  As an
+   round-trip time [RFC6298].  The sender transmits data in line with
+   the calculated pacing rate; this is approximated by calculating the
+   rate per millisecond, and generally sending the resulting amount of
+   data per millisecond as a small burst, every millisecond.  As an
    exception, the per-millisecond amount of data can be a little larger
    when the peer is very close, depending on a configurable value (per
    default, when the minimum RTT is less than 3 milliseconds).
@@ -278,13 +276,8 @@ Table of Contents
    more than half of a pacing gap ago (e.g., due to a cwnd limitation),
    the pacing gap is halved.
 
-   *TEMPORARY NOTE - TO BE REMOVED:* This description is based on the
-   longer Linux pacing analysis text that is currently available at:
-   https://docs.google.com/document/
-   d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing
-   (https://docs.google.com/document/
-   d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing) -
-   comments or corrections are very welcome!
+   This description is based on the longer Linux pacing analysis text in
+   [LinuxPacing].
 
 4.2.  Apple OSes
 
@@ -462,6 +455,12 @@ Table of Contents
 
    [HPTSCode] "tcp_hpts.c", October 2024, <https://github.com/freebsd/
               freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99>.
+
+   [LinuxPacing]
+              Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
+              2025 , 17 February 2025,
+              <https://folk.universitetetioslo.no/michawe/research/
+              publications/icnc2025-pacing.pdf>.
 
    [RACK]     Stewart, R. and M. Tüxen, "RACK and Alternate TCP Stacks
               for FreeBSD", FreeBSD Journal (January/February 2024) ,

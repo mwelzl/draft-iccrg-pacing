@@ -1320,13 +1320,13 @@ In this case, an overshoot will occur: packets are forwarded with half their arr
 <p id="section-4.1-1">The following description is based on Linux kernel version 6.8.9.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1-2">There are two ways to enable pacing in Linux: 1) via a socket option, 2) by configuring the FQ queue discipline. We describe case 1.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3">Independent of the value of the Initial Window (IW), the first 10 (hardcoded) packets are not paced. Later, 10 packets will generally be sent without pacing every 2^32 packets.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">Every time an ACK arrives, a pacing rate is calculated, as: factor * MSS * cwnd / SRTT, where "factor" is a configurable value that, by default, is 2 in slow start and 1.2 in congestion avoidance. MSS is the sender maximum segment size <span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span>, and SRTT is the smoothed round-trip time <span>[<a href="#RFC6298" class="cite xref">RFC6298</a>]</span> [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]
+<p id="section-4.1-4">Every time an ACK arrives, a pacing rate is calculated, as: factor * MSS * cwnd / SRTT, where "factor" is a configurable value that, by default, is 2 in slow start and 1.2 in congestion avoidance. MSS is the sender maximum segment size <span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span>, and SRTT is the smoothed round-trip time <span>[<a href="#RFC6298" class="cite xref">RFC6298</a>]</span>.
 The sender transmits data in line with the calculated pacing rate; this is approximated by calculating the rate per millisecond, and generally sending the resulting amount of data per millisecond as a small burst, every millisecond. As an exception, the per-millisecond amount of data can be a little larger when the peer is very close, depending on a configurable value (per default, when the minimum RTT is less than 3 milliseconds).<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1-5">If the pacing rate is smaller than 2 packets per millisecond, these bursts will become 2 packets in size, and they will not be sent every millisecond but with a varying time delay (depending on the pacing rate).
 If the pacing rate is larger than 64 Kbyte per millisecond, these bursts will be 64 Kbyte in size, and they will not be sent every millisecond but with a varying time delay (depending on the pacing rate).
 Bursts can always be smaller than described above, or be "nothing", if a limiting factor such as the receiver window (rwnd) <span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span> or the current cwnd disallows transmission.
 If the previous packet was not sent when expected by the pacing logic, but more than half of a pacing gap ago (e.g., due to a cwnd limitation), the pacing gap is halved.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
-<p id="section-4.1-6"><strong>TEMPORARY NOTE - TO BE REMOVED:</strong> This description is based on the longer Linux pacing analysis text that is currently available at: <a href="https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing">https://docs.google.com/document/d/1h5hN9isFjT76YjaCphHZdW9LCRYqV4y3GKwRKxgqEO0/edit?usp=sharing</a>  - comments or corrections are very welcome!<a href="#section-4.1-6" class="pilcrow">¶</a></p>
+<p id="section-4.1-6">This description is based on the longer Linux pacing analysis text in <span>[<a href="#LinuxPacing" class="cite xref">LinuxPacing</a>]</span>.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="apple-oses">
@@ -1452,6 +1452,10 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-4.3-5" c
 <dt id="HPTSCode">[HPTSCode]</dt>
         <dd>
 <span class="refTitle">"tcp_hpts.c"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99">https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LinuxPacing">[LinuxPacing]</dt>
+        <dd>
+<span class="refAuthor">Welzl, M.</span>, <span class="refTitle">"TCP Pacing in the Linux Kernel"</span>, <span class="seriesInfo">IEEE ICNC 2025 </span>, <time datetime="2025-02-17" class="refDate">17 February 2025</time>, <span>&lt;<a href="https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf">https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RACK">[RACK]</dt>
         <dd>
