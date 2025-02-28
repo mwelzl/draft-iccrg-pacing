@@ -303,8 +303,14 @@ TODO acknowledge. Note, numbered sections shouldn't appear
 after an unnumbered one - so either move this last, or take
 the numbering rule out. -->
 
+# Acknowledgments
+{:numbered="false"}
+
+The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard Vasilenko for suggesting improvements to this document.
+
 
 # Change Log
+{:numbered="false"}
 
 * -00 was the first individual submission for feedback by ICCRG.
 * -01 adds Michael Tuexen as new co-author, and adds the following new descriptions:
