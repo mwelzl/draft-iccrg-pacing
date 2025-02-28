@@ -93,7 +93,8 @@ Table of Contents
    7.  References
      7.1.  Normative References
      7.2.  Informative References
-   Appendix A.  Change Log
+   Acknowledgments
+   Change Log
    Authors' Addresses
 
 1.  Introduction
@@ -497,7 +498,12 @@ Table of Contents
               of a timer facility", DOI 10.1145/37499.37504, 1 November
               1987, <https://doi.org/10.1145/37499.37504>.
 
-Appendix A.  Change Log
+Acknowledgments
+
+   The authors would like to thank Grenville Armitage, Ingemar Johannson
+   and Eduard Vasilenko for suggesting improvements to this document.
+
+Change Log
 
    *  -00 was the first individual submission for feedback by ICCRG.
 
