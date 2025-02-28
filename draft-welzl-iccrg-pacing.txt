@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 24 April 2025                                       MTI Systems
+Expires: 1 September 2025                                    MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                         21 October 2024
+                                                        28 February 2025
 
 
                      Pacing in Transport Protocols
@@ -58,11 +58,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -352,7 +352,7 @@ Table of Contents
 
    Pacing in QUIC stacks commonly involves:
 
-   1.  Access to lower-level (e.g.  OS and hardware) capabilities needed
+   1.  Access to lower-level (e.g. OS and hardware) capabilities needed
        for effective pacing.
 
    2.  Managing additional timers related to pacing, along with those
