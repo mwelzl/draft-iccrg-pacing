@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-28T03:29:58.001574+00:00",
+  "timestamp": "2025-03-02T00:43:17.352964+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -147,7 +147,7 @@
       "id": "I_kwDOL2DqS86OeTt1",
       "title": "Linux SRTT calculation check",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -156,8 +156,8 @@
       "labels": [],
       "body": "The Linux TCP text currently says: SRTT is the smoothed round-trip time [[RFC6298](https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html#RFC6298)] [TODO check: Linux calculates SRTT different from the standard, though RFC 6298 relaxes the rules, so maybe it's ok?]\r\n\r\nIndeed, that check should be done - if it's \"not okay\", there should be some text explaining how the Linux SRTT calculation works.",
       "createdAt": "2024-07-04T08:50:31Z",
-      "updatedAt": "2024-10-30T14:54:40Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-28T03:51:32Z",
+      "closedAt": "2025-02-28T03:51:32Z",
       "comments": [
         {
           "author": "mwelzl",
@@ -179,13 +179,20 @@
           "body": "The short version of the above:\r\nInitially, SRTT = RTT  (\"RTT\" is the new sample).\r\nThen, to update, SRTT = 7/8 * SRTT + 1/8 * RTT.",
           "createdAt": "2024-10-30T14:54:18Z",
           "updatedAt": "2024-10-30T14:54:40Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "... this is the same as 2.3 in section 2 of RFC 6298, with alpha=1/8 as recommended there!",
+          "createdAt": "2025-02-28T03:33:14Z",
+          "updatedAt": "2025-02-28T03:33:14Z"
         }
       ]
     },
     {
       "number": 11,
       "id": "I_kwDOL2DqS86Z8dQE",
-      "title": "Time scales (or: application layer)",
+      "title": "Application control (e.g. for video)",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/11",
       "state": "OPEN",
       "author": "mwelzl",
@@ -194,22 +201,22 @@
       "labels": [],
       "body": "The \"Sammy\" paper:  https://dl.acm.org/doi/10.1145/3603269.3604839   paces at a larger time scale - avoiding to transmit video data as a bulk but instead spreading it out. This can be done with or without RTT-timescale pacing underneath, and should be discussed as a separate thing IMO.\r\n\r\nPerhaps the right angle is to talk about different time scales, or it is about being at the application layer (because this is really application payload specific).",
       "createdAt": "2024-10-12T10:07:28Z",
-      "updatedAt": "2024-11-08T10:01:59Z",
+      "updatedAt": "2025-02-28T04:35:47Z",
       "closedAt": null,
       "comments": [
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "A text donation from Ingemar Johansson:\r\n\r\n> Frame based transmission, for instance based on output from video coders possess the property that video frames are typically generated at regular intervals. For example a video coder that encodes video at 50 frames per second, outputs  a frame every 20ms. This frame is typically split up in MTU sized packets. Video coding typically also encodes frames of varying size, depending on the complexity of the input signal.  \r\nThis has the consequence that the packet pacing cannot be tuned to match the nominal bitrate, as this would mean that large video frames are unnecessarily delay on the sender side.\r\nSCReAM (https://datatracker.ietf.org/doc/draft-johansson-ccwg-rfc8298bis-screamv2/ ) as an example paces, packets at a 50% higher rate than the nominal bitrate. This has the effect that an average video frame in the example above is transmitted in 20/1.5 = 13.3ms. This reduces the risk that video frames are delayed unnecesarily  other than when the video frame is unusually large.",
+          "body": "A text donation from Ingemar Johansson:\n\n> Frame based transmission, for instance based on output from video coders possess the property that video frames are typically generated at regular intervals. For example a video coder that encodes video at 50 frames per second, outputs  a frame every 20ms. This frame is typically split up in MTU sized packets. Video coding typically also encodes frames of varying size, depending on the complexity of the input signal.  \nThis has the consequence that the packet pacing cannot be tuned to match the nominal bitrate, as this would mean that large video frames are unnecessarily delay on the sender side.\nSCReAM (https://datatracker.ietf.org/doc/draft-johansson-ccwg-rfc8298bis-screamv2/ ) as an example paces, packets at a 50% higher rate than the nominal bitrate. This has the effect that an average video frame in the example above is transmitted in 20/1.5 = 13.3ms. This reduces the risk that video frames are delayed unnecesarily  other than when the video frame is unusually large.\n\nThere is more text about SCReAM in this email:\nhttps://www.uio.no/dscience/english/dstrain/research-areas2025/informatics/ai-as-a-game-changer-for-intelligent-edge-and-tran/index.html",
           "createdAt": "2024-10-24T19:52:04Z",
-          "updatedAt": "2024-10-24T19:52:04Z"
+          "updatedAt": "2025-02-28T04:34:29Z"
         },
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "From Grenville Armitage, this is a different way of looking at \"Sammy\" - probably a better phrasing, not about time scales:\r\n\r\n>Sammy makes target upper-bound rate selection on a per-video-chunk basis, and then relies on underlying TCP packet level pacing to instantiate the per-chunk rate-limit target. So, decoupling the rate target selection logic (also referred to as \"application informed pacing\" in the paper) from the instantiation of that upper-bound (in this specific case relying on FreeBSD's HPTS subsystem giving us TCP packet granularity pacing, but of course could be any other subsystem achieving similar on-the-wire outcomes).",
+          "body": "From Grenville Armitage about \"Sammy\" - probably a better phrasing, not about time scales:\n\n>Sammy makes target upper-bound rate selection on a per-video-chunk basis, and then relies on underlying TCP packet level pacing to instantiate the per-chunk rate-limit target. So, decoupling the rate target selection logic (also referred to as \"application informed pacing\" in the paper) from the instantiation of that upper-bound (in this specific case relying on FreeBSD's HPTS subsystem giving us TCP packet granularity pacing, but of course could be any other subsystem achieving similar on-the-wire outcomes).",
           "createdAt": "2024-10-25T23:15:05Z",
-          "updatedAt": "2024-11-08T10:01:59Z"
+          "updatedAt": "2025-02-28T04:35:47Z"
         }
       ]
     },
@@ -267,7 +274,7 @@
       "labels": [],
       "body": "See the panel discussion @ ICCRG in IETF 121. Pacing works against frame aggregation (or: you pace, and then your packets get aggregated by the hardware below anyway). As Matt Mathis said in the conversation, generally, hardware can work better with larger blocks of data, at the cost of jitter for everyone else.",
       "createdAt": "2024-11-08T14:57:46Z",
-      "updatedAt": "2024-11-21T07:52:59Z",
+      "updatedAt": "2025-02-28T13:52:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -294,9 +301,16 @@
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "@goelvidhi I agree with all you say here.\r\n\r\nI believe one major take-away is that this all depends on the targeted transmission rate: the faster I need to go, the more bursty I should be, up to a limit (and indeed, using time as a limit as in your Prague example will achieve that).\r\n\r\nWhy should I even care about frame aggregation for a VoIP application low-rate low-latency signaling traffic of a game?\r\n\r\nNote though that \"high rate\" doesn't mean \"large file transfer\" only - e.g. the QUIC paper mentioned above has a plot showing significant reduction in PLT from being more bursty. A static web transfer is limited by the Flow Completion Time (FCT), i.e. we want as high throughput as possible for this application and don't actually care about queuing. Interactive traffic is very different.\r\n\r\nSo, it all depends on the type of application - but, luckily, a simple time-based rule such as the Prague one you mention will probably do the right thing automatically, under all circumstances.",
+          "body": "@goelvidhi I agree with all you say here.\n\nI believe one major take-away is that this all depends on the targeted transmission rate: the faster I need to go, the more bursty I should be, up to a limit (and indeed, using time as a limit as in your Prague example will achieve that).\n\nWhy should I even care about frame aggregation for a VoIP application or low-rate low-latency signaling traffic of a game?\n\nNote though that \"high rate\" doesn't mean \"large file transfer\" only - e.g. the QUIC paper mentioned above has a plot showing significant reduction in PLT from being more bursty. A static web transfer is limited by the Flow Completion Time (FCT), i.e. we want as high throughput as possible for this application and don't actually care about queuing. Interactive traffic is very different.\n\nSo, it all depends on the type of application - but, luckily, a simple time-based rule such as the Prague one you mention will probably do the right thing automatically, under all circumstances.",
           "createdAt": "2024-11-21T07:52:58Z",
-          "updatedAt": "2024-11-21T07:52:58Z"
+          "updatedAt": "2025-02-28T08:14:12Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "@goelvidhi see the statement from Eduard Vasilenko in #3: calculating the burst size in units of time may seem good at the sender side, but what seems like a short-delay burst there can produce significant delay further downstream. So the strategy of calculating the burst size from units of time is actually misleading in terms of the actual delay impact.\n",
+          "createdAt": "2025-02-28T13:52:53Z",
+          "updatedAt": "2025-02-28T13:52:53Z"
         }
       ]
     }
@@ -938,6 +952,140 @@
       "mergedBy": "mwelzl",
       "mergeCommit": {
         "oid": "97034f4f9bff49a4d1ce13ee521bb6ec055f9107"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOL2DqS86M4mP3",
+      "title": "Remove two TODO's: about SRTT and about the Pacing reference",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/18",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #9",
+      "createdAt": "2025-02-28T03:48:03Z",
+      "updatedAt": "2025-02-28T03:51:39Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "43d028e297b8b150560eea0ad8c212bf15680b35",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-srtt",
+      "headRefOid": "01b3e28fca5d7d215a7c0095ff4e7c06e06dccf1",
+      "closedAt": "2025-02-28T03:51:31Z",
+      "mergedAt": "2025-02-28T03:51:31Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOL2DqS86M5SlV",
+      "title": "initial RTT, closes #16",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/19",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-28T06:30:14Z",
+      "updatedAt": "2025-02-28T06:30:15Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-initial-rtt",
+      "headRefOid": "a702c098f5a2bbcba544cce383e9ce5edab9ffea",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOL2DqS86M8ZIr",
+      "title": "mini-burst discussion: wireless links and such",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/20",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Relates to, but doesn't fully close #17 and #3",
+      "createdAt": "2025-02-28T14:01:36Z",
+      "updatedAt": "2025-02-28T14:02:44Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-wireless",
+      "headRefOid": "d7a2cf3a4de93ed3c19713a9b9a1c78343ef4e1b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOL2DqS86M8jZb",
+      "title": "Queue dynamics discussion",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/21",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Relates to #3 but doesn't fully close it.",
+      "createdAt": "2025-02-28T14:21:12Z",
+      "updatedAt": "2025-02-28T14:21:59Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-queue-dynamics",
+      "headRefOid": "05910622403dec19ead7b28abb989848b4e606b0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOL2DqS86M8mWA",
+      "title": "ACK section",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/22",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-28T14:27:00Z",
+      "updatedAt": "2025-02-28T14:27:38Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-ACK",
+      "headRefOid": "b3e89ab1659a04af0fcbbd1115d920d85c550d12",
+      "closedAt": "2025-02-28T14:27:38Z",
+      "mergedAt": "2025-02-28T14:27:38Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "06daf114892fa6e470afb83eaa30182732743f73"
       },
       "comments": [],
       "reviews": []
