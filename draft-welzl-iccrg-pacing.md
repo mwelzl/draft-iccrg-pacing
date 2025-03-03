@@ -338,7 +338,7 @@ The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard
 * -01 adds Michael Tuexen as new co-author, and adds the following new descriptions:
   * a first version of text for Apple OSes
   * a first version of text for FreeBSD
- 
+
 * -02 adds a reference for Linux pacing, removes a comment on Linux SRTT calculation ("TODO check": it was checked, nothing to change), adds more discussion text:
   * queue dynamics / AQM interactions
   * initial RTT calculation, thanks to Ingemar Johannson
