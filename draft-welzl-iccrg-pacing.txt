@@ -568,6 +568,18 @@ Change Log
 
       -  a first version of text for FreeBSD
 
+   *  -02 adds a reference for Linux pacing, removes a comment on Linux
+      SRTT calculation ("TODO check": it was checked, nothing to
+      change), adds more discussion text:
+
+      -  queue dynamics / AQM interactions
+
+      -  initial RTT calculation, thanks to Ingemar Johannson
+
+      -  mini-bursts and their trade-offs, thanks to Eduard Vasilenko
+
+      -  ... and now we also have an ACK section for such thanks
+
 Authors' Addresses
 
    Michael Welzl
