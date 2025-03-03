@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 1 September 2025                                    MTI Systems
+Expires: 4 September 2025                                    MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                        28 February 2025
+                                                            3 March 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2025.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
@@ -232,12 +232,20 @@ Table of Contents
    Especially in the beginning of a transfer, when sending the initial
    window, the only RTT estimate available may be from the connection
    establishment handshake.  Being based on only one sample, this is a
-   very unreliable estimate, and using it to pace the initial window can
-   cause unnecessary delay.  This may be the reason why the Linux TCP
-   implementation does not pace the first 10 packets (see Section 4.1).
-   As a possible improvement, the initial RTT estimate could also be
-   based on a previous connection (temporal sharing) or on another
-   ongoing connection (ensemble sharing) [RFC9040].
+   very unreliable estimate.  Moreover, a new transport connection may
+   be preceded by a longer period of quiescence on the path between two
+   endpoints than there might normally occur when a connection is
+   active.  Such a silence period can provoke behavior of lower layers
+   that increases the RTT.  For example, idle periods commonly cause a
+   handshake procedure on 5G links before communication can continue,
+   inflating the RTT.
+
+   Thus, using this sample to pace the initial window can cause the
+   pacing rate to become unnecessarily low.  This may be the reason why
+   the Linux TCP implementation does not pace the first 10 packets (see
+   Section 4.1).  As a possible improvement, the initial RTT estimate
+   could also be based on a previous connection (temporal sharing) or on
+   another ongoing connection (ensemble sharing) [RFC9040].
 
 4.  Implementation examples
 
