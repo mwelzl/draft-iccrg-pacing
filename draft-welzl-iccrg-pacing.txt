@@ -84,6 +84,7 @@ Table of Contents
        3.1.2.  Able to work with smaller queues
      3.2.  Queue dynamics
      3.3.  Getting good RTT estimates
+     3.4.  Mini-bursts and their trade-offs
    4.  Implementation examples
      4.1.  Linux TCP
      4.2.  Apple OSes
@@ -262,6 +263,35 @@ Table of Contents
    Section 4.1).  As a possible improvement, the initial RTT estimate
    could also be based on a previous connection (temporal sharing) or on
    another ongoing connection (ensemble sharing) [RFC9040].
+
+3.4.  Mini-bursts and their trade-offs
+
+   Generally, hardware can perform better on large blocks of data than
+   on multiple small data blocks (fewer copy operations).  This plays a
+   role for mechanisms such as TCP Segment Offload (TSO), which,
+   however, only matter at high data rates.  A strategy to work with
+   this is to avoid pacing every single packet, but instead pace such
+   that a pause is introduced between batches of some packets that are
+   sent as a mini-burst.  Such a strategy is implemented in Linux, for
+   example.
+
+   Clearly, the size of mini-bursts embeds some trade-offs.  Even mini-
+   bursts that are very short in terms of time when they leave the
+   sender may cause significant delay further away on an Internet path,
+   where the link capacity is smaller.  For example, consider a server
+   that is connected to a 100 Gbps link, serving a client that is behind
+   a 15 Mbps bottleneck link.  If that server emits bursts that are 50
+   kbyte long, the duration of these bursts at the server-side link is
+   negligible (4.1 microseconds).  When they reach the bottleneck,
+   however, their duration becomes as large as 27.3 milliseconds.  This
+   is an argument for minimizing the size of mini-bursts.  On the other
+   hand, wireless link layers such as WiFi can benefit from having more
+   than one packet available at the local send buffer, to make use of
+   frame aggregation methods.  This can significantly reduce overhead,
+   and allow a wireless sender to make better use of its transmission
+   opportunity; eliminating these benefits with pacing may in some cases
+   be counter-productive.  This is an argument for making the size of
+   mini-bursts larger.
 
 4.  Implementation examples
 
