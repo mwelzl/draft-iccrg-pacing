@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-02T00:43:17.352964+00:00",
+  "timestamp": "2025-03-04T00:40:53.743747+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -249,7 +249,7 @@
       "id": "I_kwDOL2DqS86bpLmu",
       "title": "Initial RTT estimate in 5G access: input for section 3",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/16",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -258,24 +258,32 @@
       "labels": [],
       "body": "See this email from Ingemar Johannson:\r\nhttps://mailarchive.ietf.org/arch/msg/iccrg/8LHZwBITPSnJc5akwsAGqPn3zGM/",
       "createdAt": "2024-10-24T11:21:34Z",
-      "updatedAt": "2024-10-24T11:21:34Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-03T08:27:17Z",
+      "closedAt": "2025-03-03T08:27:17Z",
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "PR #19 addressed this, but there is a missing element, mentioned by @tuexen in the PR conversation - copying it here:\n\nMaybe we should explicitly describe the client and the server side. There are differences: The client can make an RTT measurement as long as it does not retransmit the SYN and assuming that the SYN is also not retransmitted. For the server side, an RTT measurement is only possible, if the server does not only use SYN cookies.\nBut I think we can improve the text after you submitted this version.\n\nSo this is for a future PR to resolve.",
+          "createdAt": "2025-03-03T08:27:00Z",
+          "updatedAt": "2025-03-03T08:27:00Z"
+        }
+      ]
     },
     {
       "number": 17,
       "id": "I_kwDOL2DqS86dnKEO",
       "title": "Acknowledge disadvantages of pacing over wireless",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/17",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "See the panel discussion @ ICCRG in IETF 121. Pacing works against frame aggregation (or: you pace, and then your packets get aggregated by the hardware below anyway). As Matt Mathis said in the conversation, generally, hardware can work better with larger blocks of data, at the cost of jitter for everyone else.",
       "createdAt": "2024-11-08T14:57:46Z",
-      "updatedAt": "2025-02-28T13:52:54Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-03T08:27:47Z",
+      "closedAt": "2025-03-03T08:27:47Z",
       "comments": [
         {
           "author": "mwelzl",
@@ -987,80 +995,136 @@
     {
       "number": 19,
       "id": "PR_kwDOL2DqS86M5SlV",
-      "title": "initial RTT, closes #16",
+      "title": "initial RTT",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/19",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-28T06:30:14Z",
-      "updatedAt": "2025-02-28T06:30:15Z",
+      "updatedAt": "2025-03-03T08:27:16Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-initial-rtt",
       "headRefOid": "a702c098f5a2bbcba544cce383e9ce5edab9ffea",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "closedAt": "2025-03-03T08:27:16Z",
+      "mergedAt": "2025-03-03T08:27:16Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "3e11870c3cbf60a06a61b8f82561bbf93235d8bf"
+      },
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "@tuexen thanks!  I agree on both accounts.",
+          "createdAt": "2025-03-02T22:43:43Z",
+          "updatedAt": "2025-03-02T22:43:43Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86eHcUO",
+          "commit": {
+            "abbreviatedOid": "a702c09"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Maybe we should explicitly describe the client and the server side. There are differences: The client can make an RTT measurement as long as it does not retransmit the SYN and assuming that the SYN is also not retransmitted. For the server side, an RTT measurement is only possible, if the server does not only use SYN cookies.\r\nBut I think we can improve the text after you submitted this version.",
+          "createdAt": "2025-03-02T15:13:12Z",
+          "updatedAt": "2025-03-02T15:13:12Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 20,
       "id": "PR_kwDOL2DqS86M8ZIr",
       "title": "mini-burst discussion: wireless links and such",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/20",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Relates to, but doesn't fully close #17 and #3",
       "createdAt": "2025-02-28T14:01:36Z",
-      "updatedAt": "2025-02-28T14:02:44Z",
+      "updatedAt": "2025-03-03T08:27:52Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-wireless",
       "headRefOid": "d7a2cf3a4de93ed3c19713a9b9a1c78343ef4e1b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-03T08:27:46Z",
+      "mergedAt": "2025-03-03T08:27:46Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "31af35623eca4a05acdd6e1ee0cf35cd05c17f60"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86eHb3-",
+          "commit": {
+            "abbreviatedOid": "d7a2cf3"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-02T15:07:03Z",
+          "updatedAt": "2025-03-02T15:07:03Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 21,
       "id": "PR_kwDOL2DqS86M8jZb",
       "title": "Queue dynamics discussion",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/21",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Relates to #3 but doesn't fully close it.",
       "createdAt": "2025-02-28T14:21:12Z",
-      "updatedAt": "2025-02-28T14:21:59Z",
+      "updatedAt": "2025-03-03T08:28:07Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-queue-dynamics",
       "headRefOid": "05910622403dec19ead7b28abb989848b4e606b0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-03T08:27:32Z",
+      "mergedAt": "2025-03-03T08:27:32Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "92a665e7c75d9fc4cee0c3419b9eea09adb24751"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86eHbzN",
+          "commit": {
+            "abbreviatedOid": "0591062"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-02T15:05:32Z",
+          "updatedAt": "2025-03-02T15:05:32Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 22,
@@ -1074,7 +1138,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-02-28T14:27:00Z",
-      "updatedAt": "2025-02-28T14:27:38Z",
+      "updatedAt": "2025-03-03T08:28:17Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "d3b9bbfc4f177bed9991316dd4ac896f59d82064",
