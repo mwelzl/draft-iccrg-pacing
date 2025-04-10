@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-01T00:49:17.036467+00:00",
+  "timestamp": "2025-04-10T00:42:12.602930+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -1151,6 +1151,32 @@
       "mergeCommit": {
         "oid": "06daf114892fa6e470afb83eaa30182732743f73"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOL2DqS86Rzmx3",
+      "title": "Expansions",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/23",
+      "state": "OPEN",
+      "author": "wesley-eddy",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Proposing some expanded text on motivations, covering some other non-Internet use cases, and also expanding text on offloads slightly more.",
+      "createdAt": "2025-04-08T15:19:14Z",
+      "updatedAt": "2025-04-08T15:19:14Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "5b0042b1db808d6a480c197451966722c521d959",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "expansions",
+      "headRefOid": "6b74aef5afc2d8c0ec8bdbb4e8c838d8868ae645",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
