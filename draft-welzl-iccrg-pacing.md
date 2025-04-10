@@ -131,7 +131,7 @@ informative:
         name: Michael Tüxen
     date: October 2024
     seriesinfo: "FreeBSD Journal"
-    target: https://freebsdfoundation.org/wp-content/uploads/2024/11/stewart-adventures.pdf 
+    target: https://freebsdfoundation.org/wp-content/uploads/2024/11/stewart-adventures.pdf
 
   HPTSCode:
     title: "tcp_hpts.c"
