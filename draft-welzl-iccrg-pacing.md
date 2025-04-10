@@ -66,6 +66,8 @@ informative:
 
   RFC9002:
 
+  I-D.draft-many-tiptop-usecase:
+
   VL87:
     title: "Hashed and hierarchical timing wheels: data structures for the efficient implementation of a timer facility"
     author:
@@ -145,9 +147,6 @@ informative:
     date: 2025-02-17
     seriesinfo: "IEEE ICNC 2025"
     target: https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf
-
-  I-D.draft-many-tiptop-usecase:
-
 
 --- abstract
 
