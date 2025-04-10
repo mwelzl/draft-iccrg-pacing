@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 4 September 2025                                    MTI Systems
+Expires: 12 October 2025                                     MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                            3 March 2025
+                                                           10 April 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 12 October 2025.
 
 Copyright Notice
 
@@ -78,23 +78,27 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Pacing: general considerations and consequences
-     3.1.  More likely to saturate a bottleneck
-       3.1.1.  Backing off after the increase
-       3.1.2.  Able to work with smaller queues
-     3.2.  Queue dynamics
-     3.3.  Getting good RTT estimates
-     3.4.  Mini-bursts and their trade-offs
-   4.  Implementation examples
-     4.1.  Linux TCP
-     4.2.  Apple OSes
-     4.3.  FreeBSD
-     4.4.  QUIC BBR implementations
-   5.  Security Considerations
-   6.  IANA Considerations
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   3.  Motivations for Pacing
+     3.1.  Network Benefits
+     3.2.  End Host Benefits
+     3.3.  Other Motivations
+   4.  Pacing: general considerations and consequences
+     4.1.  More likely to saturate a bottleneck
+       4.1.1.  Backing off after the increase
+       4.1.2.  Able to work with smaller queues
+     4.2.  Queue dynamics
+     4.3.  Getting good RTT estimates
+     4.4.  Mini-bursts and their trade-offs
+   5.  Implementation examples
+     5.1.  Linux TCP
+     5.2.  Apple OSes
+     5.3.  FreeBSD
+     5.4.  QUIC BBR implementations
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Change Log
    Authors' Addresses
@@ -142,9 +146,76 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Pacing: general considerations and consequences
+3.  Motivations for Pacing
 
-3.1.  More likely to saturate a bottleneck
+   There are potential benefits to pacing, both for the end-host
+   protocol stacks and within the network.  This section provides a
+   short summary of the motivations for performing pacing, with specific
+   examples worked through in the following Section 4.
+
+3.1.  Network Benefits
+
+   Senders generating large bursts create challenges for network queue
+   management to maintain low latencies, low loss rates, and low
+   correlated bursts of loss.  This is described in more detail in
+   Section 4.1, with examples.
+
+   A number of causes within the network may lead to "ACK compression",
+   where the spacing of incoming packets (with new ACKs) becomes
+   bunched.  This could happen due to many factors, such as congestion
+   at a bottleneck, packet send aggregation in the MAC layer or device
+   drivers, etc.  ACKs can also wind up being aggregated beyond the
+   normal delayed ACK recommendation, such that instead of acknowledging
+   one or two packets of data, a received ACK may cover many packets,
+   and cause a large change in the congestion window, allowing many
+   packets to be released in a burst (if pacing is not used).  This can
+   happen due to coalescing of ACKs or ACK "thinning" within the
+   network, or as a means to deal with highly asymmetric connectivity.
+   In any case, a sender that performs pacing is not susceptible to ACK
+   compression, aggregation, or thinning causing its own sending
+   patterns to become bursty in turn, which allows the network more
+   latitude in how ACKs are handled.
+
+3.2.  End Host Benefits
+
+   Due to the reduced queueing pressure that pacing creates, end host
+   application data flows can benefit from pacing in terms of less
+   latency, less loss, and smaller loss events.  However, when competing
+   with other bursty traffic in the same queue, some of these benefits
+   can be reduced.
+
+   Improved RTT measurements can result from pacing, since samples are
+   spread out further across time rather than clumped in time, as
+   explained in Section 4.3.
+
+   At a receiver, processing of the received packets is impacted by
+   pacing, since it will result in a more steady workload, rather than
+   large incoming bursts of data.  For some applications, this can be
+   beneficial in avoiding long periods where the system is busy devoted
+   to processing incoming data, and unable to perform other work.
+   However, some systems are designed such that incoming bursts are more
+   efficient to process than a steadily paced stream, so benefits may
+   differ.
+
+3.3.  Other Motivations
+
+   In some special cases, outside general Internet usage, the path
+   properties may be well-known in advance (e.g. due to scheduling of
+   capacity, etc.).  In this case, senders should pace packets at the
+   scheduled rates in order to efficiently utilize that capacity.  In
+   some of these cases, the rates may be very high, and any sender
+   burstiness might require large expensive buffers within the network
+   in order to accomodate without losses.  Cases where this applies may
+   include supercomputing grids, private datacenter interconnection, and
+   space mission communications [I-D.draft-many-tiptop-usecase].
+
+4.  Pacing: general considerations and consequences
+
+   This section explores pacing scenarios in more detail, explains
+   considerations important for using and tuning pacing, and the
+   resulting consequences.
+
+4.1.  More likely to saturate a bottleneck
 
    We can distinguish between two reasons for packet losses that are due
    to congestion at a bottleneck with a DropTail (FIFO) queue:
@@ -203,9 +274,9 @@ Table of Contents
    bottleneck is saturated, such that cwnd reflects the BDP plus the
    queue length (loss type 2).
 
-3.1.1.  Backing off after the increase
+4.1.1.  Backing off after the increase
 
-   The two loss types explained in Section 3.1 require a different back-
+   The two loss types explained in Section 4.1 require a different back-
    off factor to allow the queue to drain and congestion to dissipate.
    Specifically, in the single-sender single-bottleneck example above,
    when a slow start overshoot occurs as loss type 2, a back-off
@@ -220,18 +291,18 @@ Table of Contents
    Since pacing makes loss type 2 more likely, beta < 0.5 may be a
    better choice after slow start overshoot when pacing is used.
 
-3.1.2.  Able to work with smaller queues
+4.1.2.  Able to work with smaller queues
 
-   The probability of loss type 1 in Section 3.1 is indirectly
+   The probability of loss type 1 in Section 4.1 is indirectly
    proportional to the queue length.  Pacing therefore enables a rate
    increase to continue with a smaller queue at the bottleneck than in
    the case without pacing.
 
-3.2.  Queue dynamics
+4.2.  Queue dynamics
 
    When it enters the queue at a network bottleneck, unpaced traffic
    causes more sudden, drastic delay growth than paced traffic, and has
-   a higher risk of packet loss, as discussed in Section 3.1.  Paced
+   a higher risk of packet loss, as discussed in Section 4.1.  Paced
    traffic, on the other hand, can cause a bottleneck queue to grow more
    slowly and steadily, incuring delay growth over a longer time
    interval.  Aside from the direct problems that delay can cause, such
@@ -242,7 +313,7 @@ Table of Contents
    bursts to pass unharmed, but react upon longer-term average queue
    growth.
 
-3.3.  Getting good RTT estimates
+4.3.  Getting good RTT estimates
 
    Since pacing algorithms generally attempt to spread out packets
    evenly across an RTT, it is important to have a good RTT estimate.
@@ -260,20 +331,33 @@ Table of Contents
    Thus, using this sample to pace the initial window can cause the
    pacing rate to become unnecessarily low.  This may be the reason why
    the Linux TCP implementation does not pace the first 10 packets (see
-   Section 4.1).  As a possible improvement, the initial RTT estimate
+   Section 5.1).  As a possible improvement, the initial RTT estimate
    could also be based on a previous connection (temporal sharing) or on
    another ongoing connection (ensemble sharing) [RFC9040].
 
-3.4.  Mini-bursts and their trade-offs
+4.4.  Mini-bursts and their trade-offs
 
    Generally, hardware can perform better on large blocks of data than
-   on multiple small data blocks (fewer copy operations).  This plays a
-   role for mechanisms such as TCP Segment Offload (TSO), which,
-   however, only matter at high data rates.  A strategy to work with
-   this is to avoid pacing every single packet, but instead pace such
-   that a pause is introduced between batches of some packets that are
-   sent as a mini-burst.  Such a strategy is implemented in Linux, for
-   example.
+   on multiple small data blocks (fewer copy operations).  Hardware
+   offload capabilities such as TCP Segment Offload (TSO) and Generic
+   Segmentation Offload (GSO) are popularly used in cases with high data
+   rates or volumes (e.g. datacenters, hyperscaler servers, etc.) and
+   important to efficiency in computate and power budgets.  When using
+   TSO and GSO efficiently, there will be large writes between software
+   and hardware.  Since the hardware itself does not typically perform
+   pacing, this results in burstiness, or if the sending software is
+   trying to perform pacing, it could defeat the goal of efficiently
+   using the offload hardware.  A strategy to work with this is to avoid
+   pacing every single packet, but instead pace such that a pause is
+   introduced between batches of some packets that are sent as a mini-
+   burst.  Such a strategy is implemented in Linux, for example.
+
+   At the receiving side, offload techniques like Large Receive Offload
+   (LRO) and Generic Receive Offload (GRO), or interrupt coalescing and
+   other features may also impacted by pacing.  Smoothly paced packets
+   reduce the ability to group together incoming hardware frames and
+   packets for upper layer processing, but may be tuned to handle
+   incoming mini-bursts and maintain some efficiency.
 
    Clearly, the size of mini-bursts embeds some trade-offs.  Even mini-
    bursts that are very short in terms of time when they leave the
@@ -293,9 +377,9 @@ Table of Contents
    be counter-productive.  This is an argument for making the size of
    mini-bursts larger.
 
-4.  Implementation examples
+5.  Implementation examples
 
-4.1.  Linux TCP
+5.1.  Linux TCP
 
    The following description is based on Linux kernel version 6.8.9.
 
@@ -334,7 +418,7 @@ Table of Contents
    This description is based on the longer Linux pacing analysis text in
    [LinuxPacing].
 
-4.2.  Apple OSes
+5.2.  Apple OSes
 
    Pacing was added to Apple OS as a private API in iOS 17 and macOS 14.
    In its current form, an application or transport protocol computes
@@ -350,7 +434,7 @@ Table of Contents
    for them.  For example, a stream based protocol like TCP might pace
    packets differently than a video conferencing app.
 
-4.3.  FreeBSD
+5.3.  FreeBSD
 
    FreeBSD has the infrastructure to support multiple TCP stacks.  Each
    TCP stack has a tcp_output() function, which handles most of the
@@ -388,7 +472,7 @@ Table of Contents
    This subsystem underpins recently published research by Netflix and
    Stanford into application-informed pacing at scale [Sammy].
 
-4.4.  QUIC BBR implementations
+5.4.  QUIC BBR implementations
 
    Pacing capability is expected in QUIC senders.  While standard QUIC
    congestion control [RFC9002] is based on TCP Reno, which is not
@@ -466,7 +550,7 @@ Table of Contents
    be present is determined using heuristics, generally limiting to a
    small number of packets (e.g. 1 or 2).
 
-5.  Security Considerations
+6.  Security Considerations
 
    While congestion control designs, including aspects such as pacing,
    could result in unwanted competing traffic, they do not directly
@@ -477,13 +561,13 @@ Table of Contents
    authentication, can protect their congestion control algorithm from
    network attack.  This is orthogonal to the congestion control rules.
 
-6.  IANA Considerations
+7.  IANA Considerations
 
    This document has no IANA actions.
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [I-D.cardwell-iccrg-bbr-congestion-control]
               Cardwell, N., Cheng, Y., Yeganeh, S. H., Swett, I., and V.
@@ -502,14 +586,22 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-7.2.  Informative References
+8.2.  Informative References
 
    [HPTS]     Stewart, R. and M. Tüxen, "Pacing in the FreeBSD TCP
-              Stack", Upcoming in FreeBSD Journal (September/October
-              2024) , October 2024.
+              Stack", FreeBSD Journal , October 2024,
+              <https://freebsdfoundation.org/wp-content/uploads/2024/11/
+              stewart-adventures.pdf>.
 
    [HPTSCode] "tcp_hpts.c", October 2024, <https://github.com/freebsd/
               freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99>.
+
+   [I-D.draft-many-tiptop-usecase]
+              Blanchet, M., Eddy, W., and M. Eubanks, "IP in Deep Space:
+              Key Characteristics, Use Cases and Requirements", Work in
+              Progress, Internet-Draft, draft-many-tiptop-usecase-02, 18
+              March 2025, <https://datatracker.ietf.org/doc/html/draft-
+              many-tiptop-usecase-02>.
 
    [LinuxPacing]
               Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
