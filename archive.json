@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-10T00:42:12.602930+00:00",
+  "timestamp": "2025-04-13T02:09:21.595565+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -1166,19 +1166,76 @@
       "labels": [],
       "body": "Proposing some expanded text on motivations, covering some other non-Internet use cases, and also expanding text on offloads slightly more.",
       "createdAt": "2025-04-08T15:19:14Z",
-      "updatedAt": "2025-04-08T15:19:14Z",
+      "updatedAt": "2025-04-10T13:55:24Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "5b0042b1db808d6a480c197451966722c521d959",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "expansions",
-      "headRefOid": "6b74aef5afc2d8c0ec8bdbb4e8c838d8868ae645",
+      "headRefOid": "dae7721ef0879f0d81c770a65b2b234caf517e93",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86kSl4Q",
+          "commit": {
+            "abbreviatedOid": "6b74aef"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "This is great, many thanks!  A few suggestions in line",
+          "createdAt": "2025-04-10T11:27:16Z",
+          "updatedAt": "2025-04-10T11:40:43Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "I would perhaps remove this paragraph. I'm not sure we can say that pacing creates \"less queuing pressure\" - in isolated experiments, I actually see more average delay when pacing because it slowly builds a queue which is sustained, as opposed to unpaced TCP which creates bursts that cause heavy, but shorter queue growth.\r\n\r\nOne thing we can say (and perhaps should, here?) is that pacing enables good operation with shorter queues, i.e. it can create an incentive to reduce the size of queues being configured in the network.",
+              "createdAt": "2025-04-10T11:27:16Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 64,
+              "body": "```suggestion\r\ndata.  For some applications, pacing can therefore be beneficial in avoiding long periods\r\n```\r\n\r\nThe point is just s/this/pacing  - to be clearer",
+              "createdAt": "2025-04-10T11:31:05Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 72,
+              "body": "```suggestion\r\nIn some special situations, outside general Internet usage, the path properties may\r\n```\r\n\r\nHere I'm trying to avoid the repetition of \"cases\" and \"case\", which is a bit odd because it turns cases from plural to singular. \"Scenarios\" would also be fine.",
+              "createdAt": "2025-04-10T11:32:40Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 77,
+              "body": "a noun missing after \"accommodate\"?  and again, suggest s/Cases/Situations (or scenarios) just because of the \"In this case, ..\" before.",
+              "createdAt": "2025-04-10T11:33:31Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 106,
+              "body": "I've never heard \"computate\" before... did you mean to write \"compute\" ?",
+              "createdAt": "2025-04-10T11:36:11Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 118,
+              "body": "```suggestion\r\nalso be impacted by pacing.  Paced packets reduce the ability to group\r\n```\r\n\r\nI think this is true whether pacing is more or less \"smooth\", and \"smooth\" is ill-defined too.",
+              "createdAt": "2025-04-10T11:37:49Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            },
+            {
+              "originalPosition": 120,
+              "body": "This reads as if the packets may be tuned. Anyway, what do you mean? LRO and GRO?   May it indeed be tuned in that way? I don't know of examples, but maybe they exist...",
+              "createdAt": "2025-04-10T11:40:14Z",
+              "updatedAt": "2025-04-10T11:40:43Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
