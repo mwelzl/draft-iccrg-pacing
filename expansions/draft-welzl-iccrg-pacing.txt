@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 12 October 2025                                     MTI Systems
+Expires: 10 December 2025                                    MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                           10 April 2025
+                                                             8 June 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 October 2025.
+   This Internet-Draft will expire on 10 December 2025.
 
 Copyright Notice
 
@@ -178,11 +178,9 @@ Table of Contents
 
 3.2.  End Host Benefits
 
-   Due to the reduced queueing pressure that pacing creates, end host
-   application data flows can benefit from pacing in terms of less
-   latency, less loss, and smaller loss events.  However, when competing
-   with other bursty traffic in the same queue, some of these benefits
-   can be reduced.
+   Pacing enables good operation with shorter queues, and can create an
+   incentive to reduce the size of queues being configured within the
+   network, leading to lower maximum latency for end host applications.
 
    Improved RTT measurements can result from pacing, since samples are
    spread out further across time rather than clumped in time, as
@@ -190,24 +188,25 @@ Table of Contents
 
    At a receiver, processing of the received packets is impacted by
    pacing, since it will result in a more steady workload, rather than
-   large incoming bursts of data.  For some applications, this can be
-   beneficial in avoiding long periods where the system is busy devoted
-   to processing incoming data, and unable to perform other work.
-   However, some systems are designed such that incoming bursts are more
-   efficient to process than a steadily paced stream, so benefits may
-   differ.
+   large incoming bursts of data.  For some applications, pacing can
+   therefore be beneficial in avoiding long periods where the system is
+   busy devoted to processing incoming data, and unable to perform other
+   work.  However, some systems are designed such that incoming bursts
+   are more efficient to process than a steadily paced stream, so
+   benefits may differ.
 
 3.3.  Other Motivations
 
-   In some special cases, outside general Internet usage, the path
+   In some special situations, outside general Internet usage, the path
    properties may be well-known in advance (e.g. due to scheduling of
    capacity, etc.).  In this case, senders should pace packets at the
    scheduled rates in order to efficiently utilize that capacity.  In
    some of these cases, the rates may be very high, and any sender
    burstiness might require large expensive buffers within the network
-   in order to accomodate without losses.  Cases where this applies may
-   include supercomputing grids, private datacenter interconnection, and
-   space mission communications [I-D.draft-many-tiptop-usecase].
+   in order to accomodate bursts without losses.  Situations where this
+   applies may include supercomputing grids, private datacenter
+   interconnection, and space mission communications
+   [I-D.draft-many-tiptop-usecase].
 
 4.  Pacing: general considerations and consequences
 
@@ -232,7 +231,7 @@ Table of Contents
    congestion control algorithm: the cwnd value when loss happens is
    indicative of the bottleneck being fully saturated.  When the first
    type of loss happens, however, a sender's cwnd can be much smaller
-   than the Bandwidth*Delay Product (BDP) of the path (the amount of
+   than the Bandwidth-Delay Product (BDP) of the path (the amount of
    data that can be in flight, ignoring the queue).  In the absence of
    other traffic, the probability for the first type of loss to happen
    depends on the queue length and the ratio between the departure and
@@ -342,9 +341,9 @@ Table of Contents
    offload capabilities such as TCP Segment Offload (TSO) and Generic
    Segmentation Offload (GSO) are popularly used in cases with high data
    rates or volumes (e.g. datacenters, hyperscaler servers, etc.) and
-   important to efficiency in computate and power budgets.  When using
-   TSO and GSO efficiently, there will be large writes between software
-   and hardware.  Since the hardware itself does not typically perform
+   important to efficiency in compute and power budgets.  When using TSO
+   and GSO efficiently, there will be large writes between software and
+   hardware.  Since the hardware itself does not typically perform
    pacing, this results in burstiness, or if the sending software is
    trying to perform pacing, it could defeat the goal of efficiently
    using the offload hardware.  A strategy to work with this is to avoid
@@ -353,10 +352,10 @@ Table of Contents
    burst.  Such a strategy is implemented in Linux, for example.
 
    At the receiving side, offload techniques like Large Receive Offload
-   (LRO) and Generic Receive Offload (GRO), or interrupt coalescing and
-   other features may also impacted by pacing.  Smoothly paced packets
-   reduce the ability to group together incoming hardware frames and
-   packets for upper layer processing, but may be tuned to handle
+   (LRO), Generic Receive Offload (GRO), interrupt coalescing, and other
+   features may also be impacted by pacing.  Paced packets reduce the
+   ability to group together incoming hardware frames and packets for
+   upper layer processing, but end systems may be tuned to handle
    incoming mini-bursts and maintain some efficiency.
 
    Clearly, the size of mini-bursts embeds some trade-offs.  Even mini-
