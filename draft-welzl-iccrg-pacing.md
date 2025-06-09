@@ -66,6 +66,8 @@ informative:
 
   RFC9002:
 
+  I-D.draft-many-tiptop-usecase:
+
   VL87:
     title: "Hashed and hierarchical timing wheels: data structures for the efficient implementation of a timer facility"
     author:
@@ -128,7 +130,8 @@ informative:
         ins: M. Tüxen
         name: Michael Tüxen
     date: October 2024
-    seriesinfo: "Upcoming in FreeBSD Journal (September/October 2024)"
+    seriesinfo: "FreeBSD Journal"
+    target: https://freebsdfoundation.org/wp-content/uploads/2024/11/stewart-adventures.pdf
 
   HPTSCode:
     title: "tcp_hpts.c"
@@ -144,7 +147,6 @@ informative:
     date: 2025-02-17
     seriesinfo: "IEEE ICNC 2025"
     target: https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf
-
 
 --- abstract
 
@@ -168,8 +170,65 @@ Because of its known advantages, pacing has become common in implementations of 
 
 {::boilerplate bcp14-tagged}
 
+# Motivations for Pacing
 
-# Pacing: general considerations and consequences
+There are potential benefits to pacing, both for the end-host protocol stacks
+and within the network.  This section provides a short summary of the
+motivations for performing pacing, with specific examples worked through in the
+following {{considerations}}.
+
+## Network Benefits
+
+Senders generating large bursts create challenges for network queue management
+to maintain low latencies, low loss rates, and low correlated bursts of loss.
+This is described in more detail in {{losstypes}}, with examples.
+
+A number of causes within the network may lead to "ACK compression", where the
+spacing of incoming packets (with new ACKs) becomes bunched.  This could happen
+due to many factors, such as congestion at a bottleneck, packet send
+aggregation in the MAC layer or device drivers, etc.  ACKs can also wind up
+being aggregated beyond the normal delayed ACK recommendation, such that instead
+of acknowledging one or two packets of data, a received ACK may cover many packets,
+and cause a large change in the congestion window, allowing many packets to be
+released in a burst (if pacing is not used).  This can happen due to coalescing of
+ACKs or ACK "thinning" within the network, or as a means to deal with highly
+asymmetric connectivity.  In any case, a sender that performs pacing is not
+susceptible to ACK compression, aggregation, or thinning causing its own
+sending patterns to become bursty in turn, which allows the network more latitude
+in how ACKs are handled.
+
+## End Host Benefits
+
+Pacing enables good operation with shorter queues, and can create an incentive
+to reduce the size of queues being configured within the network, leading to
+lower maximum latency for end host applications.
+
+Improved RTT measurements can result from pacing, since samples are spread out
+further across time rather than clumped in time, as explained in {{rtt}}.
+
+At a receiver, processing of the received packets is impacted by pacing, since
+it will result in a more steady workload, rather than large incoming bursts of
+data.  For some applications, pacing can therefore be beneficial in avoiding long periods
+where the system is busy devoted to processing incoming data, and unable to
+perform other work.  However, some systems are designed such that incoming
+bursts are more efficient to process than a steadily paced stream, so benefits
+may differ.
+
+## Other Motivations
+
+In some special situations, outside general Internet usage, the path properties may
+be well-known in advance (e.g. due to scheduling of capacity, etc.).  In this
+case, senders should pace packets at the scheduled rates in order to
+efficiently utilize that capacity.  In some of these cases, the rates may be
+very high, and any sender burstiness might require large expensive buffers
+within the network in order to accomodate bursts without losses.  Situations where this
+applies may include supercomputing grids, private datacenter interconnection,
+and space mission communications {{I-D.draft-many-tiptop-usecase}}.
+
+# Pacing: general considerations and consequences {#considerations}
+
+This section explores pacing scenarios in more detail, explains considerations
+important for using and tuning pacing, and the resulting consequences.
 
 ## More likely to saturate a bottleneck {#losstypes}
 
@@ -178,7 +237,7 @@ We can distinguish between two reasons for packet losses that are due to congest
 1. A flight of N packets arrives. The amount of data in this flight exceeds the amount of data that can be transmitted by the bottleneck during the flight's arrival plus the queue length, i.e. some data do not fit into the queue.
 2. The bottleneck is fully saturated. The queue is full, and packets drain from it more slowly than new packets arrive.
 
-The second type of loss matches the typical expectation of a congestion control algorithm: the cwnd value when loss happens is indicative of the bottleneck being fully saturated. When the first type of loss happens, however, a sender's cwnd can be much smaller than the Bandwidth*Delay Product (BDP) of the path (the amount of data that can be in flight, ignoring the queue). In the absence of other traffic, the probability for the first type of loss to happen depends on the queue length and the ratio between the departure and the arrival rate during the flight's arrival. By introducing time gaps between the packets of a burst, this ratio is increased, i.e. the difference between the departure and the arrival rate becomes smaller, and the second type of loss is more likely.
+The second type of loss matches the typical expectation of a congestion control algorithm: the cwnd value when loss happens is indicative of the bottleneck being fully saturated. When the first type of loss happens, however, a sender's cwnd can be much smaller than the Bandwidth-Delay Product (BDP) of the path (the amount of data that can be in flight, ignoring the queue). In the absence of other traffic, the probability for the first type of loss to happen depends on the queue length and the ratio between the departure and the arrival rate during the flight's arrival. By introducing time gaps between the packets of a burst, this ratio is increased, i.e. the difference between the departure and the arrival rate becomes smaller, and the second type of loss is more likely.
 
 For example, consider a network path with a bottleneck capacity of 50 Mbit/s, a queue length of 15000 bytes (or 10 packets of size 1500 bytes) and an RTT of 30 ms. Assume that all packets emitted by the sender have a size of 1500 bytes. Then, the BDP equals 125 packets. The bottleneck of this network path is fully saturated when a (BDP + queue length) amount of bytes are in flight: 135 packets.
 
@@ -205,7 +264,7 @@ The probability of loss type 1 in {{losstypes}} is indirectly proportional to th
 When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in {{losstypes}}. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incuring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.
 
 
-## Getting good RTT estimates
+## Getting good RTT estimates {#rtt}
 
 Since pacing algorithms generally attempt to spread out packets evenly across an RTT, it is important to have a good RTT estimate. Especially in the beginning of a transfer, when sending the initial window, the only RTT estimate available may be from the connection establishment handshake. Being based on only one sample, this is a very unreliable estimate. Moreover, a new transport connection may be preceded by a longer period of quiescence on the path between two endpoints than there  might normally occur when a connection is active. Such a silence period can provoke behavior of lower layers that increases the RTT. For example, idle periods commonly cause a handshake procedure on 5G links before communication can continue, inflating the RTT.
 
@@ -214,7 +273,25 @@ Thus, using this sample to pace the initial window can cause the pacing rate to 
 
 ## Mini-bursts and their trade-offs
 
-Generally, hardware can perform better on large blocks of data than on multiple small data blocks (fewer copy operations). This plays a role for mechanisms such as TCP Segment Offload (TSO), which, however, only matter at high data rates. A strategy to work with this is to avoid pacing every single packet, but instead pace such that a pause is introduced between batches of some packets that are sent as a mini-burst. Such a strategy is implemented in Linux, for example.
+Generally, hardware can perform better on large blocks of data than on multiple
+small data blocks (fewer copy operations). Hardware offload capabilities such
+as TCP Segment Offload (TSO) and Generic Segmentation Offload (GSO) are
+popularly used in cases with high data rates or volumes (e.g. datacenters,
+hyperscaler servers, etc.) and important to efficiency in compute and power
+budgets.  When using TSO and GSO efficiently, there will be large writes
+between software and hardware.  Since the hardware itself does not typically
+perform pacing, this results in burstiness, or if the sending software is
+trying to perform pacing, it could defeat the goal of efficiently using the
+offload hardware.  A strategy to work with this is to avoid pacing every single
+packet, but instead pace such that a pause is introduced between batches of
+some packets that are sent as a mini-burst. Such a strategy is implemented in
+Linux, for example.
+
+At the receiving side, offload techniques like Large Receive Offload (LRO),
+Generic Receive Offload (GRO), interrupt coalescing, and other features may
+also be impacted by pacing.  Paced packets reduce the ability to group
+together incoming hardware frames and packets for upper layer processing, but
+end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.
 
 Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.
 
