@@ -12,9 +12,8 @@ v: 3
 area: "IRTF"
 workgroup: "Internet Congestion Control"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - pacing
+ - congestion control
 venue:
   group: "Internet Congestion Control"
   type: "Research Group"
@@ -67,6 +66,9 @@ informative:
   RFC9002:
 
   I-D.draft-many-tiptop-usecase:
+
+  I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03:
+
 
   VL87:
     title: "Hashed and hierarchical timing wheels: data structures for the efficient implementation of a timer facility"
@@ -201,7 +203,9 @@ in how ACKs are handled.
 
 Pacing enables good operation with shorter queues, and can create an incentive
 to reduce the size of queues being configured within the network, leading to
-lower maximum latency for end host applications.
+lower maximum latency for end host applications. When applications use pacing
+to limit the rate, this can also reduce latency irrespective of the
+size of the queues available in the network (see {{appcontrol}}).
 
 Improved RTT measurements can result from pacing, since samples are spread out
 further across time rather than clumped in time, as explained in {{rtt}}.
@@ -294,6 +298,23 @@ together incoming hardware frames and packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.
 
 Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.
+
+## Application control {#appcontrol}
+
+When an application produces data at a certain (known) bitrate, it can be beneficial to make use of pacing to
+limit the transport bitrate on this basis such that it is not exceedingly large. The Linux and FreeBSD
+applications allow the application to set an upper limit.
+
+For example, frame based video transmission typically generates data chunks at a varying size at regular intervals.
+Such an application could request a data chunk to be spread over the interval. This would
+allow a more sustained data transmission at a lower rate than a transport protocol's congestion control
+might choose, rather than using a shorter time period within the interval with a high rate. This has
+the benefit that queue growth is less likely, i.e. this form of pacing can reduce latency.
+
+Spreading over the interval needs to be done with some caution; "ideally" spreading data across the
+entire interval risks that some of data will not arrive in time, e.g. when delays are introduced
+by other traffic. SCReAM and SAMMY pace packets at a somewhat higher rate (50% in case of SCReAM)
+to reduce this risk {{I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03}}, {{Sammy}}.
 
 
 # Implementation examples
