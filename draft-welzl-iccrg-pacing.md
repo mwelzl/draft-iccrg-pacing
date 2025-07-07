@@ -435,3 +435,7 @@ The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard
   * initial RTT calculation, thanks to Ingemar Johannson
   * mini-bursts and their trade-offs, thanks to Eduard Vasilenko
   * ... and now we also have an ACK section for such thanks
+
+  * -03:
+    * re-structures the parts on general considerations and adds more text in them
+    * elaborates on application control
