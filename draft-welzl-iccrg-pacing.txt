@@ -707,6 +707,13 @@ Change Log
 
       -  ... and now we also have an ACK section for such thanks
 
+      -  -03:
+
+         o  re-structures the parts on general considerations and adds
+            more text in them
+
+         o  elaborates on application control
+
 Authors' Addresses
 
    Michael Welzl
