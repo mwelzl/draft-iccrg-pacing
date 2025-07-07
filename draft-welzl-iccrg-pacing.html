@@ -12,14 +12,13 @@
 <meta content='
        Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. 
     ' name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
-<meta content="next generation" name="keyword">
-<meta content="unicorn" name="keyword">
-<meta content="sparkling distributed ledger" name="keyword">
+<meta content="xml2rfc 3.29.0" name="generator">
+<meta content="pacing" name="keyword">
+<meta content="congestion control" name="keyword">
 <meta content="draft-welzl-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
-    Python 3.12.10
+  xml2rfc 3.29.0
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -28,7 +27,7 @@
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
+    requests 2.32.4
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1049,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Pacing in Transport Protocols</td>
-<td class="right">June 2025</td>
+<td class="right">July 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 11 December 2025</td>
+<td class="center">Expires 8 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-welzl-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-09" class="published">9 June 2025</time>
+<time datetime="2025-07-07" class="published">7 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-11">11 December 2025</time></dd>
+<dd class="expires"><time datetime="2026-01-08">8 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1133,7 +1132,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1204,6 +1203,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-mini-bursts-and-their-trade" class="internal xref">Mini-bursts and their trade-offs</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-application-control" class="internal xref">Application control</a></p>
 </li>
             </ul>
 </li>
@@ -1315,7 +1317,9 @@ in how ACKs are handled.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-3.2-1">Pacing enables good operation with shorter queues, and can create an incentive
 to reduce the size of queues being configured within the network, leading to
-lower maximum latency for end host applications.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+lower maximum latency for end host applications. When applications use pacing
+to limit the rate, this can also reduce latency irrespective of the
+size of the queues available in the network (see <a href="#appcontrol" class="auto internal xref">Section 4.5</a>).<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">Improved RTT measurements can result from pacing, since samples are spread out
 further across time rather than clumped in time, as explained in <a href="#rtt" class="auto internal xref">Section 4.3</a>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">At a receiver, processing of the received packets is impacted by pacing, since
@@ -1431,6 +1435,25 @@ also be impacted by pacing.  Paced packets reduce the ability to group
 together incoming hardware frames and packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 <p id="section-4.4-3">Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="appcontrol">
+<section id="section-4.5">
+        <h3 id="name-application-control">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-application-control" class="section-name selfRef">Application control</a>
+        </h3>
+<p id="section-4.5-1">When an application produces data at a certain (known) bitrate, it can be beneficial to make use of pacing to
+limit the transport bitrate on this basis such that it is not exceedingly large. The Linux and FreeBSD
+applications allow the application to set an upper limit.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<p id="section-4.5-2">For example, frame based video transmission typically generates data chunks at a varying size at regular intervals.
+Such an application could request a data chunk to be spread over the interval. This would
+allow a more sustained data transmission at a lower rate than a transport protocol's congestion control
+might choose, rather than using a shorter time period within the interval with a high rate. This has
+the benefit that queue growth is less likely, i.e. this form of pacing can reduce latency.<a href="#section-4.5-2" class="pilcrow">¶</a></p>
+<p id="section-4.5-3">Spreading over the interval needs to be done with some caution; "ideally" spreading data across the
+entire interval risks that some of data will not arrive in time, e.g. when delays are introduced
+by other traffic. SCReAM and SAMMY pace packets at a somewhat higher rate (50% in case of SCReAM)
+to reduce this risk <span>[<a href="#I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03" class="cite xref">I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03</a>]</span>, <span>[<a href="#Sammy" class="cite xref">Sammy</a>]</span>.<a href="#section-4.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1581,9 +1604,13 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-5" c
         <dd>
 <span class="refTitle">"tcp_hpts.c"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99">https://github.com/freebsd/freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03">[I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03]</dt>
+        <dd>
+<span class="refAuthor">Johansson, I.</span>, <span class="refAuthor">Westerlund, M.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Self-Clocked Rate Adaptation for Multimedia"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-johansson-ccwg-rfc8298bis-screamv2-03</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-johansson-ccwg-rfc8298bis-screamv2-03">https://datatracker.ietf.org/doc/html/draft-johansson-ccwg-rfc8298bis-screamv2-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.draft-many-tiptop-usecase">[I-D.draft-many-tiptop-usecase]</dt>
         <dd>
-<span class="refAuthor">Blanchet, M.</span>, <span class="refAuthor">Eddy, W.</span>, and <span class="refAuthor">M. Eubanks</span>, <span class="refTitle">"IP in Deep Space: Key Characteristics, Use Cases and Requirements"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-many-tiptop-usecase-02</span>, <time datetime="2025-03-18" class="refDate">18 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-many-tiptop-usecase-02">https://datatracker.ietf.org/doc/html/draft-many-tiptop-usecase-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Blanchet, M.</span>, <span class="refAuthor">Eddy, W.</span>, and <span class="refAuthor">M. Eubanks</span>, <span class="refTitle">"IP in Deep Space: Key Characteristics, Use Cases and Requirements"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-many-tiptop-usecase-03</span>, <time datetime="2025-06-18" class="refDate">18 June 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-many-tiptop-usecase-03">https://datatracker.ietf.org/doc/html/draft-many-tiptop-usecase-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="LinuxPacing">[LinuxPacing]</dt>
         <dd>

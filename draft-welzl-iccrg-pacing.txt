@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 11 December 2025                                    MTI Systems
+Expires: 8 January 2026                                      MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                             9 June 2025
+                                                             7 July 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 December 2025.
+   This Internet-Draft will expire on 8 January 2026.
 
 Copyright Notice
 
@@ -89,6 +89,7 @@ Table of Contents
      4.2.  Queue dynamics
      4.3.  Getting good RTT estimates
      4.4.  Mini-bursts and their trade-offs
+     4.5.  Application control
    5.  Implementation examples
      5.1.  Linux TCP
      5.2.  Apple OSes
@@ -181,6 +182,9 @@ Table of Contents
    Pacing enables good operation with shorter queues, and can create an
    incentive to reduce the size of queues being configured within the
    network, leading to lower maximum latency for end host applications.
+   When applications use pacing to limit the rate, this can also reduce
+   latency irrespective of the size of the queues available in the
+   network (see Section 4.5).
 
    Improved RTT measurements can result from pacing, since samples are
    spread out further across time rather than clumped in time, as
@@ -375,6 +379,30 @@ Table of Contents
    opportunity; eliminating these benefits with pacing may in some cases
    be counter-productive.  This is an argument for making the size of
    mini-bursts larger.
+
+4.5.  Application control
+
+   When an application produces data at a certain (known) bitrate, it
+   can be beneficial to make use of pacing to limit the transport
+   bitrate on this basis such that it is not exceedingly large.  The
+   Linux and FreeBSD applications allow the application to set an upper
+   limit.
+
+   For example, frame based video transmission typically generates data
+   chunks at a varying size at regular intervals.  Such an application
+   could request a data chunk to be spread over the interval.  This
+   would allow a more sustained data transmission at a lower rate than a
+   transport protocol's congestion control might choose, rather than
+   using a shorter time period within the interval with a high rate.
+   This has the benefit that queue growth is less likely, i.e. this form
+   of pacing can reduce latency.
+
+   Spreading over the interval needs to be done with some caution;
+   "ideally" spreading data across the entire interval risks that some
+   of data will not arrive in time, e.g. when delays are introduced by
+   other traffic.  SCReAM and SAMMY pace packets at a somewhat higher
+   rate (50% in case of SCReAM) to reduce this risk
+   [I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03], [Sammy].
 
 5.  Implementation examples
 
@@ -595,12 +623,20 @@ Table of Contents
    [HPTSCode] "tcp_hpts.c", October 2024, <https://github.com/freebsd/
               freebsd-src/blob/main/sys/netinet/tcp_hpts.c#L31-L99>.
 
+   [I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03]
+              Johansson, I., Westerlund, M., and M. Kühlewind, "Self-
+              Clocked Rate Adaptation for Multimedia", Work in Progress,
+              Internet-Draft, draft-johansson-ccwg-rfc8298bis-
+              screamv2-03, 3 March 2025,
+              <https://datatracker.ietf.org/doc/html/draft-johansson-
+              ccwg-rfc8298bis-screamv2-03>.
+
    [I-D.draft-many-tiptop-usecase]
               Blanchet, M., Eddy, W., and M. Eubanks, "IP in Deep Space:
               Key Characteristics, Use Cases and Requirements", Work in
-              Progress, Internet-Draft, draft-many-tiptop-usecase-02, 18
-              March 2025, <https://datatracker.ietf.org/doc/html/draft-
-              many-tiptop-usecase-02>.
+              Progress, Internet-Draft, draft-many-tiptop-usecase-03, 18
+              June 2025, <https://datatracker.ietf.org/doc/html/draft-
+              many-tiptop-usecase-03>.
 
    [LinuxPacing]
               Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
