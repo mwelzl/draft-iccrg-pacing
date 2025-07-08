@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-10T00:46:21.860480+00:00",
+  "timestamp": "2025-07-08T00:46:57.120386+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -102,15 +102,15 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2024-11-18T12:52:08Z",
+      "updatedAt": "2025-07-06T10:53:10Z",
       "closedAt": null,
       "comments": [
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "Some pro's of pacing:\r\n\r\n- less likely to provoke spontaneous loss from bursts\r\n- less likely to cause sudden, ephemeral delay increase\r\n- more likely to really saturate the available capacity, especially when queues are short\r\n\r\nSome con's of pacing:\r\n\r\n- more sustained delay growth\r\n- slight (miniscule, perhaps negligible) delays due to delaying packets\r\n- *perhaps* some more from [this old well-known paper](https://homes.cs.washington.edu/~tom/pubs/pacing.pdf) - but the last time I looked, the negative effects seemed to be tied to the combination of adding pacing and using an old TCP version. I don't remember if this is the case for *all* problems identified in this paper, though.",
+          "body": "Some pro's of pacing:\n\n- less likely to provoke spontaneous loss from bursts\n- less likely to cause sudden, ephemeral delay increase\n- more likely to really saturate the available capacity, especially when queues are short\n\nSome con's of pacing:\n\n- more sustained delay growth\n- slight (minuscule, perhaps negligible) delays due to delaying packets\n- *perhaps* some more from [this old well-known paper](https://homes.cs.washington.edu/~tom/pubs/pacing.pdf) - but the last time I looked, the negative effects seemed to be tied to the combination of adding pacing and using an old TCP version. I don't remember if this is the case for *all* problems identified in this paper, though.",
           "createdAt": "2024-05-06T14:06:32Z",
-          "updatedAt": "2024-05-06T14:06:32Z"
+          "updatedAt": "2025-07-06T10:53:10Z"
         },
         {
           "author": "mwelzl",
@@ -194,22 +194,22 @@
       "id": "I_kwDOL2DqS86Z8dQE",
       "title": "Application control (e.g. for video)",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "The \"Sammy\" paper:  https://dl.acm.org/doi/10.1145/3603269.3604839   paces at a larger time scale - avoiding to transmit video data as a bulk but instead spreading it out. This can be done with or without RTT-timescale pacing underneath, and should be discussed as a separate thing IMO.\r\n\r\nPerhaps the right angle is to talk about different time scales, or it is about being at the application layer (because this is really application payload specific).",
       "createdAt": "2024-10-12T10:07:28Z",
-      "updatedAt": "2025-02-28T04:35:47Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T16:19:00Z",
+      "closedAt": "2025-07-07T16:19:00Z",
       "comments": [
         {
           "author": "mwelzl",
           "authorAssociation": "OWNER",
-          "body": "A text donation from Ingemar Johansson:\n\n> Frame based transmission, for instance based on output from video coders possess the property that video frames are typically generated at regular intervals. For example a video coder that encodes video at 50 frames per second, outputs  a frame every 20ms. This frame is typically split up in MTU sized packets. Video coding typically also encodes frames of varying size, depending on the complexity of the input signal.  \nThis has the consequence that the packet pacing cannot be tuned to match the nominal bitrate, as this would mean that large video frames are unnecessarily delay on the sender side.\nSCReAM (https://datatracker.ietf.org/doc/draft-johansson-ccwg-rfc8298bis-screamv2/ ) as an example paces, packets at a 50% higher rate than the nominal bitrate. This has the effect that an average video frame in the example above is transmitted in 20/1.5 = 13.3ms. This reduces the risk that video frames are delayed unnecesarily  other than when the video frame is unusually large.\n\nThere is more text about SCReAM in this email:\nhttps://www.uio.no/dscience/english/dstrain/research-areas2025/informatics/ai-as-a-game-changer-for-intelligent-edge-and-tran/index.html",
+          "body": "A text donation from Ingemar Johansson:\n\n> Frame based transmission, for instance based on output from video coders possess the property that video frames are typically generated at regular intervals. For example a video coder that encodes video at 50 frames per second, outputs  a frame every 20ms. This frame is typically split up in MTU sized packets. Video coding typically also encodes frames of varying size, depending on the complexity of the input signal.  \nThis has the consequence that the packet pacing cannot be tuned to match the nominal bitrate, as this would mean that large video frames are unnecessarily delay on the sender side.\nSCReAM (https://datatracker.ietf.org/doc/draft-johansson-ccwg-rfc8298bis-screamv2/ ) as an example paces, packets at a 50% higher rate than the nominal bitrate. This has the effect that an average video frame in the example above is transmitted in 20/1.5 = 13.3ms. This reduces the risk that video frames are delayed unnecesarily  other than when the video frame is unusually large.",
           "createdAt": "2024-10-24T19:52:04Z",
-          "updatedAt": "2025-02-28T04:34:29Z"
+          "updatedAt": "2025-07-06T11:27:07Z"
         },
         {
           "author": "mwelzl",
@@ -1376,6 +1376,61 @@
               "updatedAt": "2025-06-08T02:01:01Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOL2DqS86doGIk",
+      "title": "Application control",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/24",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #11",
+      "createdAt": "2025-07-06T11:42:47Z",
+      "updatedAt": "2025-07-07T16:19:15Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "6dd06f73869a7cb7f768a9c97324a1d50037173b",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-appcontrol",
+      "headRefOid": "eda9a69d4039e78f2e39aaf25884d6cc46bb449d",
+      "closedAt": "2025-07-07T16:18:59Z",
+      "mergedAt": "2025-07-07T16:18:59Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "fa93af996a79e56002115f2f65675fa022cacfe9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS86ySmYP",
+          "commit": {
+            "abbreviatedOid": "eda9a69"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-06T12:13:56Z",
+          "updatedAt": "2025-07-06T12:13:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOL2DqS86yXMuF",
+          "commit": {
+            "abbreviatedOid": "eda9a69"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-07T06:59:05Z",
+          "updatedAt": "2025-07-07T06:59:05Z",
+          "comments": []
         }
       ]
     }
