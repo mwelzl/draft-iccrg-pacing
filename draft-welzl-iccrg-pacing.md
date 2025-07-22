@@ -225,7 +225,7 @@ be well-known in advance (e.g. due to scheduling of capacity, etc.).  In this
 case, senders should pace packets at the scheduled rates in order to
 efficiently utilize that capacity.  In some of these cases, the rates may be
 very high, and any sender burstiness might require large expensive buffers
-within the network in order to accomodate bursts without losses.  Situations where this
+within the network in order to accommodate bursts without losses.  Situations where this
 applies may include supercomputing grids, private datacenter interconnection,
 and space mission communications {{I-D.draft-many-tiptop-usecase}}.
 
@@ -265,7 +265,7 @@ The probability of loss type 1 in {{losstypes}} is indirectly proportional to th
 
 ## Queue dynamics
 
-When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in {{losstypes}}. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incuring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.
+When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in {{losstypes}}. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incurring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.
 
 
 ## Getting good RTT estimates {#rtt}
@@ -418,7 +418,7 @@ the numbering rule out. -->
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard Vasilenko for suggesting improvements to this document.
+The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard Vasilenko for suggesting improvements to this document.
 
 
 # Change Log
@@ -432,7 +432,7 @@ The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard
 
 * -02 adds a reference for Linux pacing, removes a comment on Linux SRTT calculation ("TODO check": it was checked, nothing to change), adds more discussion text:
   * queue dynamics / AQM interactions
-  * initial RTT calculation, thanks to Ingemar Johannson
+  * initial RTT calculation, thanks to Ingemar Johansson
   * mini-bursts and their trade-offs, thanks to Eduard Vasilenko
   * ... and now we also have an ACK section for such thanks
 
