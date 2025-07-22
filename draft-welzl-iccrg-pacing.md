@@ -321,7 +321,7 @@ to reduce this risk {{I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03}}, {{Sammy
 
 ## Linux TCP {#linux}
 
-The following description is based on Linux kernel version 6.8.9.
+Pacing was first implemented in Linux kernel version 3.12 in 2013. The following description is based on Linux kernel version 6.8.9.
 
 There are two ways to enable pacing in Linux: 1) via a socket option, 2) by configuring the FQ queue discipline. We describe case 1.
 
