@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 8 January 2026                                      MTI Systems
+Expires: 23 January 2026                                     MTI Systems
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                             7 July 2025
+                                                            22 July 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 23 January 2026.
 
 Copyright Notice
 
@@ -207,7 +207,7 @@ Table of Contents
    scheduled rates in order to efficiently utilize that capacity.  In
    some of these cases, the rates may be very high, and any sender
    burstiness might require large expensive buffers within the network
-   in order to accomodate bursts without losses.  Situations where this
+   in order to accommodate bursts without losses.  Situations where this
    applies may include supercomputing grids, private datacenter
    interconnection, and space mission communications
    [I-D.draft-many-tiptop-usecase].
@@ -307,7 +307,7 @@ Table of Contents
    causes more sudden, drastic delay growth than paced traffic, and has
    a higher risk of packet loss, as discussed in Section 4.1.  Paced
    traffic, on the other hand, can cause a bottleneck queue to grow more
-   slowly and steadily, incuring delay growth over a longer time
+   slowly and steadily, incurring delay growth over a longer time
    interval.  Aside from the direct problems that delay can cause, such
    sustained queue and delay growth is also more likely to provoke an
    Active Queue Management (AQM) algorithm to drop packets or mark them
@@ -681,7 +681,7 @@ Table of Contents
 
 Acknowledgments
 
-   The authors would like to thank Grenville Armitage, Ingemar Johannson
+   The authors would like to thank Grenville Armitage, Ingemar Johansson
    and Eduard Vasilenko for suggesting improvements to this document.
 
 Change Log
@@ -701,7 +701,7 @@ Change Log
 
       -  queue dynamics / AQM interactions
 
-      -  initial RTT calculation, thanks to Ingemar Johannson
+      -  initial RTT calculation, thanks to Ingemar Johansson
 
       -  mini-bursts and their trade-offs, thanks to Eduard Vasilenko
 

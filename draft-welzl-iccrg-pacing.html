@@ -12,12 +12,12 @@
 <meta content='
        Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. 
     ' name="description">
-<meta content="xml2rfc 3.29.0" name="generator">
+<meta content="xml2rfc 3.30.0" name="generator">
 <meta content="pacing" name="keyword">
 <meta content="congestion control" name="keyword">
 <meta content="draft-welzl-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.29.0
+  xml2rfc 3.30.0
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 8 January 2026</td>
+<td class="center">Expires 23 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-welzl-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-07" class="published">7 July 2025</time>
+<time datetime="2025-07-22" class="published">22 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-08">8 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-01-23">23 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1132,7 +1132,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1341,7 +1341,7 @@ be well-known in advance (e.g. due to scheduling of capacity, etc.).  In this
 case, senders should pace packets at the scheduled rates in order to
 efficiently utilize that capacity.  In some of these cases, the rates may be
 very high, and any sender burstiness might require large expensive buffers
-within the network in order to accomodate bursts without losses.  Situations where this
+within the network in order to accommodate bursts without losses.  Situations where this
 applies may include supercomputing grids, private datacenter interconnection,
 and space mission communications <span>[<a href="#I-D.draft-many-tiptop-usecase" class="cite xref">I-D.draft-many-tiptop-usecase</a>]</span>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 </section>
@@ -1399,7 +1399,7 @@ In this case, an overshoot will occur: packets are forwarded with half their arr
         <h3 id="name-queue-dynamics">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-queue-dynamics" class="section-name selfRef">Queue dynamics</a>
         </h3>
-<p id="section-4.2-1">When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in <a href="#losstypes" class="auto internal xref">Section 4.1</a>. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incuring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in <a href="#losstypes" class="auto internal xref">Section 4.1</a>. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incurring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rtt">
@@ -1654,7 +1654,7 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-5" c
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">The authors would like to thank Grenville Armitage, Ingemar Johannson and Eduard Vasilenko for suggesting improvements to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard Vasilenko for suggesting improvements to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="change-log">
@@ -1684,7 +1684,7 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-5" c
               <p id="appendix-B-1.3.2.1.1">queue dynamics / AQM interactions<a href="#appendix-B-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-B-1.3.2.2">
-              <p id="appendix-B-1.3.2.2.1">initial RTT calculation, thanks to Ingemar Johannson<a href="#appendix-B-1.3.2.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-B-1.3.2.2.1">initial RTT calculation, thanks to Ingemar Johansson<a href="#appendix-B-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-B-1.3.2.3">
               <p id="appendix-B-1.3.2.3.1">mini-bursts and their trade-offs, thanks to Eduard Vasilenko<a href="#appendix-B-1.3.2.3.1" class="pilcrow">¶</a></p>
