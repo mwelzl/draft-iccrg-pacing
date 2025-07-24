@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T00:46:57.120386+00:00",
+  "timestamp": "2025-07-24T00:50:55.441855+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -319,6 +319,30 @@
           "body": "@goelvidhi see the statement from Eduard Vasilenko in #3: calculating the burst size in units of time may seem good at the sender side, but what seems like a short-delay burst there can produce significant delay further downstream. So the strategy of calculating the burst size from units of time is actually misleading in terms of the actual delay impact.\n",
           "createdAt": "2025-02-28T13:52:53Z",
           "updatedAt": "2025-02-28T13:52:53Z"
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "I_kwDOL2DqS87B3w6m",
+      "title": "Linux implementation, kernel version",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/27",
+      "state": "OPEN",
+      "author": "alfs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "A bit of a nit, but the Linux implementation description is based on Linux 6.8.9. The 6.8 branch was EOL'd last year,\nhttps://en.wikipedia.org/wiki/Linux_kernel_version_history\n\nIf the implementation description holds for release 6.12, I suggest referencing this version instead, being the latest LTS and also Super-LTS/CIP (https://www.cip-project.org/blog/2025/01/13/kernel-6-12-will-have-10-years-support-via-cip-are-all-your-maintenance-problems-solved)\n\nIf the description on the other hand does not hold for current kernels, it should be updated so the RFC doesn't have obsolete information when it goes forward.",
+      "createdAt": "2025-07-22T13:06:18Z",
+      "updatedAt": "2025-07-23T21:24:09Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Thanks - I'll check!",
+          "createdAt": "2025-07-23T21:24:09Z",
+          "updatedAt": "2025-07-23T21:24:09Z"
         }
       ]
     }
@@ -1430,6 +1454,90 @@
           "body": "",
           "createdAt": "2025-07-07T06:59:05Z",
           "updatedAt": "2025-07-07T06:59:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOL2DqS86gD1HX",
+      "title": "Spelling",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/25",
+      "state": "MERGED",
+      "author": "alfs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-22T12:21:03Z",
+      "updatedAt": "2025-07-22T17:20:12Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "f3ffb87072bd4747ca735f38331338ee3edaeb95",
+      "headRepository": "alfs/draft-iccrg-pacing",
+      "headRefName": "patch-1",
+      "headRefOid": "6fad01b4f08d03384e2813fb81c6fa67f9ce278b",
+      "closedAt": "2025-07-22T15:30:15Z",
+      "mergedAt": "2025-07-22T15:30:15Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "3df1b98438df6a3b2bcff575018b68f2c9ff1801"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS861aaKi",
+          "commit": {
+            "abbreviatedOid": "6fad01b"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "This is great, many thanks!",
+          "createdAt": "2025-07-22T15:29:44Z",
+          "updatedAt": "2025-07-22T15:29:44Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOL2DqS86gERys",
+      "title": "Historical context of Linux implementation",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/26",
+      "state": "MERGED",
+      "author": "alfs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For Apple and FreeBSD, the text mentions the version of availability:\r\n\r\n_Pacing was added to Apple OS as a private API in iOS 17 and macOS 14._\r\n_... which is a kernel loadable module available in FreeBSD 14 and higher._\r\n\r\nFor coherence, I propose that the text mentions when pacing was implemented also in Linux,\r\n(in commit https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=afe4fd062416b158a8a8538b23adc1930a9b88dc\r\nthat was released in 3.12. Of course the specific commit is not very relevant in this context/RFC, but the release and the year is interesting to know - pacing support has been there for a long time.\r\n",
+      "createdAt": "2025-07-22T12:55:48Z",
+      "updatedAt": "2025-07-22T15:47:53Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "f3ffb87072bd4747ca735f38331338ee3edaeb95",
+      "headRepository": "alfs/draft-iccrg-pacing",
+      "headRefName": "patch-2",
+      "headRefOid": "882d044c215fa878178ca2675cf10ec9daeaeba0",
+      "closedAt": "2025-07-22T15:47:53Z",
+      "mergedAt": "2025-07-22T15:47:53Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "1302c140a8297dfca5781c5e4ec93711fe6efe76"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS861ax-i",
+          "commit": {
+            "abbreviatedOid": "882d044"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Agreed, thanks!",
+          "createdAt": "2025-07-22T15:47:29Z",
+          "updatedAt": "2025-07-22T15:47:29Z",
           "comments": []
         }
       ]
