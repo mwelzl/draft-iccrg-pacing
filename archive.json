@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-24T00:50:55.441855+00:00",
+  "timestamp": "2025-10-07T00:41:45.207470+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -58,11 +58,13 @@
       "state": "OPEN",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "goelvidhi"
+      ],
       "labels": [],
       "body": "todo Vidhi",
       "createdAt": "2024-05-03T10:32:25Z",
-      "updatedAt": "2024-10-12T10:03:18Z",
+      "updatedAt": "2025-10-06T10:15:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -98,11 +100,13 @@
       "state": "OPEN",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "mwelzl"
+      ],
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2025-07-06T10:53:10Z",
+      "updatedAt": "2025-10-06T10:15:01Z",
       "closedAt": null,
       "comments": [
         {
@@ -228,11 +232,13 @@
       "state": "OPEN",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "tuexen"
+      ],
       "labels": [],
       "body": "Michael Tuexen has volunteered to write text.",
       "createdAt": "2024-10-12T10:09:01Z",
-      "updatedAt": "2024-10-25T23:16:12Z",
+      "updatedAt": "2025-10-06T10:15:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -330,11 +336,13 @@
       "state": "OPEN",
       "author": "alfs",
       "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
+      "assignees": [
+        "mwelzl"
+      ],
       "labels": [],
       "body": "A bit of a nit, but the Linux implementation description is based on Linux 6.8.9. The 6.8 branch was EOL'd last year,\nhttps://en.wikipedia.org/wiki/Linux_kernel_version_history\n\nIf the implementation description holds for release 6.12, I suggest referencing this version instead, being the latest LTS and also Super-LTS/CIP (https://www.cip-project.org/blog/2025/01/13/kernel-6-12-will-have-10-years-support-via-cip-are-all-your-maintenance-problems-solved)\n\nIf the description on the other hand does not hold for current kernels, it should be updated so the RFC doesn't have obsolete information when it goes forward.",
       "createdAt": "2025-07-22T13:06:18Z",
-      "updatedAt": "2025-07-23T21:24:09Z",
+      "updatedAt": "2025-10-06T10:15:11Z",
       "closedAt": null,
       "comments": [
         {
