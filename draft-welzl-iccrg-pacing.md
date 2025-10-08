@@ -35,11 +35,10 @@ author:
   -
     ins: W. Eddy
     name: Wesley Eddy
-    org: MTI Systems
-    street: 25111 Country Club Blvd, Suite 295
-    city: North Olmsted, OH 44070
+    org: Aalyria Technologies
+    city: Avon, OH 44011
     country: United States of America
-    email: wes@mti-systems.com
+    email: wes@aalyria.com
 
   -
     ins: V. Goel
