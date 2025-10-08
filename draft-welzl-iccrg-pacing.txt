@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 23 January 2026                                     MTI Systems
+Expires: 11 April 2026                              Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                            22 July 2025
+                                                          8 October 2025
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 January 2026.
+   This Internet-Draft will expire on 11 April 2026.
 
 Copyright Notice
 
@@ -727,11 +727,10 @@ Authors' Addresses
 
 
    Wesley Eddy
-   MTI Systems
-   25111 Country Club Blvd, Suite 295
-   North Olmsted, OH 44070,
+   Aalyria Technologies
+   Avon, OH 44011,
    United States of America
-   Email: wes@mti-systems.com
+   Email: wes@aalyria.com
 
 
    Vidhi Goel
