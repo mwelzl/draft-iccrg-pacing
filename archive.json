@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-07T00:41:45.207470+00:00",
+  "timestamp": "2025-10-09T00:42:19.812426+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -1549,6 +1549,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOL2DqS86sslbk",
+      "title": "adjust Wes contact info",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/28",
+      "state": "MERGED",
+      "author": "wesley-eddy",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I changed companies recently.",
+      "createdAt": "2025-10-08T12:58:35Z",
+      "updatedAt": "2025-10-08T16:37:01Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "1302c140a8297dfca5781c5e4ec93711fe6efe76",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "update-contact-info",
+      "headRefOid": "2fb47634b980c5bea93f5da7188f5d183e86050d",
+      "closedAt": "2025-10-08T16:37:01Z",
+      "mergedAt": "2025-10-08T16:37:01Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "e35e4b230e8ba2dc8c4577af4bed56b09d452701"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
