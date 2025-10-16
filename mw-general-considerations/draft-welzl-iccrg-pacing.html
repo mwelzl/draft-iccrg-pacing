@@ -1283,10 +1283,21 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-motivations-for-pacing">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-motivations-for-pacing" class="section-name selfRef">Motivations for Pacing</a>
       </h2>
-<p id="section-3-1">There are potential benefits to pacing, both for the end-host protocol stacks
+<p id="section-3-1">Pacing is an old idea which did not see much deployment for decades. This may be
+due to the need for efficient fine-grain timers, which were not previously available
+in software. Also, at least one early analysis has documented disadvantages of
+pacing, primarily in terms of throughput <span>[<a href="#UnderstandingPacing" class="cite xref">UnderstandingPacing</a>]</span>. At the time of
+writing, this article has become 25 years old; it is limited to Reno congestion control,
+and defines a pacing method that is not in line with any of the implementations that
+we document in <a href="#implementation" class="auto internal xref">Section 5</a>. A part of the critical analysis in the article
+includes an example of a double back-off after slow start (fig. 8); the authors
+attribute the performance drop to synchronization, but it may instead be
+caused by the back-off factor beta being too large, as described in <a href="#backoff" class="auto internal xref">Section 4.1.1</a>.
+In the latter case, it is not a problem with pacing per se.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">There are several potential benefits to pacing, both for the end-host protocol stacks
 and within the network.  This section provides a short summary of the
 motivations for performing pacing, with specific examples worked through in the
-following <a href="#considerations" class="auto internal xref">Section 4</a>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+following (<a href="#considerations" class="auto internal xref">Section 4</a>).<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="network-benefits">
 <section id="section-3.1">
         <h3 id="name-network-benefits">
@@ -1375,13 +1386,14 @@ important for using and tuning pacing, and the resulting consequences.<a href="#
 In this case, an overshoot will occur: packets are forwarded with half their arrival rate, i.e. less than 20 packets can be forwarded during the burst's arrival. The remaining 20 (or more) packets cannot fit into the 10-packet queue. A cwnd of 40 packets is much smaller than the (BDP + queue) limit of 135 packets, and the bottleneck is not fully saturated.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1-6">Let us now assume that the flight of 40 packets is instead paced, such that the arrival rate only mildly exceeds the departure rate -- e.g., they arrive at a rate of 60 Mbit/s. When the last packet of this flight arrives at the bottleneck, the bottleneck should already have forwarded 5/6 * 39 = 32.5 packets. Since only complete packets can be sent, the bottleneck has really forwarded 32 packets, and the remaining 40-32 = 8 packets fit in the queue. No loss occurs.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
 <p id="section-4.1-7">This example explains how pacing can enable a rate increase to last longer than without pacing. This makes it more likely that a bottleneck is saturated, such that cwnd reflects the BDP plus the queue length (loss type 2).<a href="#section-4.1-7" class="pilcrow">¶</a></p>
-<div id="backing-off-after-the-increase">
+<div id="backoff">
 <section id="section-4.1.1">
           <h4 id="name-backing-off-after-the-incre">
 <a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-backing-off-after-the-incre" class="section-name selfRef">Backing off after the increase</a>
           </h4>
 <p id="section-4.1.1-1">The two loss types explained in <a href="#losstypes" class="auto internal xref">Section 4.1</a> require a different back-off factor to allow the queue to drain and congestion to dissipate. Specifically, in the single-sender single-bottleneck example above, when a slow start overshoot occurs as loss type 2, a back-off function such as: ssthresh = cwnd * beta with beta &gt;= 0.5 is guaranteed to cause a second loss after the end of loss recovery. This is because, when cwnd exceeds a fully saturated bottleneck (i.e., cwnd &gt; BDP + queue length), cwnd will have grown further by another (BDP + queue length) by the time the sender learns about the loss. In this case, beta = 0.5 will cause ssthresh to exceed (BDP + queue length) again.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-2">Since pacing makes loss type 2 more likely, beta &lt; 0.5 may be a better choice after slow start overshoot when pacing is used.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-3">The following example illustrates this: consider a TCP sender that transmits data across a single bottleneck router that uses a FIFO queue towards a TCP receiver; assume that the sender is paced well, and only loss type 2 happens. For simplicity, we consider the congestion window in units of segments rather than bytes. The initial window (IW) is 10 segments, and the path's capacity limit (the BDP plus the bottleneck queue length) equals 30 segments. In slow start, after receiving ACKs for the first 10 segments, the sender will have transmitted 20 more segments and the value of cwnd will be 20. After receiving ACKs for these 20 segments, the sender will have transmitted 40 more segments and the value of cwnd will be 40. The first 30 of the 40 newly transmitted segments will pass through the bottleneck, but the remaining 10 segments will be dropped. The ACKs that are caused by the first 30 segments then cause the sender to transmit another 60 segments, and cwnd will be increased to 70. When the first of these 60 segments arrive at the receiver, they cause DupACKs; when these DupACKs arrive the sender, backing off with beta=0.5 yields ssthresh = 35, which is more than the path's capacity limit, and another loss will occur.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="able-to-work-with-smaller-queues">
@@ -1458,7 +1470,7 @@ to reduce this risk <span>[<a href="#I-D.draft-johansson-ccwg-rfc8298bis-screamv
 </div>
 </section>
 </div>
-<div id="implementation-examples">
+<div id="implementation">
 <section id="section-5">
       <h2 id="name-implementation-examples">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-implementation-examples" class="section-name selfRef">Implementation examples</a>
