@@ -149,6 +149,23 @@ informative:
     seriesinfo: "IEEE ICNC 2025"
     target: https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf
 
+  UnderstandingPacing:
+    title: "Understanding the performance of TCP pacing"
+    author:
+      -
+        ins: A. Aggarwal
+        name: Amit Aggarwal
+      -
+        ins: S. Savage
+        name: Stefan Savage
+      -
+        ins: T. Anderson
+        name: Thomas Anderson
+    date: March 2000
+    seriesinfo: "IEEE Infocom 2000"
+    target: https://doi.org/10.1109/INFCOM.2000.832483
+
+
 --- abstract
 
 Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
