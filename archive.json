@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-09T00:42:19.812426+00:00",
+  "timestamp": "2025-10-19T00:49:26.053639+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -333,7 +333,7 @@
       "id": "I_kwDOL2DqS87B3w6m",
       "title": "Linux implementation, kernel version",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/27",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "alfs",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -342,8 +342,8 @@
       "labels": [],
       "body": "A bit of a nit, but the Linux implementation description is based on Linux 6.8.9. The 6.8 branch was EOL'd last year,\nhttps://en.wikipedia.org/wiki/Linux_kernel_version_history\n\nIf the implementation description holds for release 6.12, I suggest referencing this version instead, being the latest LTS and also Super-LTS/CIP (https://www.cip-project.org/blog/2025/01/13/kernel-6-12-will-have-10-years-support-via-cip-are-all-your-maintenance-problems-solved)\n\nIf the description on the other hand does not hold for current kernels, it should be updated so the RFC doesn't have obsolete information when it goes forward.",
       "createdAt": "2025-07-22T13:06:18Z",
-      "updatedAt": "2025-10-06T10:15:11Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-17T08:34:53Z",
+      "closedAt": "2025-10-17T08:34:53Z",
       "comments": [
         {
           "author": "mwelzl",
@@ -351,6 +351,13 @@
           "body": "Thanks - I'll check!",
           "createdAt": "2025-07-23T21:24:09Z",
           "updatedAt": "2025-07-23T21:24:09Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "Finished checking: none of the code changes in the relevant file (tcp_output.c, [old](https://elixir.bootlin.com/linux/v6.7.3/source/net/ipv4/tcp_output.c) vs. [new](https://elixir.bootlin.com/linux/v6.12/source/net/ipv4/tcp_output.c)) affect anything this text says. So I'll update the kernel version number.  Thanks again @alfs !",
+          "createdAt": "2025-10-17T08:31:56Z",
+          "updatedAt": "2025-10-17T08:31:56Z"
         }
       ]
     }
@@ -1574,6 +1581,74 @@
       "mergedBy": "mwelzl",
       "mergeCommit": {
         "oid": "e35e4b230e8ba2dc8c4577af4bed56b09d452701"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOL2DqS86uH3MU",
+      "title": "General considerations: discuss \"Understanding the performance...\" paper",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/29",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #3 ",
+      "createdAt": "2025-10-16T16:14:41Z",
+      "updatedAt": "2025-10-16T18:54:25Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "e35e4b230e8ba2dc8c4577af4bed56b09d452701",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-general-considerations",
+      "headRefOid": "281b67908a065bb6cdf81345d7fc18054f88002d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS87Hd98E",
+          "commit": {
+            "abbreviatedOid": "281b679"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-16T18:54:25Z",
+          "updatedAt": "2025-10-16T18:54:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOL2DqS86uQXUv",
+      "title": "Change Linux kernel version to 6.12",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/30",
+      "state": "MERGED",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #27 ",
+      "createdAt": "2025-10-17T08:34:31Z",
+      "updatedAt": "2025-10-17T08:34:57Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "e35e4b230e8ba2dc8c4577af4bed56b09d452701",
+      "headRepository": "mwelzl/draft-iccrg-pacing",
+      "headRefName": "mw-linux-kernel-version",
+      "headRefOid": "498c52c14975c8b06c680b5e298d4787a02667c4",
+      "closedAt": "2025-10-17T08:34:52Z",
+      "mergedAt": "2025-10-17T08:34:52Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "bb89ef0f0aedfa96304a4bb6c2fe898fb96e5b76"
       },
       "comments": [],
       "reviews": []
