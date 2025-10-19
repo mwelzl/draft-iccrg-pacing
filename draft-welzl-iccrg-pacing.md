@@ -225,8 +225,8 @@ The above simplicity in the kernel allows upper layer protocols or applications 
 ## FreeBSD
 
 FreeBSD has the infrastructure to support multiple TCP stacks.
-Each TCP stack has a tcp_output() function, which handles most of the sending of TCP segments.
-The default stack does not support pacing and its tcp_output() may be called whenever
+Each TCP stack has a ``tcp_output()`` function, which handles most of the sending of TCP segments.
+The default stack does not support pacing and its ``tcp_output()`` may be called whenever
 
 1. a TCP segment is received or
 
@@ -238,11 +238,82 @@ and sends as many TCP segments as is allowed by the congestion and flow control 
 However, this also allows to make use of TCP Segment Offload (TSO), which reduces the CPU load.
 
 The RACK {{RACK}} and BBR stacks both support pacing by leveraging the TCP High Precision Timer System (HPTS) {{HPTS}}, which is a kernel loadable module available in FreeBSD 14 and higher.
-The tcp_output() function of a TCP stack which supports pacing will not send as much as is allowed by congestion and flow control, but may only send a micro burst and schedule itself for being called after the inter-burst send time using the HPTS.
+The ``tcp_output()`` function of a TCP stack which supports pacing will not send as much as is allowed by congestion and flow control, but may only send a micro burst and schedule itself for being called after the inter-burst send time using the HPTS.
 The RACK stack supports an application setting a pacing rate and a maximum burst size using TCP socket options.
 The RACK stack then uses these values to compute the actual micro burst size and the inter-burst send time.
 
-The HPTS is optimized for handling a large number of TCP connections and the tcp_output() function of the RACK stack is also optimized for being called more often than the tcp_output() function of the default stack.
+The following ``IPPROTO_TCP``-level socket options are used to control static pacing:
+
+| Option Name                | Data Type    | Semantic                                         |
+| ``TCP_RACK_PACE_RATE_SS``  | ``uint64_t`` | Pace rate in B/s during slow start               |
+| ``TCP_RACK_PACE_RATE_CA``  | ``uint64_t`` | Pace rate in B/s during congestion avoidance     |
+| ``TCP_RACK_PACE_RATE_REC`` | ``uint64_t`` | Pace rate in B/s during recovery                 |
+| ``TCP_RACK_PACE_ALWAYS``   | ``int``      | Enable/Disable pacing                            |
+| ``TCP_RACK_PACE_MAX_SEG``  | ``int``      | Micro burst size in number of full sized segments|
+{: #socket-options-table title="Socket Options" cols="l l l"}
+
+The first three options can be used to control the pace rate in B/s.
+It is possible to specify individual pace rate for slow start, congestion avoidance,
+and recovery.
+When initializing one of the three pace rates, the other two pace rate are also
+initialized to the same rate.
+With the fourth socket option static pacing can be enabled and disabled.
+The last socket option allows to control the size of the micro burst in
+full sized segments. The default value is 40.
+
+The following ``packetdrill``-script illustrates the behaviour of a sender
+using a pace rate of 12 Mb/s and a micro burst size of 4 full sized segments.
+Please note that 12 Mb/s correspond to 1.5MB/s.
+Since FreeBSD takes the size of the IP packet into account this corresponds
+to 1000 full sized segments on a path with an MTU of 1500 bytes.
+The script uses a round trio time of 50 ms.
+
+~~~
+--ip_version=ipv4
+
+ 0.000 `kldload -n tcp_rack`
++0.000 `kldload -n cc_newreno`
++0.000 `sysctl kern.timecounter.alloweddeviation=0`
+
++0.000 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++0.000 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++0.000 setsockopt(3, IPPROTO_TCP, TCP_FUNCTION_BLK, {function_set_name="rack",
+                                                     pcbcnt=0}, 36) = 0
++0.000 setsockopt(3, IPPROTO_TCP, TCP_CONGESTION, "newreno", 8) = 0
++0.000 bind(3, ..., ...) = 0
++0.000 listen(3, 1) = 0
++0.000 < S      0:0(0)                  win 65535 <mss 1460,sackOK,eol,eol>
++0.000 > S.     0:0(0)        ack     1 win 65535 <mss 1460,sackOK,eol,eol>
++0.050 <  .     1:1(0)        ack     1 win 65535
++0.000 accept(3, ..., ...) = 4
++0.000 close(3) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_LOG, [TCP_LOG_STATE_CONTINUAL], 4) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [1500000], 8) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_MAX_SEG, [4], 4) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_ALWAYS, [1], 4) = 0
++0.100 send(4, ..., 14600, 0) = 14600
++0.000 >  .     1:1461(1460)  ack     1 win 65535
++0.000 >  .  1461:2921(1460)  ack     1 win 65535
++0.000 >  .  2921:4381(1460)  ack     1 win 65535
++0.000 >  .  4381:5841(1460)  ack     1 win 65535
++0.004 >  .  5841:7301(1460)  ack     1 win 65535
++0.000 >  .  7301:8761(1460)  ack     1 win 65535
++0.000 >  .  8761:10221(1460) ack     1 win 65535
++0.000 >  . 10221:11681(1460) ack     1 win 65535
++0.004 >  . 11681:13141(1460) ack     1 win 65535
++0.000 > P. 13141:14601(1460) ack     1 win 65535
++0.042 <  .     1:1(0)        ack  2921 win 65535
++0.000 <  .     1:1(0)        ack  5841 win 65535
++0.004 <  .     1:1(0)        ack  8761 win 65535
++0.000 <  .     1:1(0)        ack 11681 win 65535
++0.004 <  .     1:1(0)        ack 14601 win 65535
++0.000 close(4) = 0
++0.000 > F. 14601:14601(0)    ack     1 win 65535
++0.050 < F.      1:1(0)       ack 14602 win 65535
++0.000 >  . 14602:14602(0)    ack     2
+~~~
+
+The HPTS is optimized for handling a large number of TCP connections and the ``tcp_output()`` function of the RACK stack is also optimized for being called more often than the ``tcp_output()`` function of the default stack.
 This allows to use TSO in combination with TCP pacing.
 
 This subsystem underpins recently published research by Netflix and Stanford into application-informed pacing at scale {{Sammy}}.
