@@ -149,6 +149,23 @@ informative:
     seriesinfo: "IEEE ICNC 2025"
     target: https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf
 
+  UnderstandingPacing:
+    title: "Understanding the performance of TCP pacing"
+    author:
+      -
+        ins: A. Aggarwal
+        name: Amit Aggarwal
+      -
+        ins: S. Savage
+        name: Stefan Savage
+      -
+        ins: T. Anderson
+        name: Thomas Anderson
+    date: March 2000
+    seriesinfo: "IEEE Infocom 2000"
+    target: https://doi.org/10.1109/INFCOM.2000.832483
+
+
 --- abstract
 
 Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
@@ -173,10 +190,22 @@ Because of its known advantages, pacing has become common in implementations of 
 
 # Motivations for Pacing
 
-There are potential benefits to pacing, both for the end-host protocol stacks
+Pacing is an old idea which did not see much deployment for decades. This may be
+due to the need for efficient fine-grain timers, which were not previously available
+in software. Also, at least one early analysis has documented disadvantages of
+pacing, primarily in terms of throughput {{UnderstandingPacing}}. At the time of
+writing, this article has become 25 years old; it is limited to Reno congestion control,
+and defines a pacing method that is not in line with any of the implementations that
+we document in {{implementation}}. A part of the critical analysis in the article
+includes an example of a double back-off after slow start (fig. 8); the authors
+attribute the performance drop to synchronization, but it may instead be
+caused by the back-off factor beta being too large, as described in {{backoff}}.
+In the latter case, it is not a problem with pacing per se.
+
+There are several potential benefits to pacing, both for the end-host protocol stacks
 and within the network.  This section provides a short summary of the
 motivations for performing pacing, with specific examples worked through in the
-following {{considerations}}.
+following ({{considerations}}).
 
 ## Network Benefits
 
@@ -251,11 +280,14 @@ Let us now assume that the flight of 40 packets is instead paced, such that the 
 
 This example explains how pacing can enable a rate increase to last longer than without pacing. This makes it more likely that a bottleneck is saturated, such that cwnd reflects the BDP plus the queue length (loss type 2).
 
-### Backing off after the increase
+### Backing off after the increase {#backoff}
 
 The two loss types explained in {{losstypes}} require a different back-off factor to allow the queue to drain and congestion to dissipate. Specifically, in the single-sender single-bottleneck example above, when a slow start overshoot occurs as loss type 2, a back-off function such as: ssthresh = cwnd * beta with beta >= 0.5 is guaranteed to cause a second loss after the end of loss recovery. This is because, when cwnd exceeds a fully saturated bottleneck (i.e., cwnd > BDP + queue length), cwnd will have grown further by another (BDP + queue length) by the time the sender learns about the loss. In this case, beta = 0.5 will cause ssthresh to exceed (BDP + queue length) again.
 
 Since pacing makes loss type 2 more likely, beta < 0.5 may be a better choice after slow start overshoot when pacing is used.
+
+The following example illustrates this: consider a TCP sender that transmits data across a single bottleneck router that uses a FIFO queue towards a TCP receiver; assume that the sender is paced well, and only loss type 2 happens. For simplicity, we consider the congestion window in units of segments rather than bytes. The initial window (IW) is 10 segments, and the path's capacity limit (the BDP plus the bottleneck queue length) equals 30 segments. In slow start, after receiving ACKs for the first 10 segments, the sender will have transmitted 20 more segments and the value of cwnd will be 20. After receiving ACKs for these 20 segments, the sender will have transmitted 40 more segments and the value of cwnd will be 40. The first 30 of the 40 newly transmitted segments will pass through the bottleneck, but the remaining 10 segments will be dropped. The ACKs that are caused by the first 30 segments then cause the sender to transmit another 60 segments, and cwnd will be increased to 70. When the first of these 60 segments arrive at the receiver, they cause DupACKs; when these DupACKs arrive the sender, backing off with beta=0.5 yields ssthresh = 35, which is more than the path's capacity limit, and another loss will occur.
+
 
 ### Able to work with smaller queues
 
@@ -316,7 +348,7 @@ by other traffic. SCReAM and SAMMY pace packets at a somewhat higher rate (50% i
 to reduce this risk {{I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03}}, {{Sammy}}.
 
 
-# Implementation examples
+# Implementation examples {#implementation}
 
 ## Linux TCP {#linux}
 
