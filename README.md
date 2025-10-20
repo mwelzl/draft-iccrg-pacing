@@ -2,10 +2,10 @@
 
 This is the working area for the individual Internet-Draft, "Pacing in Transport Protocols".
 
-* [Editor's Copy](https://mwelzl.github.io/draft-iccrg-pacing/#go.draft-welzl-iccrg-pacing.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-welzl-iccrg-pacing)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-welzl-iccrg-pacing)
-* [Compare Editor's Copy to Individual Draft](https://mwelzl.github.io/draft-iccrg-pacing/#go.draft-welzl-iccrg-pacing.diff)
+* [Editor's Copy](https://mwelzl.github.io/draft-iccrg-pacing/#go.draft-irtf-iccrg-pacing.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-irtf-iccrg-pacing)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-irtf-iccrg-pacing)
+* [Compare Editor's Copy to Individual Draft](https://mwelzl.github.io/draft-iccrg-pacing/#go.draft-irtf-iccrg-pacing.diff)
 
 
 ## Contributing
