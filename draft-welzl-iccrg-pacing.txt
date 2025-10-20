@@ -149,10 +149,25 @@ Table of Contents
 
 3.  Motivations for Pacing
 
-   There are potential benefits to pacing, both for the end-host
+   Pacing is an old idea which did not see much deployment for decades.
+   This may be due to the need for efficient fine-grain timers, which
+   were not previously available in software.  Also, at least one early
+   analysis has documented disadvantages of pacing, primarily in terms
+   of throughput [UnderstandingPacing].  At the time of writing, this
+   article has become 25 years old; it is limited to Reno congestion
+   control, and defines a pacing method that is not in line with any of
+   the implementations that we document in Section 5.  A part of the
+   critical analysis in the article includes an example of a double
+   back-off after slow start (fig. 8); the authors attribute the
+   performance drop to synchronization, but it may instead be caused by
+   the back-off factor beta being too large, as described in
+   Section 4.1.1.  In the latter case, it is not a problem with pacing
+   per se.
+
+   There are several potential benefits to pacing, both for the end-host
    protocol stacks and within the network.  This section provides a
    short summary of the motivations for performing pacing, with specific
-   examples worked through in the following Section 4.
+   examples worked through in the following (Section 4).
 
 3.1.  Network Benefits
 
@@ -293,6 +308,26 @@ Table of Contents
 
    Since pacing makes loss type 2 more likely, beta < 0.5 may be a
    better choice after slow start overshoot when pacing is used.
+
+   The following example illustrates this: consider a TCP sender that
+   transmits data across a single bottleneck router that uses a FIFO
+   queue towards a TCP receiver; assume that the sender is paced well,
+   and only loss type 2 happens.  For simplicity, we consider the
+   congestion window in units of segments rather than bytes.  The
+   initial window (IW) is 10 segments, and the path's capacity limit
+   (the BDP plus the bottleneck queue length) equals 30 segments.  In
+   slow start, after receiving ACKs for the first 10 segments, the
+   sender will have transmitted 20 more segments and the value of cwnd
+   will be 20.  After receiving ACKs for these 20 segments, the sender
+   will have transmitted 40 more segments and the value of cwnd will be
+   40.  The first 30 of the 40 newly transmitted segments will pass
+   through the bottleneck, but the remaining 10 segments will be
+   dropped.  The ACKs that are caused by the first 30 segments then
+   cause the sender to transmit another 60 segments, and cwnd will be
+   increased to 70.  When the first of these 60 segments arrive at the
+   receiver, they cause DupACKs; when these DupACKs arrive the sender,
+   backing off with beta=0.5 yields ssthresh = 35, which is more than
+   the path's capacity limit, and another loss will occur.
 
 4.1.2.  Able to work with smaller queues
 
@@ -757,6 +792,11 @@ Table of Contents
               Neighbor", ACM SIGCOMM '23: Proceedings of the ACM SIGCOMM
               2023 Conference , 1 September 2023,
               <https://doi.org/10.1145/3603269.3604839>.
+
+   [UnderstandingPacing]
+              Aggarwal, A., Savage, S., and T. Anderson, "Understanding
+              the performance of TCP pacing", IEEE Infocom 2000 , March
+              2000, <https://doi.org/10.1109/INFCOM.2000.832483>.
 
    [VL87]     Varghese, G. and T. Tauck, "Hashed and hierarchical timing
               wheels: data structures for the efficient implementation
