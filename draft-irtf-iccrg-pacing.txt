@@ -14,7 +14,7 @@ Expires: 23 April 2026                              Aalyria Technologies
 
 
                      Pacing in Transport Protocols
-                    draft-welzl-iccrg-pacing-latest
+                     draft-irtf-iccrg-pacing-latest
 
 Abstract
 
@@ -31,9 +31,9 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-
+   https://mwelzl.github.io/draft-iccrg-pacing/draft-irtf-iccrg-
    pacing.html.  Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-welzl-iccrg-pacing/.
+   https://datatracker.ietf.org/doc/draft-irtf-iccrg-pacing/.
 
    Discussion of this document takes place on the Internet Congestion
    Control Research Group mailing list (mailto:iccrg@irtf.org), which is
