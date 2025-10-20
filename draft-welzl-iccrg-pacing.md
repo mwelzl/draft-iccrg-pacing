@@ -253,9 +253,9 @@ The following ``IPPROTO_TCP``-level socket options are used to control static pa
 {: #socket-options-table title="Socket Options" cols="l l l"}
 
 The first three options can be used to control the pace rate in B/s.
-It is possible to specify individual pace rate for slow start, congestion avoidance,
+It is possible to specify individual pace rates for slow start, congestion avoidance,
 and recovery.
-When initializing one of the three pace rates, the other two pace rate are also
+When initializing one of the three pace rates, the other two pace rates are also
 initialized to the same rate.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
@@ -263,10 +263,11 @@ full sized segments. The default value is 40.
 
 The following ``packetdrill``-script illustrates the behaviour of a sender
 using a pace rate of 12 Mb/s and a micro burst size of 4 full sized segments.
+``packetdrill`` is available in the FreeBSD ports collection.
 Please note that 12 Mb/s correspond to 1.5MB/s.
 Since FreeBSD takes the size of the IP packet into account this corresponds
 to 1000 full sized segments on a path with an MTU of 1500 bytes.
-The script uses a round trio time of 50 ms.
+The script uses a round trip time of 50 ms.
 
 ~~~
 --ip_version=ipv4
