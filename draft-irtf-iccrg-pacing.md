@@ -539,6 +539,11 @@ The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard
   * mini-bursts and their trade-offs, thanks to Eduard Vasilenko
   * ... and now we also have an ACK section for such thanks
 
-  * -03:
-    * re-structures the parts on general considerations and adds more text in them
-    * elaborates on application control
+* -03:
+  * re-structures the parts on general considerations and adds more text in them
+  * elaborates on application control
+
+* Adopted version draft-irtf-iccrg-00:
+  * adds a reference to the "Understanding the performance of TCP pacing" paper and discusses it in the "Motivations for pacing" section
+  * adds an example for the double-loss-after-slow start problem in section 4.1
+  * extends the FreeBSD text
