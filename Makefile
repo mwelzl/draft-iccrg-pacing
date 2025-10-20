@@ -1,4 +1,4 @@
-NAME = draft-irtf-iccrg-pacing
+NAME := draft-irtf-iccrg-pacing
 LIBDIR := lib
 include $(LIBDIR)/main.mk
 
