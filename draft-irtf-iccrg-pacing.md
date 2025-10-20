@@ -3,7 +3,7 @@ title: Pacing in Transport Protocols
 abbrev: Pacing in Transport Protocols
 category: info
 
-docname: draft-welzl-iccrg-pacing-latest
+docname: draft-irtf-iccrg-pacing-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
@@ -20,7 +20,7 @@ venue:
   mail: "iccrg@irtf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/iccrg"
   github: "mwelzl/draft-iccrg-pacing"
-  latest: "https://mwelzl.github.io/draft-iccrg-pacing/draft-welzl-iccrg-pacing.html"
+  latest: "https://mwelzl.github.io/draft-iccrg-pacing/draft-irtf-iccrg-pacing.html"
 
 author:
   -
