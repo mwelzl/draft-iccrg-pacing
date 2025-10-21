@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-19T00:49:26.053639+00:00",
+  "timestamp": "2025-10-21T00:44:00.326143+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -97,7 +97,7 @@
       "id": "I_kwDOL2DqS86Hvkgo",
       "title": "General pacing considerations",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -106,8 +106,8 @@
       "labels": [],
       "body": "We could have a list of pro's and con's of pacing (yes there are also con's).",
       "createdAt": "2024-05-03T10:33:22Z",
-      "updatedAt": "2025-10-06T10:15:01Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-20T09:22:38Z",
+      "closedAt": "2025-10-20T09:22:38Z",
       "comments": [
         {
           "author": "mwelzl",
@@ -229,7 +229,7 @@
       "id": "I_kwDOL2DqS86Z8dZN",
       "title": "FreeBSD",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -238,8 +238,8 @@
       "labels": [],
       "body": "Michael Tuexen has volunteered to write text.",
       "createdAt": "2024-10-12T10:09:01Z",
-      "updatedAt": "2025-10-06T10:15:24Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-20T09:23:29Z",
+      "closedAt": "2025-10-20T09:23:15Z",
       "comments": [
         {
           "author": "mwelzl",
@@ -247,6 +247,13 @@
           "body": "Update: we have some text now. More to come :-)",
           "createdAt": "2024-10-21T10:12:42Z",
           "updatedAt": "2024-10-21T10:12:42Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "This should have been closed by PR #31 ",
+          "createdAt": "2025-10-20T09:23:29Z",
+          "updatedAt": "2025-10-20T09:23:29Z"
         }
       ]
     },
@@ -1590,24 +1597,26 @@
       "id": "PR_kwDOL2DqS86uH3MU",
       "title": "General considerations: discuss \"Understanding the performance...\" paper",
       "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/29",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mwelzl",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Closes #3 ",
       "createdAt": "2025-10-16T16:14:41Z",
-      "updatedAt": "2025-10-16T18:54:25Z",
+      "updatedAt": "2025-10-20T09:22:37Z",
       "baseRepository": "mwelzl/draft-iccrg-pacing",
       "baseRefName": "main",
       "baseRefOid": "e35e4b230e8ba2dc8c4577af4bed56b09d452701",
       "headRepository": "mwelzl/draft-iccrg-pacing",
       "headRefName": "mw-general-considerations",
       "headRefOid": "281b67908a065bb6cdf81345d7fc18054f88002d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-20T09:22:37Z",
+      "mergedAt": "2025-10-20T09:22:37Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "f83ecc8ad514fa13c14b19ee65a99a97695b83c8"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1652,6 +1661,142 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 31,
+      "id": "PR_kwDOL2DqS86uh3DV",
+      "title": "Add more details for FreeBSD",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/pull/31",
+      "state": "MERGED",
+      "author": "tuexen",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-19T21:51:56Z",
+      "updatedAt": "2025-10-20T09:22:24Z",
+      "baseRepository": "mwelzl/draft-iccrg-pacing",
+      "baseRefName": "main",
+      "baseRefOid": "bb89ef0f0aedfa96304a4bb6c2fe898fb96e5b76",
+      "headRepository": "tuexen/draft-iccrg-pacing",
+      "headRefName": "coauthorship",
+      "headRefOid": "414d7e491dcb7735da5d4d4446f1e611d2340d93",
+      "closedAt": "2025-10-20T09:22:23Z",
+      "mergedAt": "2025-10-20T09:22:23Z",
+      "mergedBy": "mwelzl",
+      "mergeCommit": {
+        "oid": "4234677742f5af885222798518abf9ff653e1fe5"
+      },
+      "comments": [
+        {
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Many thanks for doing this! Looks good, I just suggested a few nit fixes. Just one thing about the packetdrill script: I haven't ever used packetdrill, this looks nice - though probably a reference to the packetdrill tool would be good, unless it's shipped with FreeBSD? (in which case it might be good to say so too).\r\n\r\nA port is available in the ports tree. I added a sentence making that statement.\r\n> \r\n> What I wonder - isn't this particular output a bit odd to show? It shows the use of the options, which is fine - but then it shows IW, which, IIUC, is sent without any gaps. Pacing would begin an RTT later - but after some ACKs there are FIN packets and that's it. If we show such code, shouldn't it at least show 3-4 packets where the pacing rate is somehow visible from the time gap?\r\nThe burst size is 4, the initial window is 10. So it sends 10 full sized segments. After the first 4, there is a gap of 4 ms, then it sends the next 4, another gap of 4 ms and then the last 10.\r\n\r\nI have also scripts for burst sizes of 1 and 2. And one with pacing disabled. I can also write some explanation, if that would help. Just let me know. We still have some hours. I'm busy until 16:00, but then can do some work, if you think it would be good.\r\n> \r\n> Again, I may be misunderstanding...\r\n\r\n",
+          "createdAt": "2025-10-20T08:08:38Z",
+          "updatedAt": "2025-10-20T08:08:38Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "body": "> > Many thanks for doing this! Looks good, I just suggested a few nit fixes. Just one thing about the packetdrill script: I haven't ever used packetdrill, this looks nice - though probably a reference to the packetdrill tool would be good, unless it's shipped with FreeBSD? (in which case it might be good to say so too).\r\n> \r\n> A port is available in the ports tree. I added a sentence making that statement.\r\n> \r\n> > What I wonder - isn't this particular output a bit odd to show? It shows the use of the options, which is fine - but then it shows IW, which, IIUC, is sent without any gaps. Pacing would begin an RTT later - but after some ACKs there are FIN packets and that's it. If we show such code, shouldn't it at least show 3-4 packets where the pacing rate is somehow visible from the time gap?\r\n> > The burst size is 4, the initial window is 10. So it sends 10 full sized segments. After the first 4, there is a gap of 4 ms, then it sends the next 4, another gap of 4 ms and then the last 10.\r\n> \r\n> I have also scripts for burst sizes of 1 and 2. And one with pacing disabled. I can also write some explanation, if that would help. Just let me know. We still have some hours. I'm busy until 16:00, but then can do some work, if you think it would be good.\r\n> \r\n> > Again, I may be misunderstanding...\r\n\r\nAh, I understand. I have gotten so used to IW being sent without pacing (in Linux) that, seeing these 4ms, I just thought \"this is probably timing noise\". But 4ms would be way too large for that anyway. It was just me - all is well, the example is good as it stands!",
+          "createdAt": "2025-10-20T09:21:53Z",
+          "updatedAt": "2025-10-20T09:21:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOL2DqS87H-swP",
+          "commit": {
+            "abbreviatedOid": "4ca7c3f"
+          },
+          "author": "mwelzl",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Many thanks for doing this!  Looks good, I just suggested a few nit fixes.  Just one thing about the packetdrill script: I haven't ever used packetdrill, this looks nice - though probably a reference to the packetdrill tool would be good, unless it's shipped with FreeBSD?  (in which case it might be good to say so too).\r\n\r\nWhat I wonder - isn't this particular output a bit odd to show?  It shows the use of the options, which is fine - but then it shows IW, which, IIUC, is sent without any gaps. Pacing would begin an RTT later - but after some ACKs there are FIN packets and that's it. If we show such code, shouldn't it at least show 3-4 packets where the pacing rate is somehow visible from the time gap?\r\n\r\nAgain, I may be misunderstanding...",
+          "createdAt": "2025-10-20T06:02:33Z",
+          "updatedAt": "2025-10-20T06:08:21Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\nIt is possible to specify individual pace rates for slow start, congestion avoidance,\r\n```",
+              "createdAt": "2025-10-20T06:02:33Z",
+              "updatedAt": "2025-10-20T06:08:21Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\nWhen initializing one of the three pace rates, the other two pace rates are also\r\n```",
+              "createdAt": "2025-10-20T06:02:47Z",
+              "updatedAt": "2025-10-20T06:08:21Z"
+            },
+            {
+              "originalPosition": 45,
+              "body": "```suggestion\r\nThe script uses a round trip time of 50 ms.\r\n```",
+              "createdAt": "2025-10-20T06:03:22Z",
+              "updatedAt": "2025-10-20T06:08:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS87H_ujl",
+          "commit": {
+            "abbreviatedOid": "4ca7c3f"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-20T08:04:21Z",
+          "updatedAt": "2025-10-20T08:04:21Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Fixed.",
+              "createdAt": "2025-10-20T08:04:21Z",
+              "updatedAt": "2025-10-20T08:04:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS87H_uoz",
+          "commit": {
+            "abbreviatedOid": "4ca7c3f"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-20T08:04:30Z",
+          "updatedAt": "2025-10-20T08:04:30Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "Fixed.",
+              "createdAt": "2025-10-20T08:04:30Z",
+              "updatedAt": "2025-10-20T08:04:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOL2DqS87H_uv9",
+          "commit": {
+            "abbreviatedOid": "4ca7c3f"
+          },
+          "author": "tuexen",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-20T08:04:42Z",
+          "updatedAt": "2025-10-20T08:04:42Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Fixed.",
+              "createdAt": "2025-10-20T08:04:42Z",
+              "updatedAt": "2025-10-20T08:04:42Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
