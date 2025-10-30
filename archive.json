@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T00:44:00.326143+00:00",
+  "timestamp": "2025-10-30T00:46:00.048479+00:00",
   "repo": "mwelzl/draft-iccrg-pacing",
   "labels": [
     {
@@ -367,6 +367,24 @@
           "updatedAt": "2025-10-17T08:31:56Z"
         }
       ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOL2DqS87UNBx8",
+      "title": "Make FreeBSD text a bit clearer",
+      "url": "https://github.com/mwelzl/draft-iccrg-pacing/issues/32",
+      "state": "OPEN",
+      "author": "mwelzl",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tuexen"
+      ],
+      "labels": [],
+      "body": "From @goelvidhi :\n- Clarify that TCP_RACK_PACE_RATE_* options set the *maximum* rate\n- Update the packetdrill example to use a lower rate, such that the effect becomes more pronounced\n- Describe what we see in the packetdrill example: that the pauses after micro bursts of 4 packets are the expected delays\n- Clarify that this is only valid for the RACK stack",
+      "createdAt": "2025-10-28T07:29:54Z",
+      "updatedAt": "2025-10-28T07:30:02Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
