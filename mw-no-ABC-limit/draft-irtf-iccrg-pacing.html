@@ -21,12 +21,12 @@
     Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.5.0
+    lxml 6.0.2
+    platformdirs 4.5.1
     pycountry 24.6.1
-    PyYAML 6.0.2
+    PyYAML 6.0.3
     requests 2.32.5
     wcwidth 0.2.14
 -->
@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Pacing in Transport Protocols</td>
-<td class="right">October 2025</td>
+<td class="right">January 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 23 April 2026</td>
+<td class="center">Expires 20 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-irtf-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-20" class="published">20 October 2025</time>
+<time datetime="2026-01-16" class="published">16 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-23">23 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-20">20 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1140,7 +1140,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2025 IETF Trust and the persons identified as the
+            Copyright (c) 2026 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1446,6 +1446,7 @@ also be impacted by pacing.  Paced packets reduce the ability to group
 together incoming hardware frames and packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 <p id="section-4.4-3">Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-4">Without pacing, increasing cwnd by the number of acknowledged bytes in slow start can cause large mini-bursts when a single ACK acknowledges multiple segments worth of data. This increase is therefore recommended to be upper-bound with one SMSS in <span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span>. With pacing, the earlier discussed trade-offs for mini-bursts apply, and such a slow start limitation may not be necessary. Accordingly, HyStart++ <span>[<a href="#RFC9406" class="cite xref">RFC9406</a>]</span>, which CUBIC implementations should use according to <span>[<a href="#RFC9406" class="cite xref">RFC9406</a>]</span>, specifies that no such limit should be applied ("L=infinity").<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="appcontrol">
@@ -1771,6 +1772,10 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
         <dd>
 <span class="refAuthor">Touch, J.</span>, <span class="refAuthor">Welzl, M.</span>, and <span class="refAuthor">S. Islam</span>, <span class="refTitle">"TCP Control Block Interdependence"</span>, <span class="seriesInfo">RFC 9040</span>, <span class="seriesInfo">DOI 10.17487/RFC9040</span>, <time datetime="2021-07" class="refDate">July 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9040">https://www.rfc-editor.org/rfc/rfc9040</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9406">[RFC9406]</dt>
+        <dd>
+<span class="refAuthor">Balasubramanian, P.</span>, <span class="refAuthor">Huang, Y.</span>, and <span class="refAuthor">M. Olson</span>, <span class="refTitle">"HyStart++: Modified Slow Start for TCP"</span>, <span class="seriesInfo">RFC 9406</span>, <span class="seriesInfo">DOI 10.17487/RFC9406</span>, <time datetime="2023-05" class="refDate">May 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9406">https://www.rfc-editor.org/rfc/rfc9406</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="Sammy">[Sammy]</dt>
         <dd>
 <span class="refAuthor">Spang, B.</span>, <span class="refAuthor">Kunamalla, S.</span>, <span class="refAuthor">Teixeira, R.</span>, <span class="refAuthor">Huang, T.</span>, <span class="refAuthor">Armitage, G.</span>, <span class="refAuthor">Johari, R.</span>, and <span class="refAuthor">N. McKeown</span>, <span class="refTitle">"Sammy: Smoothing Video Traffic to be a Friendly Internet Neighbor"</span>, <span class="seriesInfo">ACM SIGCOMM '23: Proceedings of the ACM SIGCOMM 2023 Conference </span>, <time datetime="2023-09-01" class="refDate">1 September 2023</time>, <span>&lt;<a href="https://doi.org/10.1145/3603269.3604839">https://doi.org/10.1145/3603269.3604839</a>&gt;</span>. </dd>
@@ -1831,16 +1836,30 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
             <li class="normal" id="appendix-B-1.3.2.4">
               <p id="appendix-B-1.3.2.4.1">... and now we also have an ACK section for such thanks<a href="#appendix-B-1.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-B-1.3.2.5">
-              <p id="appendix-B-1.3.2.5.1">-03:<a href="#appendix-B-1.3.2.5.1" class="pilcrow">¶</a></p>
+          </ul>
+</li>
+        <li class="normal" id="appendix-B-1.4">
+          <p id="appendix-B-1.4.1">-03:<a href="#appendix-B-1.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-1.3.2.5.2.1">
-                  <p id="appendix-B-1.3.2.5.2.1.1">re-structures the parts on general considerations and adds more text in them<a href="#appendix-B-1.3.2.5.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-B-1.4.2.1">
+              <p id="appendix-B-1.4.2.1.1">re-structures the parts on general considerations and adds more text in them<a href="#appendix-B-1.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="appendix-B-1.3.2.5.2.2">
-                  <p id="appendix-B-1.3.2.5.2.2.1">elaborates on application control<a href="#appendix-B-1.3.2.5.2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-B-1.4.2.2">
+              <p id="appendix-B-1.4.2.2.1">elaborates on application control<a href="#appendix-B-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
+          </ul>
+</li>
+        <li class="normal" id="appendix-B-1.5">
+          <p id="appendix-B-1.5.1">Adopted version draft-irtf-iccrg-00:<a href="#appendix-B-1.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-1.5.2.1">
+              <p id="appendix-B-1.5.2.1.1">adds a reference to the "Understanding the performance of TCP pacing" paper and discusses it in the "Motivations for pacing" section<a href="#appendix-B-1.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-B-1.5.2.2">
+              <p id="appendix-B-1.5.2.2.1">adds an example for the double-loss-after-slow start problem in section 4.1<a href="#appendix-B-1.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-B-1.5.2.3">
+              <p id="appendix-B-1.5.2.3.1">extends the FreeBSD text<a href="#appendix-B-1.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
