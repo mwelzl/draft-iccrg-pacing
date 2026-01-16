@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 23 April 2026                              Aalyria Technologies
+Expires: 20 July 2026                               Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                         20 October 2025
+                                                         16 January 2026
 
 
                      Pacing in Transport Protocols
@@ -58,11 +58,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 20 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -137,7 +137,7 @@ Table of Contents
    Because of its known advantages, pacing has become common in
    implementations of congestion controlled transports.  It is also an
    integral element of the "BBR" congestion control mechanism
-   [I-D.cardwell-iccrg-bbr-congestion-control].
+   [I-D.ietf-ccwg-bbr].
 
 2.  Conventions and Definitions
 
@@ -715,14 +715,6 @@ Table of Contents
 
 8.1.  Normative References
 
-   [I-D.cardwell-iccrg-bbr-congestion-control]
-              Cardwell, N., Cheng, Y., Yeganeh, S. H., Swett, I., and V.
-              Jacobson, "BBR Congestion Control", Work in Progress,
-              Internet-Draft, draft-cardwell-iccrg-bbr-congestion-
-              control-02, 7 March 2022,
-              <https://datatracker.ietf.org/doc/html/draft-cardwell-
-              iccrg-bbr-congestion-control-02>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -756,6 +748,13 @@ Table of Contents
               Progress, Internet-Draft, draft-many-tiptop-usecase-03, 18
               June 2025, <https://datatracker.ietf.org/doc/html/draft-
               many-tiptop-usecase-03>.
+
+   [I-D.ietf-ccwg-bbr]
+              Cardwell, N., Swett, I., and J. Beshay, "BBR Congestion
+              Control", Work in Progress, Internet-Draft, draft-ietf-
+              ccwg-bbr-04, 20 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-
+              bbr-04>.
 
    [LinuxPacing]
               Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
