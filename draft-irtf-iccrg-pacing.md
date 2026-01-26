@@ -425,6 +425,8 @@ to 100 full sized segments per second on a path with an MTU of 1500 bytes.
 This means sending a full sized segment every 10 ms or sending a micro burst
 of 4 full size segments every 40 ms.
 The script uses a round trip time of 100 ms.
+Please note that this behaviour is specific for the RACK stack;
+the FreeBSD default stack does not support pacing.
 
 ~~~
 --ip_version=ipv4
