@@ -410,6 +410,8 @@ It is possible to specify individual pace rates for slow start, congestion avoid
 and recovery.
 When initializing one of the three pace rates, the other two pace rates are also
 initialized to the same rate.
+These pacing rates limit the maximum sending rate.
+The congestion control and the flow control are always honored.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
 full sized segments. The default value is 40.
