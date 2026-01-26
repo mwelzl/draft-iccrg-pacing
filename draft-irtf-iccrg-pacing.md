@@ -442,7 +442,7 @@ The script uses a round trip time of 50 ms.
 +0.000 accept(3, ..., ...) = 4
 +0.000 close(3) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_LOG, [TCP_LOG_STATE_CONTINUAL], 4) = 0
-+0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [1500000], 8) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [150000], 8) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_MAX_SEG, [4], 4) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_ALWAYS, [1], 4) = 0
 +1.000 send(4, ..., 14600, 0) = 14600
@@ -450,17 +450,17 @@ The script uses a round trip time of 50 ms.
 +0.000 >  .  1461:2921(1460)  ack     1 win 65535
 +0.000 >  .  2921:4381(1460)  ack     1 win 65535
 +0.000 >  .  4381:5841(1460)  ack     1 win 65535
-+0.004 >  .  5841:7301(1460)  ack     1 win 65535
++0.040 >  .  5841:7301(1460)  ack     1 win 65535
 +0.000 >  .  7301:8761(1460)  ack     1 win 65535
 +0.000 >  .  8761:10221(1460) ack     1 win 65535
 +0.000 >  . 10221:11681(1460) ack     1 win 65535
-+0.004 >  . 11681:13141(1460) ack     1 win 65535
++0.040 >  . 11681:13141(1460) ack     1 win 65535
 +0.000 > P. 13141:14601(1460) ack     1 win 65535
-+0.092 <  .     1:1(0)        ack  2921 win 65535
++0.020 <  .     1:1(0)        ack  2921 win 65535
 +0.000 <  .     1:1(0)        ack  5841 win 65535
-+0.004 <  .     1:1(0)        ack  8761 win 65535
++0.040 <  .     1:1(0)        ack  8761 win 65535
 +0.000 <  .     1:1(0)        ack 11681 win 65535
-+0.004 <  .     1:1(0)        ack 14601 win 65535
++0.040 <  .     1:1(0)        ack 14601 win 65535
 +0.000 close(4) = 0
 +0.000 > F. 14601:14601(0)    ack     1 win 65535
 +0.100 < F.     1:1(0)        ack 14602 win 65535
