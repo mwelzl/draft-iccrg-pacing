@@ -415,6 +415,16 @@ Table of Contents
    be counter-productive.  This is an argument for making the size of
    mini-bursts larger.
 
+   Without pacing, increasing cwnd by the number of acknowledged bytes
+   in slow start can cause large mini-bursts when a single ACK
+   acknowledges multiple segments worth of data.  This increase is
+   therefore recommended to be upper-bound with one SMSS in [RFC5681].
+   With pacing, the earlier discussed trade-offs for mini-bursts apply,
+   and such a slow start limitation may not be necessary.  Accordingly,
+   HyStart++ [RFC9406], which CUBIC implementations should use according
+   to [RFC9406], specifies that no such limit should be applied
+   ("L=infinity").
+
 4.5.  Application control
 
    When an application produces data at a certain (known) bitrate, it
@@ -793,6 +803,11 @@ Table of Contents
    [RFC9040]  Touch, J., Welzl, M., and S. Islam, "TCP Control Block
               Interdependence", RFC 9040, DOI 10.17487/RFC9040, July
               2021, <https://www.rfc-editor.org/rfc/rfc9040>.
+
+   [RFC9406]  Balasubramanian, P., Huang, Y., and M. Olson, "HyStart++:
+              Modified Slow Start for TCP", RFC 9406,
+              DOI 10.17487/RFC9406, May 2023,
+              <https://www.rfc-editor.org/rfc/rfc9406>.
 
    [Sammy]    Spang, B., Kunamalla, S., Teixeira, R., Huang, T.,
               Armitage, G., Johari, R., and N. McKeown, "Sammy:
