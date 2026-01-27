@@ -28,7 +28,7 @@
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.32.5
-    wcwidth 0.2.14
+    wcwidth 0.3.0
 -->
 <link href="draft-irtf-iccrg-pacing.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -569,6 +569,7 @@ aside, blockquote {
 }
 blockquote {
   margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
 }
 cite {
   display: block;
@@ -639,7 +640,7 @@ a.pilcrow {
   }
 }
 @media not print {
-  :hover > a.pilcrow {
+  :hover > a.pilcrow, a.pilcrow:focus {
     opacity: 1;
   }
   a.pilcrow[href]:hover {
@@ -1051,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 20 July 2026</td>
+<td class="center">Expires 31 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-irtf-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-16" class="published">16 January 2026</time>
+<time datetime="2026-01-27" class="published">27 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-07-20">20 July 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-31">31 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1132,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1593,16 +1594,22 @@ It is possible to specify individual pace rates for slow start, congestion avoid
 and recovery.
 When initializing one of the three pace rates, the other two pace rates are also
 initialized to the same rate.
+These pacing rates limit the maximum sending rate.
+The congestion control and the flow control are always honored.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
 full sized segments. The default value is 40.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
 <p id="section-5.3-8">The following <code>packetdrill</code>-script illustrates the behaviour of a sender
-using a pace rate of 12 Mb/s and a micro burst size of 4 full sized segments.
+using a pace rate of 1200000 b/s and a micro burst size of 4 full sized segments.
 <code>packetdrill</code> is available in the FreeBSD ports collection.
-Please note that 12 Mb/s correspond to 1.5MB/s.
+Please note that 1200000 b/s correspond to 150000 B/s.
 Since FreeBSD takes the size of the IP packet into account this corresponds
-to 1000 full sized segments on a path with an MTU of 1500 bytes.
-The script uses a round trip time of 50 ms.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
+to 100 full sized segments per second on a path with an MTU of 1500 bytes.
+This means sending a full sized segment every 10 ms or sending a micro burst
+of 4 full sized segments every 40 ms.
+The script uses a round trip time of 100 ms.
+Please note that this behaviour is specific for the RACK stack;
+the FreeBSD default stack does not support pacing.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-9">
 <pre>
 --ip_version=ipv4
@@ -1620,32 +1627,36 @@ The script uses a round trip time of 50 ms.<a href="#section-5.3-8" class="pilcr
 +0.000 listen(3, 1) = 0
 +0.000 &lt; S      0:0(0)                  win 65535 &lt;mss 1460,sackOK,eol,eol&gt;
 +0.000 &gt; S.     0:0(0)        ack     1 win 65535 &lt;mss 1460,sackOK,eol,eol&gt;
-+0.050 &lt;  .     1:1(0)        ack     1 win 65535
++0.100 &lt;  .     1:1(0)        ack     1 win 65535
 +0.000 accept(3, ..., ...) = 4
 +0.000 close(3) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_LOG, [TCP_LOG_STATE_CONTINUAL], 4) = 0
-+0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [1500000], 8) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [150000], 8) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_MAX_SEG, [4], 4) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_ALWAYS, [1], 4) = 0
-+0.100 send(4, ..., 14600, 0) = 14600
+// Provide user data for 10 full sized segments to the TCP stack.
++1.000 send(4, ..., 14600, 0) = 14600
+// Send the first micro burst of 4 full sized segments.
 +0.000 &gt;  .     1:1461(1460)  ack     1 win 65535
 +0.000 &gt;  .  1461:2921(1460)  ack     1 win 65535
 +0.000 &gt;  .  2921:4381(1460)  ack     1 win 65535
 +0.000 &gt;  .  4381:5841(1460)  ack     1 win 65535
-+0.004 &gt;  .  5841:7301(1460)  ack     1 win 65535
+// Send the second micro burst of 4 full sized segments.
++0.040 &gt;  .  5841:7301(1460)  ack     1 win 65535
 +0.000 &gt;  .  7301:8761(1460)  ack     1 win 65535
 +0.000 &gt;  .  8761:10221(1460) ack     1 win 65535
 +0.000 &gt;  . 10221:11681(1460) ack     1 win 65535
-+0.004 &gt;  . 11681:13141(1460) ack     1 win 65535
+// Send the third micro burst of the remaining 2 full sized segments.
++0.040 &gt;  . 11681:13141(1460) ack     1 win 65535
 +0.000 &gt; P. 13141:14601(1460) ack     1 win 65535
-+0.042 &lt;  .     1:1(0)        ack  2921 win 65535
++0.020 &lt;  .     1:1(0)        ack  2921 win 65535
 +0.000 &lt;  .     1:1(0)        ack  5841 win 65535
-+0.004 &lt;  .     1:1(0)        ack  8761 win 65535
++0.040 &lt;  .     1:1(0)        ack  8761 win 65535
 +0.000 &lt;  .     1:1(0)        ack 11681 win 65535
-+0.004 &lt;  .     1:1(0)        ack 14601 win 65535
++0.040 &lt;  .     1:1(0)        ack 14601 win 65535
 +0.000 close(4) = 0
 +0.000 &gt; F. 14601:14601(0)    ack     1 win 65535
-+0.050 &lt; F.      1:1(0)       ack 14602 win 65535
++0.100 &lt; F.     1:1(0)        ack 14602 win 65535
 +0.000 &gt;  . 14602:14602(0)    ack     2
 </pre><a href="#section-5.3-9" class="pilcrow">¶</a>
 </div>
