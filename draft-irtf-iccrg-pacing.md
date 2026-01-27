@@ -410,17 +410,23 @@ It is possible to specify individual pace rates for slow start, congestion avoid
 and recovery.
 When initializing one of the three pace rates, the other two pace rates are also
 initialized to the same rate.
+These pacing rates limit the maximum sending rate.
+The congestion control and the flow control are always honored.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
 full sized segments. The default value is 40.
 
 The following ``packetdrill``-script illustrates the behaviour of a sender
-using a pace rate of 12 Mb/s and a micro burst size of 4 full sized segments.
+using a pace rate of 1200000 b/s and a micro burst size of 4 full sized segments.
 ``packetdrill`` is available in the FreeBSD ports collection.
-Please note that 12 Mb/s correspond to 1.5MB/s.
+Please note that 1200000 b/s correspond to 150000 B/s.
 Since FreeBSD takes the size of the IP packet into account this corresponds
-to 1000 full sized segments on a path with an MTU of 1500 bytes.
-The script uses a round trip time of 50 ms.
+to 100 full sized segments per second on a path with an MTU of 1500 bytes.
+This means sending a full sized segment every 10 ms or sending a micro burst
+of 4 full sized segments every 40 ms.
+The script uses a round trip time of 100 ms.
+Please note that this behaviour is specific for the RACK stack;
+the FreeBSD default stack does not support pacing.
 
 ~~~
 --ip_version=ipv4
@@ -438,32 +444,36 @@ The script uses a round trip time of 50 ms.
 +0.000 listen(3, 1) = 0
 +0.000 < S      0:0(0)                  win 65535 <mss 1460,sackOK,eol,eol>
 +0.000 > S.     0:0(0)        ack     1 win 65535 <mss 1460,sackOK,eol,eol>
-+0.050 <  .     1:1(0)        ack     1 win 65535
++0.100 <  .     1:1(0)        ack     1 win 65535
 +0.000 accept(3, ..., ...) = 4
 +0.000 close(3) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_LOG, [TCP_LOG_STATE_CONTINUAL], 4) = 0
-+0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [1500000], 8) = 0
++0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_RATE_SS, [150000], 8) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_MAX_SEG, [4], 4) = 0
 +0.000 setsockopt(4, IPPROTO_TCP, TCP_RACK_PACE_ALWAYS, [1], 4) = 0
-+0.100 send(4, ..., 14600, 0) = 14600
+// Provide user data for 10 full sized segments to the TCP stack.
++1.000 send(4, ..., 14600, 0) = 14600
+// Send the first micro burst of 4 full sized segments.
 +0.000 >  .     1:1461(1460)  ack     1 win 65535
 +0.000 >  .  1461:2921(1460)  ack     1 win 65535
 +0.000 >  .  2921:4381(1460)  ack     1 win 65535
 +0.000 >  .  4381:5841(1460)  ack     1 win 65535
-+0.004 >  .  5841:7301(1460)  ack     1 win 65535
+// Send the second micro burst of 4 full sized segments.
++0.040 >  .  5841:7301(1460)  ack     1 win 65535
 +0.000 >  .  7301:8761(1460)  ack     1 win 65535
 +0.000 >  .  8761:10221(1460) ack     1 win 65535
 +0.000 >  . 10221:11681(1460) ack     1 win 65535
-+0.004 >  . 11681:13141(1460) ack     1 win 65535
+// Send the third micro burst of the remaining 2 full sized segments.
++0.040 >  . 11681:13141(1460) ack     1 win 65535
 +0.000 > P. 13141:14601(1460) ack     1 win 65535
-+0.042 <  .     1:1(0)        ack  2921 win 65535
++0.020 <  .     1:1(0)        ack  2921 win 65535
 +0.000 <  .     1:1(0)        ack  5841 win 65535
-+0.004 <  .     1:1(0)        ack  8761 win 65535
++0.040 <  .     1:1(0)        ack  8761 win 65535
 +0.000 <  .     1:1(0)        ack 11681 win 65535
-+0.004 <  .     1:1(0)        ack 14601 win 65535
++0.040 <  .     1:1(0)        ack 14601 win 65535
 +0.000 close(4) = 0
 +0.000 > F. 14601:14601(0)    ack     1 win 65535
-+0.050 < F.      1:1(0)       ack 14602 win 65535
++0.100 < F.     1:1(0)        ack 14602 win 65535
 +0.000 >  . 14602:14602(0)    ack     2
 ~~~
 
