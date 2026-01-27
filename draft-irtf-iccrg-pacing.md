@@ -423,7 +423,7 @@ Please note that 1200000 b/s correspond to 150000 B/s.
 Since FreeBSD takes the size of the IP packet into account this corresponds
 to 100 full sized segments per second on a path with an MTU of 1500 bytes.
 This means sending a full sized segment every 10 ms or sending a micro burst
-of 4 full size segments every 40 ms.
+of 4 full sized segments every 40 ms.
 The script uses a round trip time of 100 ms.
 Please note that this behaviour is specific for the RACK stack;
 the FreeBSD default stack does not support pacing.
