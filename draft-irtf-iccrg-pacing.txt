@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 31 July 2026                               Aalyria Technologies
+Expires: 1 August 2026                              Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                         27 January 2026
+                                                         28 January 2026
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 July 2026.
+   This Internet-Draft will expire on 1 August 2026.
 
 Copyright Notice
 
@@ -871,6 +871,12 @@ Change Log
          section 4.1
 
       -  extends the FreeBSD text
+
+   *  Adopted version draft-irtf-iccrg-01:
+
+      -  improves the FreeBSD text
+
+      -  adds a discussion of the ABC limit in slow start
 
 Authors' Addresses
 
