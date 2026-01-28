@@ -559,3 +559,7 @@ The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard
   * adds a reference to the "Understanding the performance of TCP pacing" paper and discusses it in the "Motivations for pacing" section
   * adds an example for the double-loss-after-slow start problem in section 4.1
   * extends the FreeBSD text
+
+* Adopted version draft-irtf-iccrg-01:
+  * improves the FreeBSD text
+  * adds a discussion of the ABC limit in slow start
