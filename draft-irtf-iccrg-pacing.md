@@ -373,7 +373,7 @@ This description is based on the longer Linux pacing analysis text in {{LinuxPac
 
 ## Apple OSes
 
-By default, pacing is not enabled on Apple devices. Starting with iOS 27 and macOS 27, an application can enable pacing on a TCP connection, and set the maximum pacing rate, through two equivalent APIs.
+Starting with iOS 27 and macOS 27, an application can enable pacing on a TCP connection, and set the maximum pacing rate, through two equivalent APIs.
 
 The Network.framework public API has the following C function:
 
@@ -402,6 +402,12 @@ In all cases, the value supplied is an upper bound, in bytes per second, on the 
 Passing 0 or UINT64_MAX in C, or ``nil`` in Swift, disables pacing on that connection; the stack then sends as congestion and flow control allow. The cap may be changed at any time during the lifetime of an established connection, and each call replaces the previous value.
 
 Caps strictly between 0 and 12500 bytes/second (i.e. below 100 Kbps) are silently clamped up to 12500 bytes/second. Applications that need a genuinely lower cap have to shape at the application layer.
+
+### Rate computation and packet scheduling
+
+On every cwnd update the kernel recomputes a target rate as ``cwnd / SRTT`` in bytes per second, doubled while the sender is in slow start so that pacing does not throttle the exponential cwnd growth. The application cap, if set, is then applied: the effective pacing rate is the minimum of the computed rate and the cap. The stack then derives a burst budget of roughly 244 µs of data, with a minimum of one MSS.
+
+Packets are assigned transmit timestamps using a leaky-bucket scheme: consecutive packets share a timestamp while their cumulative size stays within the current burst budget, and once the budget is exhausted the next timestamp is advanced by ``budget / rate``. The timestamp is then carried with the packet(s) into the per-interface AQM, which holds the packet in its per-flow queue until the wall clock reaches that timestamp before transmitting it.
 
 ## FreeBSD
 
