@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 1 August 2026                              Aalyria Technologies
+Expires: 28 December 2026                           Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                         28 January 2026
+                                                            26 June 2026
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 August 2026.
+   This Internet-Draft will expire on 28 December 2026.
 
 Copyright Notice
 
@@ -93,6 +93,7 @@ Table of Contents
    5.  Implementation examples
      5.1.  Linux TCP
      5.2.  Apple OSes
+       5.2.1.  Rate computation and packet scheduling
      5.3.  FreeBSD
      5.4.  QUIC BBR implementations
    6.  Security Considerations
@@ -430,8 +431,8 @@ Table of Contents
    When an application produces data at a certain (known) bitrate, it
    can be beneficial to make use of pacing to limit the transport
    bitrate on this basis such that it is not exceedingly large.  The
-   Linux and FreeBSD applications allow the application to set an upper
-   limit.
+   Linux, FreeBSD, and Apple OS applications allow the application to
+   set an upper limit.
 
    For example, frame based video transmission typically generates data
    chunks at a varying size at regular intervals.  Such an application
@@ -493,19 +494,62 @@ Table of Contents
 
 5.2.  Apple OSes
 
-   Pacing was added to Apple OS as a private API in iOS 17 and macOS 14.
-   In its current form, an application or transport protocol computes
-   and sets the desired transmit timestamp on a per packet basis and
-   sends it to the pacing module in AQM.  The packets are queued in the
-   AQM until the current time becomes greater than or equal to
-   corresponding packet's transmit timestamp.  There is an upper limit
-   of 3 seconds for how long the AQM will hold a queued packet before
-   sending it.
+   Starting with iOS 27 and macOS 27, an application can enable pacing
+   on a TCP connection, and set the maximum pacing rate, through two
+   equivalent APIs.
 
-   The above simplicity in the kernel allows upper layer protocols or
-   applications to set a transmit timestamp in a manner that is suitable
-   for them.  For example, a stream based protocol like TCP might pace
-   packets differently than a video conferencing app.
+   The Network.framework public API has the following C function:
+
+   int nw_tcp_set_max_pacing_rate(nw_protocol_metadata_t metadata,
+                                  uint64_t max_pacing_rate);
+
+   and a corresponding Swift overlay on NWProtocolTCP.Metadata:
+
+func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt64?)
+
+   For applications using the BSD sockets API, the same cap is exposed
+   as the socket-level SO_MAX_PACING_RATE option, taking a uint64_t rate
+   in bytes per second and supported on AF_INET and AF_INET6 sockets:
+
+   uint64_t rate = 2 * 1024 * 1024;  /* 2 MB/s */
+   setsockopt(fd, SOL_SOCKET, SO_MAX_PACING_RATE, &rate, sizeof(rate));
+
+   The same option may be read back with getsockopt.
+
+   In all cases, the value supplied is an upper bound, in bytes per
+   second, on the on-wire rate of a single connection.  The actual
+   pacing rate used by the TCP stack is the minimum of (a) this cap and
+   (b) the rate calculated by the transport protocol.  The cap can
+   therefore only reduce the on-wire rate, and never raise it above what
+   congestion control allows -- it is exactly the "upper limit" form of
+   application control discussed in Section 4.5.
+
+   Passing 0 or UINT64_MAX in C, or nil in Swift, disables pacing on
+   that connection; the stack then sends as congestion and flow control
+   allow.  The cap may be changed at any time during the lifetime of an
+   established connection, and each call replaces the previous value.
+
+   Caps strictly between 0 and 12500 bytes/second (i.e. below 100 Kbps)
+   are silently clamped up to 12500 bytes/second.  Applications that
+   need a genuinely lower cap have to shape at the application layer.
+
+5.2.1.  Rate computation and packet scheduling
+
+   On every cwnd update the kernel recomputes a target rate as cwnd /
+   SRTT in bytes per second, doubled while the sender is in slow start
+   so that pacing does not throttle the exponential cwnd growth.  The
+   application cap, if set, is then applied: the effective pacing rate
+   is the minimum of the computed rate and the cap.  The stack then
+   derives a burst budget of roughly 244 µs of data, with a minimum of
+   one MSS.
+
+   Packets are assigned transmit timestamps using a leaky-bucket scheme:
+   consecutive packets share a timestamp while their cumulative size
+   stays within the current burst budget, and once the budget is
+   exhausted the next timestamp is advanced by budget / rate.  The
+   timestamp is then carried with the packet(s) into the per-interface
+   AQM, which holds the packet in its per-flow queue until the wall
+   clock reaches that timestamp before transmitting it.
 
 5.3.  FreeBSD
 
@@ -771,9 +815,9 @@ Table of Contents
    [I-D.ietf-ccwg-bbr]
               Cardwell, N., Swett, I., and J. Beshay, "BBR Congestion
               Control", Work in Progress, Internet-Draft, draft-ietf-
-              ccwg-bbr-04, 20 October 2025,
+              ccwg-bbr-05, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-
-              bbr-04>.
+              bbr-05>.
 
    [LinuxPacing]
               Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
