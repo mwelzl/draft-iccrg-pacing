@@ -305,7 +305,7 @@ Since pacing algorithms generally attempt to spread out packets evenly across an
 
 Thus, using this sample to pace the initial window can cause the pacing rate to become unnecessarily low. Accordingly, the Linux TCP implementation does not pace the first 10 packets (see {{linux}}). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) {{?RFC9040}}.
 
-Since having an accurate RTT estimate is important for pacing also after the initial round trip, delayed ACKs can be detrimental to pacing in two ways: first, by potentially reducing the number of ACKs, they can reduce the sampling frequency; second, by adding delay to the transmission of ACKs, they can worsen the quality of the signal. Here, QUIC has a benefit over TCP: since a host reports the local delay between data reception and generation of the corresponding ACK, QUIC's RTT calculation can be more precise {{?RFC9000}}.
+Since having an accurate RTT estimate is important for pacing also after the initial round trip, delayed ACKs can be detrimental to pacing in two ways: first, by potentially reducing the number of ACKs, they can reduce the sampling frequency. Second, by adding delay to the transmission of ACKs, they can worsen the quality of the signal. Here, QUIC has a benefit over TCP: since a host reports the local delay between data reception and generation of the corresponding ACK, QUIC's RTT calculation can be more precise {{?RFC9000}}.
 
 ## Mini-bursts and their trade-offs
 
