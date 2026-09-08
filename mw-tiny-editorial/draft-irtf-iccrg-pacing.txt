@@ -377,8 +377,8 @@ Table of Contents
    Since having an accurate RTT estimate is important for pacing also
    after the initial round trip, delayed ACKs can be detrimental to
    pacing in two ways: first, by potentially reducing the number of
-   ACKs, they can reduce the sampling frequency; second, by adding delay
-   to the transmission of ACKs, they can worsen the quality of the
+   ACKs, they can reduce the sampling frequency.  Second, by adding
+   delay to the transmission of ACKs, they can worsen the quality of the
    signal.  Here, QUIC has a benefit over TCP: since a host reports the
    local delay between data reception and generation of the
    corresponding ACK, QUIC's RTT calculation can be more precise
