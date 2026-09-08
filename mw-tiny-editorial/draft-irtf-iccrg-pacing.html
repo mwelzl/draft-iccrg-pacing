@@ -18,18 +18,18 @@
 <meta content="draft-irtf-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.0
-    Python 3.14.5
+    Python 3.14.7
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.10.0
+    platformdirs 4.11.7
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.1
+    wcwidth 0.8.3
 -->
 <link href="draft-irtf-iccrg-pacing.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -65,7 +65,6 @@
   src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: italic;
@@ -114,7 +113,6 @@
   src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: normal;
@@ -179,7 +177,6 @@
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 }
 
 @font-face {
@@ -1048,11 +1045,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Pacing in Transport Protocols</td>
-<td class="right">June 2026</td>
+<td class="right">September 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 26 December 2026</td>
+<td class="center">Expires 12 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1062,12 @@ svg {
 <dd class="internet-draft">draft-irtf-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-24" class="published">24 June 2026</time>
+<time datetime="2026-09-08" class="published">8 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-26">26 December 2026</time></dd>
+<dd class="expires"><time datetime="2027-03-12">12 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1132,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1425,7 +1422,8 @@ In this case, an overshoot will occur: packets are forwarded with half their arr
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-getting-good-rtt-estimates" class="section-name selfRef">Getting good RTT estimates</a>
         </h3>
 <p id="section-4.3-1">Since pacing algorithms generally attempt to spread out packets evenly across an RTT, it is important to have a good RTT estimate. Especially in the beginning of a transfer, when sending the initial window, the only RTT estimate available may be from the connection establishment handshake. Being based on only one sample, this is a very unreliable estimate. Moreover, a new transport connection may be preceded by a longer period of quiescence on the path between two endpoints than there  might normally occur when a connection is active. Such a silence period can provoke behavior of lower layers that increases the RTT. For example, idle periods commonly cause a handshake procedure on 5G links before communication can continue, inflating the RTT.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">Thus, using this sample to pace the initial window can cause the pacing rate to become unnecessarily low. This may be the reason why the Linux TCP implementation does not pace the first 10 packets (see <a href="#linux" class="auto internal xref">Section 5.1</a>). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) <span>[<a href="#RFC9040" class="cite xref">RFC9040</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">Thus, using this sample to pace the initial window can cause the pacing rate to become unnecessarily low. Accordingly, the Linux TCP implementation does not pace the first 10 packets (see <a href="#linux" class="auto internal xref">Section 5.1</a>). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) <span>[<a href="#RFC9040" class="cite xref">RFC9040</a>]</span>.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">Since having an accurate RTT estimate is important for pacing also after the initial round trip, delayed ACKs can be detrimental to pacing in two ways: first, by potentially reducing the number of ACKs, they can reduce the sampling frequency; second, by adding delay to the transmission of ACKs, they can worsen the quality of the signal. Here, QUIC has a benefit over TCP: since a host reports the local delay between data reception and generation of the corresponding ACK, QUIC's RTT calculation can be more precise <span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mini-bursts-and-their-trade-offs">
@@ -1451,7 +1449,7 @@ Generic Receive Offload (GRO), interrupt coalescing, and other features may
 also be impacted by pacing.  Paced packets reduce the ability to group
 together incoming hardware frames and packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
-<p id="section-4.4-3">Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi or 5G can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">Without pacing, increasing cwnd by the number of acknowledged bytes in slow start can cause large mini-bursts when a single ACK acknowledges multiple segments worth of data. This increase is therefore recommended to be upper-bound with one SMSS in <span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span>. With pacing, the earlier discussed trade-offs for mini-bursts apply, and such a slow start limitation may not be necessary. Accordingly, HyStart++ <span>[<a href="#RFC9406" class="cite xref">RFC9406</a>]</span>, which CUBIC implementations should use according to <span>[<a href="#RFC9406" class="cite xref">RFC9406</a>]</span>, specifies that no such limit should be applied ("L=infinity").<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1636,7 +1634,7 @@ These pacing rates limit the maximum sending rate.
 The congestion control and the flow control are always honored.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
-full sized segments. The default value is 40.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
+full sized segments. Its default value is 40.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
 <p id="section-5.3-8">The following <code>packetdrill</code>-script illustrates the behaviour of a sender
 using a pace rate of 1200000 b/s and a micro burst size of 4 full sized segments.
 <code>packetdrill</code> is available in the FreeBSD ports collection.
@@ -1794,7 +1792,7 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 <dd class="break"></dd>
 <dt id="I-D.ietf-ccwg-bbr">[I-D.ietf-ccwg-bbr]</dt>
         <dd>
-<span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">J. Beshay</span>, <span class="refTitle">"BBR Congestion Control"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccwg-bbr-05</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-05">https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-05</a>&gt;</span>. </dd>
+<span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">J. Beshay</span>, <span class="refTitle">"BBR Congestion Control"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccwg-bbr-06</span>, <time datetime="2026-07-06" class="refDate">6 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-06">https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="LinuxPacing">[LinuxPacing]</dt>
         <dd>
@@ -1811,6 +1809,10 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 <dt id="RFC6298">[RFC6298]</dt>
         <dd>
 <span class="refAuthor">Paxson, V.</span>, <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Chu, J.</span>, and <span class="refAuthor">M. Sargent</span>, <span class="refTitle">"Computing TCP's Retransmission Timer"</span>, <span class="seriesInfo">RFC 6298</span>, <span class="seriesInfo">DOI 10.17487/RFC6298</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6298">https://www.rfc-editor.org/rfc/rfc6298</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9000">[RFC9000]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9002">[RFC9002]</dt>
         <dd>
@@ -1846,7 +1848,7 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard Vasilenko for suggesting improvements to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The authors would like to thank Grenville Armitage, Ingemar Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting improvements to this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="change-log">
@@ -1912,13 +1914,29 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
           </ul>
 </li>
         <li class="normal" id="appendix-B-1.6">
-          <p id="appendix-B-1.6.1">Adopted version draft-irtf-iccrg-01:<a href="#appendix-B-1.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-1.6.1">-01:<a href="#appendix-B-1.6.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-1.6.2.1">
               <p id="appendix-B-1.6.2.1.1">improves the FreeBSD text<a href="#appendix-B-1.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-B-1.6.2.2">
               <p id="appendix-B-1.6.2.2.1">adds a discussion of the ABC limit in slow start<a href="#appendix-B-1.6.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="appendix-B-1.7">
+          <p id="appendix-B-1.7.1">-02:<a href="#appendix-B-1.7.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-1.7.2.1">
+              <p id="appendix-B-1.7.2.1.1">Extended the Apple OSes description<a href="#appendix-B-1.7.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="appendix-B-1.8">
+          <p id="appendix-B-1.8.1">-03:<a href="#appendix-B-1.8.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-1.8.2.1">
+              <p id="appendix-B-1.8.2.1.1">fixing nits, and a bit of text on how DelACKs can harm RTT estimation<a href="#appendix-B-1.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
