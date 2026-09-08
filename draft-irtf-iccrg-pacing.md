@@ -303,8 +303,9 @@ When it enters the queue at a network bottleneck, unpaced traffic causes more su
 
 Since pacing algorithms generally attempt to spread out packets evenly across an RTT, it is important to have a good RTT estimate. Especially in the beginning of a transfer, when sending the initial window, the only RTT estimate available may be from the connection establishment handshake. Being based on only one sample, this is a very unreliable estimate. Moreover, a new transport connection may be preceded by a longer period of quiescence on the path between two endpoints than there  might normally occur when a connection is active. Such a silence period can provoke behavior of lower layers that increases the RTT. For example, idle periods commonly cause a handshake procedure on 5G links before communication can continue, inflating the RTT.
 
-Thus, using this sample to pace the initial window can cause the pacing rate to become unnecessarily low. This may be the reason why the Linux TCP implementation does not pace the first 10 packets (see {{linux}}). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) {{?RFC9040}}.
+Thus, using this sample to pace the initial window can cause the pacing rate to become unnecessarily low. Accordingly, the Linux TCP implementation does not pace the first 10 packets (see {{linux}}). As a possible improvement, the initial RTT estimate could also be based on a previous connection (temporal sharing) or on another ongoing connection (ensemble sharing) {{?RFC9040}}.
 
+Since having an accurate RTT estimate is important for pacing also after the initial round trip, delayed ACKs can be detrimental to pacing in two ways: first, by potentially reducing the number of ACKs, they can reduce the sampling frequency. Second, by adding delay to the transmission of ACKs, they can worsen the quality of the signal. Here, QUIC has a benefit over TCP: since a host reports the local delay between data reception and generation of the corresponding ACK, QUIC's RTT calculation can be more precise {{?RFC9000}}.
 
 ## Mini-bursts and their trade-offs
 
@@ -328,7 +329,7 @@ also be impacted by pacing.  Paced packets reduce the ability to group
 together incoming hardware frames and packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.
 
-Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.
+Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi or 5G can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.
 
 Without pacing, increasing cwnd by the number of acknowledged bytes in slow start can cause large mini-bursts when a single ACK acknowledges multiple segments worth of data. This increase is therefore recommended to be upper-bound with one SMSS in {{?RFC5681}}. With pacing, the earlier discussed trade-offs for mini-bursts apply, and such a slow start limitation may not be necessary. Accordingly, HyStart++ {{?RFC9406}}, which CUBIC implementations should use according to {{?RFC9406}}, specifies that no such limit should be applied ("L=infinity").
 
@@ -448,7 +449,7 @@ These pacing rates limit the maximum sending rate.
 The congestion control and the flow control are always honored.
 With the fourth socket option static pacing can be enabled and disabled.
 The last socket option allows to control the size of the micro burst in
-full sized segments. The default value is 40.
+full sized segments. Its default value is 40.
 
 The following ``packetdrill``-script illustrates the behaviour of a sender
 using a pace rate of 1200000 b/s and a micro burst size of 4 full sized segments.
@@ -565,7 +566,7 @@ the numbering rule out. -->
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard Vasilenko for suggesting improvements to this document.
+The authors would like to thank Grenville Armitage, Ingemar Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting improvements to this document.
 
 
 # Change Log
@@ -592,6 +593,12 @@ The authors would like to thank Grenville Armitage, Ingemar Johansson and Eduard
   * adds an example for the double-loss-after-slow start problem in section 4.1
   * extends the FreeBSD text
 
-* Adopted version draft-irtf-iccrg-01:
+* -01:
   * improves the FreeBSD text
   * adds a discussion of the ABC limit in slow start
+
+* -02:
+  * Extended the Apple OSes description
+
+* -03:
+  * fixing nits, and a bit of text on how DelACKs can harm RTT estimation
