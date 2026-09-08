@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 28 December 2026                           Aalyria Technologies
+Expires: 12 March 2027                              Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                            26 June 2026
+                                                        8 September 2026
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 December 2026.
+   This Internet-Draft will expire on 12 March 2027.
 
 Copyright Notice
 
@@ -368,11 +368,21 @@ Table of Contents
    inflating the RTT.
 
    Thus, using this sample to pace the initial window can cause the
-   pacing rate to become unnecessarily low.  This may be the reason why
-   the Linux TCP implementation does not pace the first 10 packets (see
-   Section 5.1).  As a possible improvement, the initial RTT estimate
-   could also be based on a previous connection (temporal sharing) or on
-   another ongoing connection (ensemble sharing) [RFC9040].
+   pacing rate to become unnecessarily low.  Accordingly, the Linux TCP
+   implementation does not pace the first 10 packets (see Section 5.1).
+   As a possible improvement, the initial RTT estimate could also be
+   based on a previous connection (temporal sharing) or on another
+   ongoing connection (ensemble sharing) [RFC9040].
+
+   Since having an accurate RTT estimate is important for pacing also
+   after the initial round trip, delayed ACKs can be detrimental to
+   pacing in two ways: first, by potentially reducing the number of
+   ACKs, they can reduce the sampling frequency.  Second, by adding
+   delay to the transmission of ACKs, they can worsen the quality of the
+   signal.  Here, QUIC has a benefit over TCP: since a host reports the
+   local delay between data reception and generation of the
+   corresponding ACK, QUIC's RTT calculation can be more precise
+   [RFC9000].
 
 4.4.  Mini-bursts and their trade-offs
 
@@ -408,13 +418,13 @@ Table of Contents
    negligible (4.1 microseconds).  When they reach the bottleneck,
    however, their duration becomes as large as 27.3 milliseconds.  This
    is an argument for minimizing the size of mini-bursts.  On the other
-   hand, wireless link layers such as WiFi can benefit from having more
-   than one packet available at the local send buffer, to make use of
-   frame aggregation methods.  This can significantly reduce overhead,
-   and allow a wireless sender to make better use of its transmission
-   opportunity; eliminating these benefits with pacing may in some cases
-   be counter-productive.  This is an argument for making the size of
-   mini-bursts larger.
+   hand, wireless link layers such as WiFi or 5G can benefit from having
+   more than one packet available at the local send buffer, to make use
+   of frame aggregation methods.  This can significantly reduce
+   overhead, and allow a wireless sender to make better use of its
+   transmission opportunity; eliminating these benefits with pacing may
+   in some cases be counter-productive.  This is an argument for making
+   the size of mini-bursts larger.
 
    Without pacing, increasing cwnd by the number of acknowledged bytes
    in slow start can cause large mini-bursts when a single ACK
@@ -612,7 +622,7 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
    The congestion control and the flow control are always honored.  With
    the fourth socket option static pacing can be enabled and disabled.
    The last socket option allows to control the size of the micro burst
-   in full sized segments.  The default value is 40.
+   in full sized segments.  Its default value is 40.
 
    The following packetdrill-script illustrates the behaviour of a
    sender using a pace rate of 1200000 b/s and a micro burst size of 4
@@ -815,9 +825,9 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
    [I-D.ietf-ccwg-bbr]
               Cardwell, N., Swett, I., and J. Beshay, "BBR Congestion
               Control", Work in Progress, Internet-Draft, draft-ietf-
-              ccwg-bbr-05, 2 March 2026,
+              ccwg-bbr-06, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-
-              bbr-05>.
+              bbr-06>.
 
    [LinuxPacing]
               Welzl, M., "TCP Pacing in the Linux Kernel", IEEE ICNC
@@ -839,6 +849,11 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
               "Computing TCP's Retransmission Timer", RFC 6298,
               DOI 10.17487/RFC6298, June 2011,
               <https://www.rfc-editor.org/rfc/rfc6298>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
 
    [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
               and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
@@ -872,8 +887,9 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
 
 Acknowledgments
 
-   The authors would like to thank Grenville Armitage, Ingemar Johansson
-   and Eduard Vasilenko for suggesting improvements to this document.
+   The authors would like to thank Grenville Armitage, Ingemar
+   Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting
+   improvements to this document.
 
 Change Log
 
@@ -916,11 +932,20 @@ Change Log
 
       -  extends the FreeBSD text
 
-   *  Adopted version draft-irtf-iccrg-01:
+   *  -01:
 
       -  improves the FreeBSD text
 
       -  adds a discussion of the ABC limit in slow start
+
+   *  -02:
+
+      -  Extended the Apple OSes description
+
+   *  -03:
+
+      -  fixing nits, and a bit of text on how DelACKs can harm RTT
+         estimation
 
 Authors' Addresses
 
