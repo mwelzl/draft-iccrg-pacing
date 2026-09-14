@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 15 March 2027                              Aalyria Technologies
+Expires: 18 March 2027                              Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                       11 September 2026
+                                                       14 September 2026
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 March 2027.
+   This Internet-Draft will expire on 18 March 2027.
 
 Copyright Notice
 
@@ -107,8 +107,8 @@ Table of Contents
 
 1.  Introduction
 
-   Applications commonly generate either bulk data (e.g. files) or
-   bursts of data (e.g. segments of media) that transport protocols
+   Applications commonly generate either bulk data (e.g., files) or
+   bursts of data (e.g., segments of media) that transport protocols
    deliver into the network based on congestion control algorithms.
 
    RFCs describing congestion control generally refer to a congestion
@@ -216,7 +216,7 @@ Table of Contents
 3.3.  Other Motivations
 
    In some special situations, outside general Internet usage, the path
-   properties may be well-known in advance (e.g. due to scheduling of
+   properties may be well-known in advance (e.g., due to scheduling of
    capacity, etc.).  In this case, senders should pace packets at the
    scheduled rates in order to efficiently utilize that capacity.  In
    some of these cases, the rates may be very high, and any sender
@@ -343,11 +343,11 @@ Table of Contents
    slowly and steadily, incurring delay growth over a longer time
    interval.  Aside from the direct problems that delay can cause, such
    sustained queue and delay growth is also more likely to provoke an
-   Active Queue Management (AQM) algorithm to drop packets or mark them
-   using Explicit Congestion Notification (ECN).  This is because AQM
-   algorithms are commonly designed to allow short, transient traffic
-   bursts to pass unharmed, but react upon longer-term average queue
-   growth.
+   Active Queue Management (AQM) algorithm [RFC7567] to drop packets or
+   mark them using Explicit Congestion Notification (ECN) [RFC8087].
+   This is because AQM algorithms are commonly designed to allow short,
+   transient traffic bursts to pass unharmed, but react upon longer-term
+   average queue growth.
 
 4.3.  Getting good RTT estimates
 
@@ -387,7 +387,7 @@ Table of Contents
    on multiple small data blocks (fewer copy operations).  Hardware
    offload capabilities such as TCP Segment Offload (TSO) and Generic
    Segmentation Offload (GSO) are popularly used in cases with high data
-   rates or volumes (e.g. datacenters, hyperscaler servers, etc.) and
+   rates or volumes (e.g., datacenters, hyperscaler servers, etc.) and
    important to efficiency in compute and power budgets.  When using TSO
    and GSO efficiently, there will be large writes between software and
    hardware.  Since the hardware itself does not typically perform
@@ -401,9 +401,9 @@ Table of Contents
    At the receiving side, offload techniques like Large Receive Offload
    (LRO), Generic Receive Offload (GRO), interrupt coalescing, and other
    features may also be impacted by pacing.  Paced packets reduce the
-   ability to group together incoming hardware frames and packets for
-   upper layer processing, but end systems may be tuned to handle
-   incoming mini-bursts and maintain some efficiency.
+   ability to group together incoming packets for upper layer
+   processing, but end systems may be tuned to handle incoming mini-
+   bursts and maintain some efficiency.
 
    Clearly, the size of mini-bursts embeds some trade-offs.  Even mini-
    bursts that are very short in terms of time when they leave the
@@ -443,19 +443,20 @@ Table of Contents
 
    For example, frame based video transmission typically generates data
    chunks at a varying size at regular intervals.  Such an application
-   could request a data chunk to be spread over the interval.  This
-   would allow a more sustained data transmission at a lower rate than a
-   transport protocol's congestion control might choose, rather than
-   using a shorter time period within the interval with a high rate.
-   This has the benefit that queue growth is less likely, i.e. this form
-   of pacing can reduce latency.
+   could request a data chunk to be transmitted at a lower rate, taking
+   up a larger fraction of such an interval.  This would allow a more
+   sustained data transmission at a lower rate than a transport
+   protocol's congestion control might choose, rather than using a
+   shorter time period within the interval with a high rate.  This has
+   the benefit that queue growth is less likely, i.e. this form of
+   pacing can reduce latency.
 
-   Spreading over the interval needs to be done with some caution;
-   "ideally" spreading data across the entire interval risks that some
-   of data will not arrive in time, e.g. when delays are introduced by
-   other traffic.  SCReAM and SAMMY pace packets at a somewhat higher
-   rate (50% in case of SCReAM) to reduce this risk
-   [I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03], [Sammy].
+   Spreading over the interval from one video chunk to the next needs to
+   be done with some caution; "ideally" spreading data across the entire
+   interval risks that some of data will not arrive in time, e.g., when
+   delays are introduced by other traffic.  SCReAM and SAMMY pace
+   packets at a somewhat higher rate (50% in case of SCReAM) to reduce
+   this risk [I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03], [Sammy].
 
 5.  Implementation examples
 
@@ -700,13 +701,13 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
 
    Pacing in QUIC stacks commonly involves:
 
-   1.  Access to lower-level (e.g. OS and hardware) capabilities needed
+   1.  Access to lower-level (e.g., OS and hardware) capabilities needed
        for effective pacing.
 
    2.  Managing additional timers related to pacing, along with those
        already needed for retransmission, and other events.
 
-   3.  Details of the actual pacing algorithm (e.g. granularity of
+   3.  Details of the actual pacing algorithm (e.g., granularity of
        bursts allowed, etc.).
 
    Examples of different approaches to dealing with these challenges in
@@ -737,7 +738,7 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
 
    Pacing can be done based on different approaches such as a token-
    based or tokenless algorithm.  For instance, a tokenless algorithm
-   (e.g. as used in mvfst) might compute a regular interval time and
+   (e.g., as used in mvfst) might compute a regular interval time and
    batch size (number of packets) to be released every interval and
    achieve the pacing rate.  This allows specific future transmissions
    to be scheduled.  In contrast, a token-based algorithm accumulates
@@ -748,23 +749,23 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
 
    The additional notion of "burst tokens" (or other burst allowance)
    may be present in order to rapidly transmit data if coming out of a
-   quiescent period (e.g. when a flow has been application-limited
-   without data to send, e.g. as used in Google's implementation).  A
+   quiescent period (e.g., when a flow has been application-limited
+   without data to send, e.g., as used in Google's implementation).  A
    number of burst tokens, representing packets that can be sent
-   unpaced, is initialized to some value (e.g. 10) when a flow starts or
-   becomes quiescent.  If burst tokens are available, outgoing packets
-   are sent immediately, without pacing, up to the limit permitted by
-   the congestion window, and the burst tokens are depleted by each
-   packet sent.  The number of burst tokens is reduced to zero on
-   congestion events.  When coming out of quiescence, it is set to the
-   minimum of the initial burst size, or the amount of packets that the
-   congestion window (in bytes) represents.
+   unpaced, is initialized to some value (e.g., 10) when a flow starts
+   or becomes quiescent.  If burst tokens are available, outgoing
+   packets are sent immediately, without pacing, up to the limit
+   permitted by the congestion window, and the burst tokens are depleted
+   by each packet sent.  The number of burst tokens is reduced to zero
+   on congestion events.  When coming out of quiescence, it is set to
+   the minimum of the initial burst size, or the amount of packets that
+   the congestion window (in bytes) represents.
 
    There may be additional "lumpy tokens" that further allow unpaced
    packets after the burst tokens have been consumed, and the congestion
    window does not limit sending.  The amount of lumpy tokens that might
    be present is determined using heuristics, generally limiting to a
-   small number of packets (e.g. 1 or 2).
+   small number of packets (e.g., 1 or 2).
 
 6.  Security Considerations
 
@@ -846,6 +847,16 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
               "Computing TCP's Retransmission Timer", RFC 6298,
               DOI 10.17487/RFC6298, June 2011,
               <https://www.rfc-editor.org/rfc/rfc6298>.
+
+   [RFC7567]  Baker, F., Ed. and G. Fairhurst, Ed., "IETF
+              Recommendations Regarding Active Queue Management",
+              BCP 197, RFC 7567, DOI 10.17487/RFC7567, July 2015,
+              <https://www.rfc-editor.org/rfc/rfc7567>.
+
+   [RFC8087]  Fairhurst, G. and M. Welzl, "The Benefits of Using
+              Explicit Congestion Notification (ECN)", RFC 8087,
+              DOI 10.17487/RFC8087, March 2017,
+              <https://www.rfc-editor.org/rfc/rfc8087>.
 
    [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
