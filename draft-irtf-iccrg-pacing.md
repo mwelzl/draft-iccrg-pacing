@@ -186,18 +186,18 @@ informative:
 
 --- abstract
 
-Applications or congestion control mechanisms can produce bursty traffic which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
+Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
 
 
 --- middle
 
 # Introduction
 
-Applications commonly generate either bulk data (e.g. files) or bursts of data (e.g. segments of media) that transport protocols deliver into the network based on congestion control algorithms.
+Applications commonly generate either bulk data (e.g., files) or bursts of data (e.g., segments of media) that transport protocols deliver into the network based on congestion control algorithms.
 
-RFCs describing congestion control generally refer to a congestion window (cwnd) state variable as an upper limit for either the number of unacknowledged packets or bytes that a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can result in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows to send the same cwnd sized data but spread it across a round-trip time more evenly.
+RFCs describing congestion control generally refer to a congestion window (cwnd) state variable as an upper limit for either the number of unacknowledged packets or bytes that a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can result in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows a sender to send a cwnd of data, but to spread transmission more evenly across a round-trip time.
 
-Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a lower rate. Accordingly, it is in line with these specifications to pace packets. Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets being back-to-back), loss can be more likely to happen than in a case where there are time gaps between packets (e.g., when they are spread out over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing can also yield higher goodput by reducing the time lost in loss recovery.
+Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a lower rate. Accordingly, it is in line with these specifications to pace packets. Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets sent back-to-back), loss can be more likely than in a case where there are time gaps between packets (e.g., when they are spread over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing can also yield higher goodput by reducing the time lost in loss recovery.
 
 Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism {{?I-D.ietf-ccwg-bbr}}.
 
@@ -208,7 +208,7 @@ Because of its known advantages, pacing has become common in implementations of 
 
 # Motivations for Pacing
 
-Pacing is an old idea which did not see much deployment for decades. This may be
+Pacing is an old idea that did not see much deployment for decades. This may be
 due to the need for efficient fine-grain timers, which were not previously available
 in software. Also, at least one early analysis has documented disadvantages of
 pacing, primarily in terms of throughput {{UnderstandingPacing}}. At the time of
@@ -234,8 +234,7 @@ This is described in more detail in {{losstypes}}, with examples.
 A number of causes within the network may lead to "ACK compression", where the
 spacing of incoming packets (with new ACKs) becomes bunched.  This could happen
 due to many factors, such as congestion at a bottleneck, packet send
-aggregation in the MAC layer or device drivers, etc.  ACKs can also wind up
-being aggregated beyond the normal delayed ACK recommendation, such that instead
+aggregation in the MAC layer or device drivers, etc.  ACKs can also be aggregated such that instead
 of acknowledging one or two packets of data, a received ACK may cover many packets,
 and cause a large change in the congestion window, allowing many packets to be
 released in a burst (if pacing is not used).  This can happen due to coalescing of
@@ -267,11 +266,11 @@ may differ.
 ## Other Motivations
 
 In some special situations, outside general Internet usage, the path properties may
-be well-known in advance (e.g. due to scheduling of capacity, etc.).  In this
+be well-known in advance (e.g., due to scheduling of capacity, etc.).  In this
 case, senders should pace packets at the scheduled rates in order to
 efficiently utilize that capacity.  In some of these cases, the rates may be
 very high, and any sender burstiness might require large expensive buffers
-within the network in order to accommodate bursts without losses.  Situations where this
+within the network to accommodate bursts without losses.  Situations where this
 applies may include supercomputing grids, private datacenter interconnection,
 and space mission communications {{I-D.draft-many-tiptop-usecase}}.
 
@@ -282,12 +281,12 @@ important for using and tuning pacing, and the resulting consequences.
 
 ## More likely to saturate a bottleneck {#losstypes}
 
-We can distinguish between two reasons for packet losses that are due to congestion at a bottleneck with a DropTail (FIFO) queue:
+Two reasons for packet losses that are due to congestion at a bottleneck with a DropTail (FIFO) queue can be distinguished:
 
 1. A flight of N packets arrives. The amount of data in this flight exceeds the amount of data that can be transmitted by the bottleneck during the flight's arrival plus the queue length, i.e. some data do not fit into the queue.
 2. The bottleneck is fully saturated. The queue is full, and packets drain from it more slowly than new packets arrive.
 
-The second type of loss matches the typical expectation of a congestion control algorithm: the cwnd value when loss happens is indicative of the bottleneck being fully saturated. When the first type of loss happens, however, a sender's cwnd can be much smaller than the Bandwidth-Delay Product (BDP) of the path (the amount of data that can be in flight, ignoring the queue). In the absence of other traffic, the probability for the first type of loss to happen depends on the queue length and the ratio between the departure and the arrival rate during the flight's arrival. By introducing time gaps between the packets of a burst, this ratio is increased, i.e. the difference between the departure and the arrival rate becomes smaller, and the second type of loss is more likely.
+The second type of loss matches the typical expectation of a congestion control algorithm: the cwnd value when loss happens is indicative of the bottleneck being fully saturated. When the first type of loss happens, however, a sender's cwnd can be much smaller than the Bandwidth-Delay Product (BDP) of the path (the amount of data that can be in flight, ignoring the queue). In the absence of other traffic, the probability for the first type of loss depends on the queue length and the ratio between the departure and the arrival rate during the flight's arrival. By introducing time gaps between the packets of a burst, this ratio is increased, i.e. the difference between the departure and the arrival rate becomes smaller, and the second type of loss is more likely.
 
 For example, consider a network path with a bottleneck capacity of 50 Mbit/s, a queue length of 15000 bytes (or 10 packets of size 1500 bytes) and an RTT of 30 ms. Assume that all packets emitted by the sender have a size of 1500 bytes. Then, the BDP equals 125 packets. The bottleneck of this network path is fully saturated when a (BDP + queue length) amount of bytes are in flight: 135 packets.
 
@@ -314,7 +313,7 @@ The probability of loss type 1 in {{losstypes}} is indirectly proportional to th
 
 ## Queue dynamics
 
-When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in {{losstypes}}. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incurring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm to drop packets or mark them using Explicit Congestion Notification (ECN). This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.
+When it enters the queue at a network bottleneck, unpaced traffic causes more sudden, drastic delay growth than paced traffic, and has a higher risk of packet loss, as discussed in {{losstypes}}. Paced traffic, on the other hand, can cause a bottleneck queue to grow more slowly and steadily, incurring delay growth over a longer time interval. Aside from the direct problems that delay can cause, such sustained queue and delay growth is also more likely to provoke an Active Queue Management (AQM) algorithm {{?RFC7567}} to drop packets or mark them using Explicit Congestion Notification (ECN) {{?RFC8087}}. This is because AQM algorithms are commonly designed to allow short, transient traffic bursts to pass unharmed, but react upon longer-term average queue growth.
 
 
 ## Getting good RTT estimates {#rtt}
@@ -330,7 +329,7 @@ Since having an accurate RTT estimate is important for pacing also after the ini
 Generally, hardware can perform better on large blocks of data than on multiple
 small data blocks (fewer copy operations). Hardware offload capabilities such
 as TCP Segment Offload (TSO) and Generic Segmentation Offload (GSO) are
-popularly used in cases with high data rates or volumes (e.g. datacenters,
+popularly used in cases with high data rates or volumes (e.g., datacenters,
 hyperscaler servers, etc.) and important to efficiency in compute and power
 budgets.  When using TSO and GSO efficiently, there will be large writes
 between software and hardware.  Since the hardware itself does not typically
@@ -344,7 +343,7 @@ Linux, for example.
 At the receiving side, offload techniques like Large Receive Offload (LRO),
 Generic Receive Offload (GRO), interrupt coalescing, and other features may
 also be impacted by pacing.  Paced packets reduce the ability to group
-together incoming hardware frames and packets for upper layer processing, but
+together incoming packets for upper layer processing, but
 end systems may be tuned to handle incoming mini-bursts and maintain some efficiency.
 
 Clearly, the size of mini-bursts embeds some trade-offs. Even mini-bursts that are very short in terms of time when they leave the sender may cause significant delay further away on an Internet path, where the link capacity is smaller. For example, consider a server that is connected to a 100 Gbps link, serving a client that is behind a 15 Mbps bottleneck link. If that server emits bursts that are 50 kbyte long, the duration of these bursts at the server-side link is negligible (4.1 microseconds). When they reach the bottleneck, however, their duration becomes as large as 27.3 milliseconds. This is an argument for minimizing the size of mini-bursts. On the other hand, wireless link layers such as WiFi or 5G can benefit from having more than one packet available at the local send buffer, to make use of frame aggregation methods. This can significantly reduce overhead, and allow a wireless sender to make better use of its transmission opportunity; eliminating these benefits with pacing may in some cases be counter-productive. This is an argument for making the size of mini-bursts larger.
@@ -358,13 +357,15 @@ limit the transport bitrate on this basis such that it is not exceedingly large.
 applications allow the application to set an upper limit.
 
 For example, frame based video transmission typically generates data chunks at a varying size at regular intervals.
-Such an application could request a data chunk to be spread over the interval. This would
+Such an application could request a data chunk to be transmitted at a lower rate, taking up a larger fraction of
+such an interval. This would
 allow a more sustained data transmission at a lower rate than a transport protocol's congestion control
 might choose, rather than using a shorter time period within the interval with a high rate. This has
 the benefit that queue growth is less likely, i.e. this form of pacing can reduce latency.
 
-Spreading over the interval needs to be done with some caution; "ideally" spreading data across the
-entire interval risks that some of data will not arrive in time, e.g. when delays are introduced
+Spreading over the interval from one video chunk to the next needs to be done with some caution;
+"ideally" spreading data across the
+entire interval risks that some of data will not arrive in time, e.g., when delays are introduced
 by other traffic. SCReAM and SAMMY pace packets at a somewhat higher rate (50% in case of SCReAM)
 to reduce this risk {{I-D.draft-johansson-ccwg-rfc8298bis-screamv2-03}}, {{Sammy}}.
 
@@ -542,11 +543,11 @@ Pacing capability is expected in QUIC senders.  While standard QUIC congestion c
 
 Pacing in QUIC stacks can rely on one or more of:
 
-1. Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.
+1. Access to lower-level (e.g., OS and hardware) capabilities needed for effective pacing.
 
 2. Managing additional timers related to pacing, along with those already needed for retransmission, and other events.
 
-3. Details of the actual pacing algorithm (e.g. granularity of bursts allowed, etc.).
+3. Details of the actual pacing algorithm (e.g., granularity of bursts allowed, etc.).
 
 Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.
 
@@ -556,11 +557,11 @@ Some operating systems, like Linux {{linux}}, can support pacing simply through 
 
 To support cases where operating systems mechanisms are not available or sufficient alone, QUIC stacks may include their own pacing logic.  When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel {{VL87}} provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.
 
-Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.
+Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g., as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.
 
-The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send, e.g. as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.
+The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g., when a flow has been application-limited without data to send, e.g., as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g., 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.
 
-There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).
+There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g., 1 or 2).
 
 # Security Considerations
 
