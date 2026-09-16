@@ -917,8 +917,8 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
 
 Acknowledgments
 
-   The authors would like to thank Grenville Armitage, Ingemar
-   Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting
+   The authors would like to thank Grenville Armitage, Gorry Fairhurst,
+   Ingemar Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting
    improvements to this document.
 
 Change Log
@@ -976,6 +976,11 @@ Change Log
 
       -  fixing nits, and a bit of text on how DelACKs can harm RTT
          estimation
+
+   *  -04:
+
+      -  addressing comment from Gorry Fairhurst: primarily editorial,
+         some details in the QUIC section.
 
 Authors' Addresses
 
