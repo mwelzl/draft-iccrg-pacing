@@ -587,7 +587,7 @@ the numbering rule out. -->
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank Grenville Armitage, Ingemar Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting improvements to this document.
+The authors would like to thank Grenville Armitage, Gorry Fairhurst, Ingemar Johansson, Nicolas Kuhn and Eduard Vasilenko for suggesting improvements to this document.
 
 
 # Change Log
@@ -623,3 +623,6 @@ The authors would like to thank Grenville Armitage, Ingemar Johansson, Nicolas K
 
 * -03:
   * fixing nits, and a bit of text on how DelACKs can harm RTT estimation
+
+* -04:
+  * addressing comment from Gorry Fairhurst: primarily editorial, some details in the QUIC section.
