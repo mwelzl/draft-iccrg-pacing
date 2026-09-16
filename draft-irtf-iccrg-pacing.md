@@ -165,6 +165,24 @@ informative:
     seriesinfo: "IEEE Infocom 2000"
     target: https://doi.org/10.1109/INFCOM.2000.832483
 
+  QuicSteps:
+    title: "QUIC Steps: Evaluating Pacing Strategies in QUIC Implementations"
+    author:
+      -
+        name: Marcel Kempf
+      -
+        name: Simon Tietz
+      -
+        name: Benedikt Jaeger
+      -
+        name: Johannes Spath
+      -
+        name: Georg Carle
+      -
+        name: Johnnes Zirngibl
+    date: June 2025
+    seriesinfo: "Proceedings of the ACM on Networking"
+    target: https://doi.org/10.1145/3730985
 
 --- abstract
 
@@ -520,9 +538,9 @@ This subsystem underpins recently published research by Netflix and Stanford int
 
 ## QUIC BBR implementations
 
-Pacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation ({{Section 7.7 of RFC9002}}).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.
+Pacing capability is expected in QUIC senders.  While standard QUIC congestion control {{RFC9002}} is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation ({{Section 7.7 of RFC9002}}).  RFC 9002 does not require a specific approach or set of parameters for pacing, leaving endpoints to implement pacing as they choose.  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it, though the same methods are applicable for congestion control based on RFC 9002.
 
-Pacing in QUIC stacks commonly involves:
+Pacing in QUIC stacks can rely on one or more of:
 
 1. Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.
 
@@ -532,9 +550,11 @@ Pacing in QUIC stacks commonly involves:
 
 Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.
 
-Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.
+Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.  When available, QUIC implementations may choose to rely on operating system features that support pacing for outgoing UDP packets.
 
-When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel {{VL87}} provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.
+Some operating systems, like Linux {{linux}}, can support pacing simply through use of an FQ queue discipline applied for outgoing QUIC packets.  However, since multiple QUIC connections can share a socket, this should be carefully applied.  Linux also includes an "SO\_TXTIME" option that allows a per-packet transmission time to be specified, however, this may not be compatible with simultaneous use of GSO.  Effectiveness of different OS capabilities for pacing has been evaluated with multiple QUIC stacks {{QuicSteps}}.
+
+To support cases where operating systems mechanisms are not available or sufficient alone, QUIC stacks may include their own pacing logic.  When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel {{VL87}} provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.
 
 Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.
 
