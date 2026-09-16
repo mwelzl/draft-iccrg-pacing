@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 12 March 2027                              Aalyria Technologies
+Expires: 20 March 2027                              Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                        8 September 2026
+                                                       16 September 2026
 
 
                      Pacing in Transport Protocols
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 March 2027.
+   This Internet-Draft will expire on 20 March 2027.
 
 Copyright Notice
 
@@ -697,11 +697,14 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
    congestion control [RFC9002] is based on TCP Reno, which is not
    defined to include pacing (but also does not prohibit it), QUIC
    congestion control requires either pacing or some other burst
-   limitation (Section 7.7 of [RFC9002]).  BBR congestion control
+   limitation (Section 7.7 of [RFC9002]).  RFC 9002 does not require a
+   specific approach or set of parameters for pacing, leaving endpoints
+   to implement pacing as they choose.  BBR congestion control
    implementations are common in QUIC stacks, and pacing is integral to
-   BBR, so this document focuses on it.
+   BBR, so this document focuses on it, though the same methods are
+   applicable for congestion control based on RFC 9002.
 
-   Pacing in QUIC stacks commonly involves:
+   Pacing in QUIC stacks can rely on one or more of:
 
    1.  Access to lower-level (e.g. OS and hardware) capabilities needed
        for effective pacing.
@@ -724,8 +727,21 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
    with the underlying protocol stack and hardware needed to achieve
    pacing.  For instance, if an application trying to do pacing is
    running on a highly loaded system, it may often "wake up late" and
-   miss the times that it intends to pace packets.
+   miss the times that it intends to pace packets.  When available, QUIC
+   implementations may choose to rely on operating system features that
+   support pacing for outgoing UDP packets.
 
+   Some operating systems, like Linux Section 5.1, can support pacing
+   simply through use of an FQ queue discipline applied for outgoing
+   QUIC packets.  However, since multiple QUIC connections can share a
+   socket, this should be carefully applied.  Linux also includes an
+   "SO_TXTIME" option that allows a per-packet transmission time to be
+   specified, however, this may not be compatible with simultaneous use
+   of GSO.  Effectiveness of different OS capabilities for pacing has
+   been evaluated with multiple QUIC stacks [QuicSteps].
+
+   To support cases where operating systems mechanisms are not available
+   or sufficient alone, QUIC stacks may include their own pacing logic.
    When a large amount of data needs to be sent, pacing naively could
    result in an excessive number of timers to be managed and adjusted
    along with all of the other timers that the QUIC stack and rest of
@@ -834,6 +850,12 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
               2025 , 17 February 2025,
               <https://folk.universitetetioslo.no/michawe/research/
               publications/icnc2025-pacing.pdf>.
+
+   [QuicSteps]
+              Kempf, M., Tietz, S., Jaeger, B., Spath, J., Carle, G.,
+              and J. Zirngibl, "QUIC Steps: Evaluating Pacing Strategies
+              in QUIC Implementations", Proceedings of the ACM on
+              Networking , June 2025, <https://doi.org/10.1145/3730985>.
 
    [RACK]     Stewart, R. and M. Tüxen, "RACK and Alternate TCP Stacks
               for FreeBSD", FreeBSD Journal (January/February 2024) ,

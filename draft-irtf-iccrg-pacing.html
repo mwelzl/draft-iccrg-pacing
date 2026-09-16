@@ -1049,7 +1049,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 12 March 2027</td>
+<td class="center">Expires 20 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg {
 <dd class="internet-draft">draft-irtf-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-08" class="published">8 September 2026</time>
+<time datetime="2026-09-16" class="published">16 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-12">12 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-20">20 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1706,8 +1706,8 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
         <h3 id="name-quic-bbr-implementations">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-quic-bbr-implementations" class="section-name selfRef">QUIC BBR implementations</a>
         </h3>
-<p id="section-5.4-1">Pacing capability is expected in QUIC senders.  While standard QUIC congestion control <span>[<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span>).  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Pacing in QUIC stacks commonly involves:<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-1">Pacing capability is expected in QUIC senders.  While standard QUIC congestion control <span>[<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> is based on TCP Reno, which is not defined to include pacing (but also does not prohibit it), QUIC congestion control requires either pacing or some other burst limitation (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span>).  RFC 9002 does not require a specific approach or set of parameters for pacing, leaving endpoints to implement pacing as they choose.  BBR congestion control implementations are common in QUIC stacks, and pacing is integral to BBR, so this document focuses on it, though the same methods are applicable for congestion control based on RFC 9002.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Pacing in QUIC stacks can rely on one or more of:<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.4-3">
 <li id="section-5.4-3.1">
             <p id="section-5.4-3.1.1">Access to lower-level (e.g. OS and hardware) capabilities needed for effective pacing.<a href="#section-5.4-3.1.1" class="pilcrow">¶</a></p>
@@ -1720,11 +1720,12 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 </li>
         </ol>
 <p id="section-5.4-4">Examples of different approaches to dealing with these challenges in ways that work on multiple operating systems and hardware platforms can be found in open source QUIC stacks, such as Google's QUIC implementation and Meta's "mvfst". These provide examples for some of the concepts discussed below.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
-<p id="section-5.4-5">Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
-<p id="section-5.4-6">When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel <span>[<a href="#VL87" class="cite xref">VL87</a>]</span> provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
-<p id="section-5.4-7">Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
-<p id="section-5.4-8">The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send, e.g. as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.<a href="#section-5.4-8" class="pilcrow">¶</a></p>
-<p id="section-5.4-9">There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).<a href="#section-5.4-9" class="pilcrow">¶</a></p>
+<p id="section-5.4-5">Unlike TCP implementations that typically run within the operating system kernel, QUIC implementations more typically run in user space and are thus faced with more challenges regarding timing and coupling with the underlying protocol stack and hardware needed to achieve pacing.  For instance, if an application trying to do pacing is running on a highly loaded system, it may often "wake up late" and miss the times that it intends to pace packets.  When available, QUIC implementations may choose to rely on operating system features that support pacing for outgoing UDP packets.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
+<p id="section-5.4-6">Some operating systems, like Linux <a href="#linux" class="auto internal xref">Section 5.1</a>, can support pacing simply through use of an FQ queue discipline applied for outgoing QUIC packets.  However, since multiple QUIC connections can share a socket, this should be carefully applied.  Linux also includes an "SO_TXTIME" option that allows a per-packet transmission time to be specified, however, this may not be compatible with simultaneous use of GSO.  Effectiveness of different OS capabilities for pacing has been evaluated with multiple QUIC stacks <span>[<a href="#QuicSteps" class="cite xref">QuicSteps</a>]</span>.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
+<p id="section-5.4-7">To support cases where operating systems mechanisms are not available or sufficient alone, QUIC stacks may include their own pacing logic.  When a large amount of data needs to be sent, pacing naively could result in an excessive number of timers to be managed and adjusted along with all of the other timers that the QUIC stack and rest of the application require.  The Hashed Hierarchical Timing Wheel <span>[<a href="#VL87" class="cite xref">VL87</a>]</span> provides one approach for such cases, but implementations may also simply schedule the next send event based on the current pacing rate, and then schedule subsequent events as needed, rather than adjusting timers for them.  In any case, typically a pacing algorithm should allow for some amount of burstiness, in order to efficiently use the hardware as well as to be responsive for bursty (but low overall rate) applications, and to avoid excessive timer management.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
+<p id="section-5.4-8">Pacing can be done based on different approaches such as a token-based or tokenless algorithm.  For instance, a tokenless algorithm (e.g. as used in mvfst) might compute a regular interval time and batch size (number of packets) to be released every interval and achieve the pacing rate.  This allows specific future transmissions to be scheduled.  In contrast, a token-based algorithm accumulates tokens to permit transmission based on the pacing rate, using a "leaky bucket" to control bursts.  In this case the size of bursts may be more granular, depending on how much time has elapsed between evaluations.<a href="#section-5.4-8" class="pilcrow">¶</a></p>
+<p id="section-5.4-9">The additional notion of "burst tokens" (or other burst allowance) may be present in order to rapidly transmit data if coming out of a quiescent period (e.g. when a flow has been application-limited without data to send, e.g. as used in Google's implementation).  A number of burst tokens, representing packets that can be sent unpaced, is initialized to some value (e.g. 10) when a flow starts or becomes quiescent.  If burst tokens are available, outgoing packets are sent immediately, without pacing, up to the limit permitted by the congestion window, and the burst tokens are depleted by each packet sent.  The number of burst tokens is reduced to zero on congestion events.  When coming out of quiescence, it is set to the minimum of the initial burst size, or the amount of packets that the congestion window (in bytes) represents.<a href="#section-5.4-9" class="pilcrow">¶</a></p>
+<p id="section-5.4-10">There may be additional "lumpy tokens" that further allow unpaced packets after the burst tokens have been consumed, and the congestion window does not limit sending.  The amount of lumpy tokens that might be present is determined using heuristics, generally limiting to a small number of packets (e.g. 1 or 2).<a href="#section-5.4-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1797,6 +1798,10 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 <dt id="LinuxPacing">[LinuxPacing]</dt>
         <dd>
 <span class="refAuthor">Welzl, M.</span>, <span class="refTitle">"TCP Pacing in the Linux Kernel"</span>, <span class="seriesInfo">IEEE ICNC 2025 </span>, <time datetime="2025-02-17" class="refDate">17 February 2025</time>, <span>&lt;<a href="https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf">https://folk.universitetetioslo.no/michawe/research/publications/icnc2025-pacing.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="QuicSteps">[QuicSteps]</dt>
+        <dd>
+<span class="refAuthor">Kempf, M.</span>, <span class="refAuthor">Tietz, S.</span>, <span class="refAuthor">Jaeger, B.</span>, <span class="refAuthor">Spath, J.</span>, <span class="refAuthor">Carle, G.</span>, and <span class="refAuthor">J. Zirngibl</span>, <span class="refTitle">"QUIC Steps: Evaluating Pacing Strategies in QUIC Implementations"</span>, <span class="seriesInfo">Proceedings of the ACM on Networking </span>, <time datetime="2025-06" class="refDate">June 2025</time>, <span>&lt;<a href="https://doi.org/10.1145/3730985">https://doi.org/10.1145/3730985</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RACK">[RACK]</dt>
         <dd>
