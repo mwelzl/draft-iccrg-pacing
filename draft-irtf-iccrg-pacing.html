@@ -10,26 +10,26 @@
 <meta content="Vidhi Goel" name="author">
 <meta content="Michael Tüxen" name="author">
 <meta content='
-       Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. 
+       Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. It is a product of the Internet Congestion Control Research Group (ICCRG) of the Internet Research Task Force (IRTF). 
     ' name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.35.0" name="generator">
 <meta content="pacing" name="keyword">
 <meta content="congestion control" name="keyword">
 <meta content="draft-irtf-iccrg-pacing-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
-    Python 3.14.7
-    ConfigArgParse 1.7.5
+  xml2rfc 3.35.0
+    Python 3.14.10
+    ConfigArgParse 1.9.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.7
+    platformdirs 4.14.3
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.3
+    wcwidth 0.9.4
 -->
 <link href="draft-irtf-iccrg-pacing.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1030,7 +1030,7 @@ svg {
   & :is([stroke="white"], [stroke^="#fff"]) {
     stroke: var(--background-color);
   }
-  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+  & :is([fill="black"], [fill^="#000"], :not([fill], [fill] *)) {
     fill: var(--text-color);
   }
   & :is([fill="white"], [fill^="#fff"]) {
@@ -1045,11 +1045,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Pacing in Transport Protocols</td>
-<td class="right">September 2026</td>
+<td class="right">November 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Welzl, et al.</td>
-<td class="center">Expires 20 March 2027</td>
+<td class="center">Expires 14 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg {
 <dd class="internet-draft">draft-irtf-iccrg-pacing-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-16" class="published">16 September 2026</time>
+<time datetime="2026-11-10" class="published">10 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-20">20 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-05-14">14 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,7 +1092,7 @@ svg {
 <h1 id="title">Pacing in Transport Protocols</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. It is a product of the Internet Congestion Control Research Group (ICCRG) of the Internet Research Task Force (IRTF).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1129,7 +1129,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1267,6 +1267,7 @@ svg {
 <p id="section-1-2">RFCs describing congestion control generally refer to a congestion window (cwnd) state variable as an upper limit for either the number of unacknowledged packets or bytes that a sender is allowed to emit. This limits the sender's transmission rate at the granularity of a round-trip time (RTT). If the sender transmits the entire cwnd sized data in an instant, this can result in unnecessarily high queuing and eventually packet losses at the bottleneck. Such consequences are detrimental to users' applications in terms of both responsiveness and goodput. To solve this problem, the concept of pacing was introduced. Pacing allows a sender to send a cwnd of data, but to spread transmission more evenly across a round-trip time.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Congestion control specifications always allow to send less than the cwnd, or temporarily emit packets at a lower rate. Accordingly, it is in line with these specifications to pace packets. Pacing is known to have advantages -- if some packets arrive at a bottleneck as a burst (all packets sent back-to-back), loss can be more likely than in a case where there are time gaps between packets (e.g., when they are spread over the RTT). It also means that pacing is less likely to cause any sudden, ephemeral increases in queuing delay. Since keeping the queues short reduces packet losses, pacing can also yield higher goodput by reducing the time lost in loss recovery.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism <span>[<a href="#I-D.ietf-ccwg-bbr" class="cite xref">I-D.ietf-ccwg-bbr</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">This document provides an overview of pacing and describes how it is implemented in several well-known systems. It is a product of the IRTF Internet Congestion Control Research Group (ICCRG), and represents the consensus of this group, based on reviews by several members of the group, discussions in the mailing list and in the group's meetings. This document is not an IETF product and is not an Internet Standards Track specification.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1794,7 +1795,7 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 <dd class="break"></dd>
 <dt id="I-D.ietf-ccwg-bbr">[I-D.ietf-ccwg-bbr]</dt>
         <dd>
-<span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">J. Beshay</span>, <span class="refTitle">"BBR Congestion Control"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccwg-bbr-06</span>, <time datetime="2026-07-06" class="refDate">6 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-06">https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">J. Beshay</span>, <span class="refTitle">"BBR Congestion Control"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ccwg-bbr-07</span>, <time datetime="2026-11-02" class="refDate">2 November 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-07">https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="LinuxPacing">[LinuxPacing]</dt>
         <dd>
@@ -1959,6 +1960,14 @@ This allows to use TSO in combination with TCP pacing.<a href="#section-5.3-10" 
 <ul class="normal">
 <li class="normal" id="appendix-B-1.9.2.1">
               <p id="appendix-B-1.9.2.1.1">addressing comment from Gorry Fairhurst: primarily editorial, some details in the QUIC section.<a href="#appendix-B-1.9.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="appendix-B-1.10">
+          <p id="appendix-B-1.10.1">-05:<a href="#appendix-B-1.10.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-1.10.2.1">
+              <p id="appendix-B-1.10.2.1.1">adds RFC 5743 info to abstract and intro.<a href="#appendix-B-1.10.2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
