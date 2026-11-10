@@ -186,7 +186,7 @@ informative:
 
 --- abstract
 
-Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work.
+Applications or congestion control mechanisms can produce bursty traffic, which can cause unnecessary queuing and packet loss. To reduce the burstiness of traffic, the concept of evenly spacing out the traffic from a data sender over a round-trip time known as "pacing" has been used in many transport protocol implementations. This document gives an overview of pacing and how some known pacing implementations work. It is a product of the Internet Congestion Control Research Group (ICCRG) of the Internet Research Task Force (IRTF).
 
 
 --- middle
@@ -201,6 +201,7 @@ Congestion control specifications always allow to send less than the cwnd, or te
 
 Because of its known advantages, pacing has become common in implementations of congestion controlled transports. It is also an integral element of the "BBR" congestion control mechanism {{?I-D.ietf-ccwg-bbr}}.
 
+This document provides an overview of pacing and describes how it is implemented in several well-known systems. It is a product of the IRTF Internet Congestion Control Research Group (ICCRG), and represents the consensus of this group, based on reviews by several members of the group, discussions in the mailing list and in the group's meetings. This document is not an IETF product and is not an Internet Standards Track specification.
 
 # Conventions and Definitions
 
@@ -626,3 +627,6 @@ The authors would like to thank Grenville Armitage, Gorry Fairhurst, Ingemar Joh
 
 * -04:
   * addressing comment from Gorry Fairhurst: primarily editorial, some details in the QUIC section.
+
+* -05:
+  * adds RFC 5743 info to abstract and intro.
