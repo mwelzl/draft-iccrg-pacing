@@ -5,12 +5,12 @@
 Internet Congestion Control                                     M. Welzl
 Internet-Draft                                        University of Oslo
 Intended status: Informational                                   W. Eddy
-Expires: 14 May 2027                                Aalyria Technologies
+Expires: 20 May 2027                                Aalyria Technologies
                                                                  V. Goel
                                                               Apple Inc.
                                                                 M. Tüxen
                                   Münster University of Applied Sciences
-                                                        10 November 2026
+                                                        16 November 2026
 
 
                      Pacing in Transport Protocols
@@ -60,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 May 2027.
+   This Internet-Draft will expire on 20 May 2027.
 
 Copyright Notice
 
@@ -589,12 +589,12 @@ func setMaximumPacingRateBytesPerSecond(_ maximumPacingRateBytesPerSecond: UInt6
    CPU load.
 
    The RACK [RACK] and BBR stacks both support pacing by leveraging the
-   TCP High Precision Timer System (HPTS) [HPTS], which is a kernel
-   loadable module available in FreeBSD 14 and higher.  The tcp_output()
-   function of a TCP stack which supports pacing will not send as much
-   as is allowed by congestion and flow control, but may only send a
-   micro burst and schedule itself for being called after the inter-
-   burst send time using the HPTS.  The RACK stack supports an
+   TCP High Precision Timer System (HPTS) [HPTS][HPTSCode], which is a
+   kernel loadable module available in FreeBSD 14 and higher.  The
+   tcp_output() function of a TCP stack which supports pacing will not
+   send as much as is allowed by congestion and flow control, but may
+   only send a micro burst and schedule itself for being called after
+   the inter-burst send time using the HPTS.  The RACK stack supports an
    application setting a pacing rate and a maximum burst size using TCP
    socket options.  The RACK stack then uses these values to compute the
    actual micro burst size and the inter-burst send time.
@@ -994,7 +994,7 @@ Change Log
 
    *  -05:
 
-      -  adds RFC 5743 info to abstract and intro.
+      -  adds RFC 5743 info to abstract and intro.  Refer to HTPSCode.
 
 Authors' Addresses
 
