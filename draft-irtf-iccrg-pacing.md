@@ -445,7 +445,7 @@ The default stack does not support pacing and its ``tcp_output()`` may be called
 and sends as many TCP segments as is allowed by the congestion and flow control resulting in burst of TCP segments.
 However, this also allows to make use of TCP Segment Offload (TSO), which reduces the CPU load.
 
-The RACK {{RACK}} and BBR stacks both support pacing by leveraging the TCP High Precision Timer System (HPTS) {{HPTS}}, which is a kernel loadable module available in FreeBSD 14 and higher.
+The RACK {{RACK}} and BBR stacks both support pacing by leveraging the TCP High Precision Timer System (HPTS) {{HPTS}}{{HPTSCode}}, which is a kernel loadable module available in FreeBSD 14 and higher.
 The ``tcp_output()`` function of a TCP stack which supports pacing will not send as much as is allowed by congestion and flow control, but may only send a micro burst and schedule itself for being called after the inter-burst send time using the HPTS.
 The RACK stack supports an application setting a pacing rate and a maximum burst size using TCP socket options.
 The RACK stack then uses these values to compute the actual micro burst size and the inter-burst send time.
@@ -629,4 +629,4 @@ The authors would like to thank Grenville Armitage, Gorry Fairhurst, Ingemar Joh
   * addressing comment from Gorry Fairhurst: primarily editorial, some details in the QUIC section.
 
 * -05:
-  * adds RFC 5743 info to abstract and intro.
+  * adds RFC 5743 info to abstract and intro. Refer to HTPSCode.
