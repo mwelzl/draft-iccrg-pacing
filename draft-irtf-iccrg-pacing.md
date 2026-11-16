@@ -4,7 +4,7 @@ abbrev: Pacing in Transport Protocols
 category: info
 
 docname: draft-irtf-iccrg-pacing-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
+submissiontype: IRTF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
